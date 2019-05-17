@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group>
+    <item
+        android:id="@+id/first_item"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Home">
+    </item>
+    <item
+        android:id="@+id/second_item"
+        android:icon="@drawable/ic_camera_alt_black_24dp"
+        android:title="Monitor">
+    </item>
+    <item
+        android:id="@+id/third_item"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="Your Data">
+    </item>
+    </group>
+
+</menu>

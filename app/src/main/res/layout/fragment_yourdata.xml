@@ -1,9 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/colorPrimaryDarkCUSTOM"
+    tools:context=".YourDataFragment">
 
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="1">
 
+        <TableRow>
+
+            <TableLayout>
+
+                <TableRow>
+
+                    <TextView
+                        android:fontFamily="sans-serif"
+                        android:padding="3dip"
+                        android:text="Personal Details"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textColor="@color/white"
+                        android:textSize="24sp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:fontFamily="sans-serif-thin"
+                        android:padding="3dip"
+                        android:text="View and edit your personal details here"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+                </TableRow>
+            </TableLayout>
+        </TableRow>
+
+        <View
+            android:layout_height="1dip"
+            android:background="@color/colorAccentCUSTOM" />
+
+        <TableRow>
+
+            <TableLayout>
+
+                <TableRow>
+
+                    <TextView
+                        android:fontFamily="sans-serif"
+                        android:padding="3dip"
+                        android:text="Registered Dressings"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textColor="@color/white"
+                        android:textSize="24sp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:fontFamily="sans-serif-thin"
+                        android:padding="3dip"
+                        android:text="View and edit your registered dressings here"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+                </TableRow>
+            </TableLayout>
+        </TableRow>
+
+        <View
+            android:layout_height="1dip"
+            android:background="@color/colorAccentCUSTOM" />
+
+        <TableLayout>
+
+            <TableRow>
+
+                <TextView
+                    android:padding="3dip"
+                    android:text="History"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:fontFamily="sans-serif-thin"
+                    android:padding="3dip"
+                    android:text="View you wound monitoring history here"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </TableRow>
+        </TableLayout>
+
+        <View
+            android:layout_height="1dip"
+            android:background="@color/colorAccentCUSTOM" />
+
+        <TableLayout>
+
+            <TableRow>
+
+                <TextView
+                    android:padding="3dip"
+                    android:text="Reminders"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:fontFamily="sans-serif-thin"
+                    android:padding="2dip"
+                    android:text="View and set daily reminders here"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </TableRow>
+        </TableLayout>
+
+        <View
+            android:layout_height="1dip"
+            android:background="@color/colorAccentCUSTOM" />
+
+        <TableLayout android:id="@+id/tableLayout2">
+
+            <TableRow>
+
+                <TextView
+                    android:padding="5dip"
+                    android:text="Settings"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:fontFamily="sans-serif-thin"
+                    android:padding="2dip"
+                    android:text="View and edit your application's settings here"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </TableRow>
+        </TableLayout>
+
+        <View
+            android:layout_height="1dip"
+            android:background="@color/colorAccentCUSTOM" />
+
+    </TableLayout>
+
+    <Button
+        android:id="@+id/button_logout"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/colorPrimaryCUSTOM"
+        android:text="Logout"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tableLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

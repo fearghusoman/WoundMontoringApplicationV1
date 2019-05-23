@@ -18,4 +18,31 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="home_welcome">Welcome, let\'s start checking those wounds.</string>
+
+    <!--List of options for th Your Data fragment-->
+    <string-array name="your_data_options">
+        <item>Personal Details</item>
+        <item>History</item>
+        <item>Reminders</item>
+        <item>Settings</item>
+    </string-array>
+
+    <string-array name="wound_locations">
+        <item>Left Arm</item>
+        <item>Left Leg</item>
+        <item>Left Foot</item>
+        <item>Left Hand</item>
+        <item>Right Arm</item>
+        <item>Right Leg</item>
+        <item>Right Foot</item>
+        <item>Right Hand</item>
+        <item>Stomach</item>
+        <item>Chest</item>
+        <item>Neck</item>
+        <item>Back</item>
+        <item>Groin</item>
+        <item>Head</item>
+    </string-array>
+
+    <string name="title_activity_register_dressing">RegisterDressingActivity</string>
 </resources>

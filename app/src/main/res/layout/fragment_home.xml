@@ -1,8 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDarkCUSTOM"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <TableRow>
+        <TableLayout>
+            <TableRow>
+                <TextView
+                    android:id="@+id/register_qr"
+                    android:text="Register a New Dressing"
+                    android:fontFamily="sans-serif"
+                    android:padding="3dip"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:clickable="true"
+                    android:onClick="perform_action"/>
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:fontFamily="sans-serif-thin"
+                    android:padding="3dip"
+                    android:text="Click here to register a new dressing using QR code"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </TableRow>
+        </TableLayout>
 
-</android.support.constraint.ConstraintLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dip"
+            android:src="@drawable/bb74793e6be9106b" />
+    </TableRow>
+
+
+</TableLayout>

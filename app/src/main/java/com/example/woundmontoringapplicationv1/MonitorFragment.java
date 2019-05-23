@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,7 @@ import android.widget.Button;
 
 public class MonitorFragment extends Fragment {
 
-    Button btn1, btn2;
+    FloatingActionButton btn1;
 
     @Nullable
     @Override
@@ -21,7 +22,6 @@ public class MonitorFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_monitor, container, false);
 
         btn1 = view.findViewById(R.id.button2);
-        btn2 = view.findViewById(R.id.button3);
 
         btn1.setOnClickListener(new View.OnClickListener() {
             /**
@@ -31,19 +31,8 @@ public class MonitorFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intentCapture = new Intent(getContext(), CaptureImageActivity.class);
+                intentCapture.putExtra("CALLING_ACTIVITY", "ProcessNewImage");
                 startActivity(intentCapture);
-            }
-        });
-
-        btn2.setOnClickListener(new View.OnClickListener() {
-            /**
-             *
-             * @param v
-             */
-            @Override
-            public void onClick(View v) {
-                Intent intentProcess = new Intent(getContext(), ProcessImageActivity.class);
-                startActivity(intentProcess);
             }
         });
 

@@ -1,6 +1,7 @@
 package com.example.woundmontoringapplicationv1;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,7 +42,7 @@ import java.util.Locale;
 public class CaptureImageActivity extends AppCompatActivity {
 
     //setup the class' instance variables
-    Button captureButton;
+    FloatingActionButton captureButton;
 
     CameraManager cameraManager;
     CameraDevice.StateCallback stateCallback;
@@ -66,6 +68,9 @@ public class CaptureImageActivity extends AppCompatActivity {
     byte[] bytes;
     String imageLocation;
 
+    //create a bundle to check why the camera is being used
+    Bundle bundle;
+
     /**
      * Method is called when an instance of the class is created
      * @param savedInstanceState
@@ -75,11 +80,13 @@ public class CaptureImageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capture_image);
 
-        textureView = (TextureView) findViewById(R.id.texture_view);
-        captureButton = (Button) findViewById(R.id.takeImage);
+        textureView = findViewById(R.id.texture_view);
+        captureButton = findViewById(R.id.takeImage);
 
         cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         cameraFacing = CameraCharacteristics.LENS_FACING_BACK;
+
+        bundle = getIntent().getExtras();
 
         /**
          * what happens when the camera is in various states
@@ -147,10 +154,30 @@ public class CaptureImageActivity extends AppCompatActivity {
                     //to the output stream 'outputPhoto'
                     textureView.getBitmap().compress(Bitmap.CompressFormat.PNG, 100, outputPhoto);
 
-                    //create the intent that goes to the next activity & pass it the path to the captured image
-                    Intent imageIntent = new Intent(getApplicationContext(), ProcessImageActivity.class);
-                    imageIntent.putExtra("imageName", imageFile.getAbsoluteFile());
-                    startActivity(imageIntent);
+                    if (bundle != null) {
+                        String reason = bundle.get("CALLING_ACTIVITY").toString();
+
+                        if(reason.equalsIgnoreCase("RegisterDressing")){
+                            Intent imageIntent = new Intent(getApplicationContext(), RegisterDressingActivity.class);
+                            imageIntent.putExtra("imageName", imageFile.getAbsoluteFile());
+                            Log.d("FEARGS CHECK", imageFile.getAbsolutePath());
+                            setResult(Activity.RESULT_OK, imageIntent);
+                            finish();
+
+                        }
+                        else if(reason.equalsIgnoreCase("ProcessNewImage")){
+                            //create the intent that goes to the next activity & pass it the path to the captured image
+                            Intent imageIntent = new Intent(getApplicationContext(), ProcessImageActivity.class);
+                            imageIntent.putExtra("imageName", imageFile.getAbsoluteFile());
+                            Log.d("FEARGS CHECK", imageFile.getAbsolutePath());
+                            startActivity(imageIntent);
+                        }
+                        else{
+                            Log.d("FEARGS CHECK", "Intent extras are not being processed correctly.");
+                        }
+
+
+                    }
 
                 }
                 catch(Exception e){

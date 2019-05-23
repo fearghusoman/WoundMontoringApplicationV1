@@ -39,19 +39,19 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        fn = (EditText) findViewById(R.id.editFName);
-        ln = (EditText) findViewById(R.id.editLName);
-        dob = (EditText) findViewById(R.id.editDOB);
-        a1 = (EditText) findViewById(R.id.editAddress1);
-        a2 = (EditText) findViewById(R.id.editAddress2);
-        town = (EditText) findViewById(R.id.editTown);
-        country = (EditText) findViewById(R.id.editCountry);
-        postcode = (EditText) findViewById(R.id.editPCode);
-        email = (EditText) findViewById(R.id.editEmail);
-        pw = (EditText) findViewById(R.id.editPassword2);
-        pwCheck = (EditText) findViewById(R.id.editPassword);
+        fn = findViewById(R.id.editFName);
+        ln = findViewById(R.id.editLName);
+        dob = findViewById(R.id.editDOB);
+        a1 = findViewById(R.id.editAddress1);
+        a2 = findViewById(R.id.editAddress2);
+        town = findViewById(R.id.editTown);
+        country = findViewById(R.id.editCountry);
+        postcode = findViewById(R.id.editPCode);
+        email = findViewById(R.id.editEmail);
+        pw = findViewById(R.id.editPassword2);
+        pwCheck = findViewById(R.id.editPassword);
 
-        registerBtn = (Button) findViewById(R.id.buttonRegister);
+        registerBtn = findViewById(R.id.buttonRegister);
 
         requestQueue = Volley.newRequestQueue(RegisterActivity.this);
         progressDialog = new ProgressDialog(RegisterActivity.this);
@@ -69,7 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
                     UserRegister();
                 }
                 else{
-                    //DO NOTHING
+                    Log.d("FEARGS REGISTER", "REGISTER ATTEMPTED BUT NOT ALL FIELDS CORRECT");
                 }
             }
         });
@@ -85,9 +85,8 @@ public class RegisterActivity extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("Debug", response.toString());
+                Log.d("FEARGS REGISTER", response.toString());
                 Log.d("FEARGS REGISTER", "GOT A RESPONSE FROM THE SERVER");
-                //hide the progress dialogue after all tasks completed
                 progressDialog.dismiss();
 
                 if(response.equalsIgnoreCase("Successful Registration")){

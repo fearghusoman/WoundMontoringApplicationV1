@@ -61,13 +61,13 @@ public class ProcessImageActivity extends AppCompatActivity {
     //store our known real-life measurements for the distance between points on a dressing
     //distance between the top two corners of the qr code in cm
     //final static double L1 = 7.1;
-    final static double L1 = 5.0;
+    final static double L1 = 5.2;
     //distance between the top right corner of qr code and top left corner of the area to be
     //analysed for colour in cm
-    final static double L2 = 2.1;
+    final static double L2 = 2.2;
     //distance between the top two points of the rectangle in cm
     //final static double L3 = 15.5;
-    final static double L3 = 15.9;
+    final static double L3 = 16.2;
 
     //Measurements for the circles
     //distance from edge of rect to centre of circle1 in cm

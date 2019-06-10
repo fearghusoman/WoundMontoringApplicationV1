@@ -107,5 +107,61 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/bandage_mock_up" />
+
+        <TextView
+            android:id="@+id/textViewC1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:visibility="visible"
+            android:text="Circle1 cropped:" />
+
+        <ImageView
+            android:id="@+id/imageViewC1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/bandage_mock_up" />
+
+        <TextView
+            android:id="@+id/textViewC2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:visibility="visible"
+            android:text="Circle2 cropped:" />
+
+        <ImageView
+            android:id="@+id/imageViewC2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/bandage_mock_up" />
+
+        <TextView
+            android:id="@+id/textViewC3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:visibility="visible"
+            android:text="Circle3 cropped:" />
+
+        <ImageView
+            android:id="@+id/imageViewC3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/bandage_mock_up" />
+
+        <TextView
+            android:id="@+id/textViewC4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:visibility="visible"
+            android:text="Circle4 cropped:" />
+
+        <ImageView
+            android:id="@+id/imageViewC4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/bandage_mock_up" />
     </LinearLayout>
 </ScrollView>

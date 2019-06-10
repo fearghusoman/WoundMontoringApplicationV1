@@ -2,15 +2,24 @@ package com.example.woundmontoringapplicationv1;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseArray;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
@@ -30,14 +39,54 @@ public class OpenCVColorAnalysisActivity extends AppCompatActivity {
 
     private static final String TAG = "FEARGS CHECK";
 
+    //store our known real-life measurements for the distance between points on a dressing
+    //distance between the top two corners of the qr code in cm
+    //final static double L1 = 7.1;
+    final static double L1 = 5.2;
+    //distance between the top right corner of qr code and top left corner of the area to be
+    //analysed for colour in cm
+    final static double L2 = 2.2;
+    //distance between the top two points of the rectangle in cm
+    //final static double L3 = 15.5;
+    final static double L3 = 16.2;
+
+    //Measurements for the circles
+    //distance from edge of rect to centre of circle1 in cm
+    final static double LCirc1 = 2.0;
+    //distance from centre of circle1 to centre of circle2 in cm
+    final static double LCirc2 = 4.0;
+    //distance from the centre of circle2 to centre of circle3 in cm
+    final static double LCirc3 = 3.6;
+    //distance from the centre of circle3 to centre of circle4 in cm
+    final static double LCirc4 = 4.1;
+
+    //the real-world radius of the 4 circles in cm
+    final static double radius1 = 1.7 / 2;
+    final static double radius2 = 1.6 / 2;
+    final static double radius3 = 1.5 / 2;
+    final static double radius4 = 1.5 / 2;
+
+    double Q = 0;
+
+    //Variables with regards to QR Codes
+    Frame frame;
+    SparseArray<Barcode> barcodeSparseArray;
+    Barcode barcode;
+    BarcodeDetector barcodeDetector;
+
+    //point array to hold the corner points of the QR Code
+    Point[] qrCornerPoints;
+    Rect rect;
+    Point centreC1, centreC2, centreC3, centreC4;
+
     TextView textViewRED, textViewGREEN, textViewBLUE, textViewYELLOW, textViewDISTANCE;
-    ImageView imageViewRED, imageViewGREEN, imageViewBLUE, imageViewYELLOW, imageViewDISTANCE;
+    ImageView imageViewRED, imageViewGREEN, imageViewBLUE, imageViewYELLOW, imageViewDISTANCE, imageViewC1, imageViewC2, imageViewC3, imageViewC4;
 
     //an array of colors to store the primary colors we allow in our analysis
-    Color[] colors = {Color.valueOf(Color.WHITE), Color.valueOf(Color.RED), Color.valueOf(Color.GREEN), Color.valueOf(Color.BLUE), Color.valueOf(Color.YELLOW)};
+    //Color[] colors = {Color.valueOf(Color.WHITE), Color.valueOf(Color.RED), Color.valueOf(Color.GREEN), Color.valueOf(Color.BLUE), Color.valueOf(Color.YELLOW)};
     int[] colorsInt = {Color.WHITE, Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.BLACK};
 
-    Bitmap bitmap;
+    Bitmap bitmap, rotatedBitmap;
 
     Bundle bundle;
 
@@ -86,15 +135,19 @@ public class OpenCVColorAnalysisActivity extends AppCompatActivity {
         imageViewBLUE = findViewById(R.id.imageViewBLUE);
         imageViewYELLOW = findViewById(R.id.imageViewYELLOW);
         imageViewDISTANCE = findViewById(R.id.imageViewDISTANCE);
+        imageViewC1 = findViewById(R.id.imageViewC1);
+        imageViewC2 = findViewById(R.id.imageViewC2);
+        imageViewC3 = findViewById(R.id.imageViewC3);
+        imageViewC4 = findViewById(R.id.imageViewC4);
 
         bundle = getIntent().getExtras();
 
         if (bundle != null) {
             String path = bundle.get("imageName").toString();
-            Rect rect = (Rect) bundle.get("rectangleForAnalysis");
+            Rect rect1 = (Rect) bundle.get("rectangleForAnalysis");
             double slope = (double) bundle.get("slope");
             Log.d(TAG, "Bundle: " + path);
-            Log.d(TAG, "RECT: " + rect.left + " " + rect.top);
+            Log.d(TAG, "RECT: " + rect1.left + " " + rect1.top);
 
             try {
                 FileInputStream fIS = new FileInputStream(new File(path));
@@ -105,7 +158,46 @@ public class OpenCVColorAnalysisActivity extends AppCompatActivity {
                 processImage(bitmap, imageViewBLUE, scalarBLUELower, scalarBLUEUpper);
                 processImage(bitmap, imageViewYELLOW, scalarYELLOWLower, scalarYELLOWUpper);
 
-                createNewBitmap(bitmap, rect, slope);
+                rotatedBitmap = createNewBitmap(bitmap, rect1, slope);
+
+                barcodeDetector = new BarcodeDetector.Builder(getApplicationContext()).setBarcodeFormats(Barcode.QR_CODE).build();
+
+                if (!barcodeDetector.isOperational()) {
+                    return;
+                }
+                //if the barcode detector has been set up correctly
+                else {
+                    frame = new Frame.Builder().setBitmap(rotatedBitmap).build();
+
+                    barcodeSparseArray = barcodeDetector.detect(frame);
+
+                    //if there is a barcode present in the frame then analyse it
+                    if (barcodeSparseArray.size() > 0) {
+                        barcode = barcodeSparseArray.valueAt(0);
+
+                        //call the QR corner points method
+                        qrCornerPoints = getQRCornerPoints(barcode);
+
+                        //call the method to calculate the proportional value Q
+                        Q = calculateProportion(qrCornerPoints);
+
+                        //call the method to get the coordinates of the rectangle to draw
+                        rect = getRectangleOnImage(qrCornerPoints, Q);
+
+                        //call the method to calculate the centres of the 4 circles to draw - calculated with
+                        //relation to the rect
+                        getCirclesOnImage(rect, Q);
+
+                        //now draw the rect and circles on the canvas and set on the second imageView
+                        //drawCanvasOnImageBitmap(imageView1, rect, centreC1, centreC2, centreC3, centreC4, rotatedBitmap, Q);
+
+                        //method to draw the first circle as its own bitmap
+                        getBitmapClippedCirclePath(rotatedBitmap, centreC1,radius1 * Q, imageViewC1);
+                        getBitmapClippedCirclePath(rotatedBitmap, centreC2,radius2 * Q, imageViewC2);
+                        getBitmapClippedCirclePath(rotatedBitmap, centreC3,radius3 * Q, imageViewC3);
+                        getBitmapClippedCirclePath(rotatedBitmap, centreC4,radius4 * Q, imageViewC4);
+                    }
+                }
             }
             catch(FileNotFoundException e){
                 e.printStackTrace();
@@ -178,48 +270,6 @@ public class OpenCVColorAnalysisActivity extends AppCompatActivity {
     }
 
     /**
-    private double[] convertRGBtoLAB(int[] rgb){
-        int r  = rgb[0];
-        int g  = rgb[1];
-        int b  = rgb[2];
-
-        double[] lab = new double[3];
-
-        ColorUtils.colorToLAB();
-        //D65 / 2 degrees
-
-        return lab;
-    }
-     **/
-
-    /**
-     *
-     * @param desiredColors
-     * @param color
-     * @return
-     */
-    private int rgbToLAB(int[] desiredColors, int color){
-        int closestPrimary = 0;
-        double distance = Double.MAX_VALUE;
-        double[] ourLAB = new double[3];
-
-        ColorUtils.RGBToLAB(Color.red(color), Color.green(color), Color.blue(color), ourLAB);
-
-        for(int c : desiredColors){
-            double[] desiredLAB = new double[3];
-
-            ColorUtils.RGBToLAB(Color.red(c), Color.green(c), Color.blue(c), desiredLAB);
-
-            if(ColorUtils.distanceEuclidean(ourLAB, desiredLAB) < distance){
-                closestPrimary = c;
-                distance = ColorUtils.distanceEuclidean(ourLAB, desiredLAB);
-            }
-        }
-
-        return closestPrimary;
-    }
-
-    /**
      *
      * @param color
      * @param colorCheck
@@ -267,7 +317,7 @@ public class OpenCVColorAnalysisActivity extends AppCompatActivity {
      * @param rect
      * @param slope
      */
-    private void createNewBitmap(Bitmap bitmap, Rect rect, double slope){
+    private Bitmap createNewBitmap(Bitmap bitmap, Rect rect, double slope){
         Matrix rotationMatrix = new Matrix();
         rotationMatrix.postRotate((float) (Math.abs(slope)));
 
@@ -283,5 +333,74 @@ public class OpenCVColorAnalysisActivity extends AppCompatActivity {
         }
 
         imageViewDISTANCE.setImageBitmap(newBitmap);
+        return newBitmap;
+    }
+
+    private Point[] getQRCornerPoints(Barcode barcode){
+        return barcode.cornerPoints;
+    }
+
+    /**
+     *
+     * @param qrCornerPoints
+     * @return
+     */
+    private double calculateProportion(Point[] qrCornerPoints){
+        double prop = (qrCornerPoints[1].x - qrCornerPoints[0].x) / L1;
+
+        return prop;
+    }
+
+    /**
+     *
+     * @param qrCornerPoints
+     * @return
+     */
+    private Rect getRectangleOnImage(Point[] qrCornerPoints, double prop){
+        Rect rect = new Rect((int) (qrCornerPoints[1].x + (L2 * prop)),
+                qrCornerPoints[1].y,
+                (int) (qrCornerPoints[1].x + (L2 * prop) + (L3 * prop)),
+                qrCornerPoints[2].y);
+
+        return rect;
+    }
+
+    /**
+     *
+     * @param rect
+     */
+    private void getCirclesOnImage(Rect rect, double prop){
+
+        centreC1 = new Point((int) (rect.left + (LCirc1 * prop)), rect.top + ((rect.bottom - rect.top) / 2));
+        centreC2 = new Point((int) (centreC1.x + (LCirc2 * prop)), rect.top + ((rect.bottom - rect.top) / 2));
+        centreC3 = new Point((int) (centreC2.x + (LCirc3 * prop)), rect.top + ((rect.bottom - rect.top) / 2));
+        centreC4 = new Point((int) (centreC3.x + (LCirc4 * prop)), rect.top + ((rect.bottom - rect.top) / 2));
+
+    }
+
+    /**
+     *
+     * @param bitmap
+     * @param radius
+     * @param imageView
+     */
+    private void getBitmapClippedCirclePath(Bitmap bitmap, Point centreOfCircle, double radius, ImageView imageView){
+
+        Bitmap circleBitmap;
+        circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+
+        Path path = new Path();
+        path.addCircle(
+                (float) (centreOfCircle.x),
+                (float) (centreOfCircle.y),
+                (float) (radius),
+                Path.Direction.CCW
+        );
+
+        Canvas canvas = new Canvas(circleBitmap);
+        canvas.clipPath(path);
+        canvas.drawBitmap(bitmap, 0, 0, null);
+        imageView.setImageBitmap(circleBitmap);
+
     }
 }

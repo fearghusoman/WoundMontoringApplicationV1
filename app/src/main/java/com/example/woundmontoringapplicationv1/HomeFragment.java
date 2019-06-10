@@ -1,10 +1,15 @@
 package com.example.woundmontoringapplicationv1;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +19,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -27,6 +34,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
+
+    public final static int MY_PERMISSION_REQUEST_CAMERA = 1;
 
     TextView textView1;
 
@@ -127,6 +136,60 @@ public class HomeFragment extends Fragment {
         requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(jsonObjectRequest);
 
+        //check for camera permission
+        if(checkPermission()){
+            //continue
+            Log.d("FEARGS PERMISSION", "Camera is already allowed");
+        }
+        else{
+            requestPermission();
+        }
+
         return view;
+    }
+
+    /**
+     *
+     * @return
+     */
+    private boolean checkPermission(){
+        if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    /**
+     *
+     */
+    private void requestPermission(){
+        ActivityCompat.requestPermissions(getActivity(),
+                new String[]{Manifest.permission.CAMERA}, MY_PERMISSION_REQUEST_CAMERA);
+        Log.d("FEARGS PERMISSION", "Requesting Camera now");
+    }
+
+    /**
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        switch(requestCode){
+            case MY_PERMISSION_REQUEST_CAMERA:
+
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(getContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
+                }
+
+                else{
+                    Toast.makeText(getContext(), "Permission Denied", Toast.LENGTH_SHORT).show();
+
+                }
+        }
     }
 }

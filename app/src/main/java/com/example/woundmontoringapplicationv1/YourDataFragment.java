@@ -11,12 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import static com.example.woundmontoringapplicationv1.LoginActivity.SHARED_PREFS;
 
-
 public class YourDataFragment extends Fragment {
 
+    TextView reminderTV, historyTV, registeredDressingsTV;
     Button logout;
 
     @Nullable
@@ -26,6 +27,9 @@ public class YourDataFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_yourdata, container, false);
 
         logout = view.findViewById(R.id.button_logout);
+        reminderTV = view.findViewById(R.id.reminders);
+        historyTV = view.findViewById(R.id.historyTV);
+        registeredDressingsTV = view.findViewById(R.id.registeredTV);
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,6 +40,30 @@ public class YourDataFragment extends Fragment {
                 editor.putString("email", "");
 
                 Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        reminderTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), RemindersActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        historyTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), HistoryActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        registeredDressingsTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), RegisteredDressingsActivity.class);
                 startActivity(intent);
             }
         });

@@ -13,12 +13,12 @@
         <item name="colorPrimary">@color/colorPrimaryCUSTOM</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkCUSTOM</item>
         <item name="colorAccent">@color/colorAccentCUSTOM</item>
-
     </style>
 
     <style name="CustomWMAStyle.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="CustomWMAStyle.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

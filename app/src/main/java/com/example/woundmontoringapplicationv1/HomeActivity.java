@@ -13,17 +13,30 @@ import android.widget.Button;
 public class HomeActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
+    Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.constraint_container_home,
-                new HomeFragment()).commit();
+        bundle = getIntent().getExtras();
+
+        if(bundle != null){
+            if(bundle.getString("message").equalsIgnoreCase("yourdatafragment")){
+                getSupportFragmentManager().beginTransaction().replace(R.id.constraint_container_home,
+                        new YourDataFragment()).commit();
+            }
+        }else{
+            getSupportFragmentManager().beginTransaction().replace(R.id.constraint_container_home,
+                    new HomeFragment()).commit();
+        }
+
 
     }
 

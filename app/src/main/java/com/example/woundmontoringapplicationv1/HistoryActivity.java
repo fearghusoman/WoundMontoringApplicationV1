@@ -1,34 +1,29 @@
 package com.example.woundmontoringapplicationv1;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment {
-
-    TextView textView1;
+public class HistoryActivity extends AppCompatActivity {
 
     JsonObjectRequest jsonObjectRequest;
 
@@ -44,35 +39,26 @@ public class HomeFragment extends Fragment {
     private HomeFragmentRecyclerAdapter homeFragmentRecyclerAdapter;
     private ArrayList<SnapshotItem> snapshotItems;
 
-    /**
-     *
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
-     */
-    @Nullable
+    FloatingActionButton floatingActionButton;
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_history);
 
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-        recyclerView = view.findViewById(R.id.recycler_view);
+        floatingActionButton = findViewById(R.id.backToMenu);
+        recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.HORIZONTAL));
 
         snapshotItems = new ArrayList<>();
 
-        textView1 = view.findViewById(R.id.register_qr);
-        textView1.setOnClickListener(new View.OnClickListener() {
-            /**
-             *
-             * @param v
-             */
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), RegisterDressingActivity.class);
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                intent.putExtra("message", "yourdatafragment");
                 startActivity(intent);
             }
         });
@@ -109,7 +95,7 @@ public class HomeFragment extends Fragment {
                                 snapshotItems.add(new SnapshotItem(qrid, timestamp));
                             }
 
-                            homeFragmentRecyclerAdapter = new HomeFragmentRecyclerAdapter(getActivity(), snapshotItems);
+                            homeFragmentRecyclerAdapter = new HomeFragmentRecyclerAdapter(getApplicationContext(), snapshotItems);
                             recyclerView.setAdapter(homeFragmentRecyclerAdapter);
 
                         } catch (JSONException e) {
@@ -124,9 +110,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.add(jsonObjectRequest);
-
-        return view;
     }
 }

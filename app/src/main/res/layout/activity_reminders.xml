@@ -1,9 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDarkCUSTOM"
     tools:context=".RemindersActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_margin="5dp"
+        android:id="@+id/backToMenu"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_keyboard_backspace_black_24dp" />
+
+    <TextView
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/TitleReminders"
+        android:text="Reminders"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/white"
+        android:textSize="32sp"
+        />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*">
+
+
+        <TableRow
+            android:layout_marginTop="60px"
+            android:layout_marginBottom="60px">
+
+            <TextView
+                android:id="@+id/textTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/cancelReminder"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorPrimaryCUSTOM"
+                android:text="Delete"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:visibility="gone" />
+        </TableRow>
+
+        <View
+            android:visibility="gone"
+            android:id="@+id/view2"
+            android:layout_height="1dip"
+            android:background="@color/colorAccentCUSTOM" />
+
+        <TableRow
+            android:layout_marginTop="60px"
+            android:layout_marginBottom="60px">
+
+            <TextView
+                android:id="@+id/textTime1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/cancelReminder1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorPrimaryCUSTOM"
+                android:text="Delete"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:visibility="gone" />
+        </TableRow>
+
+        <View
+            android:visibility="gone"
+            android:id="@+id/view3"
+            android:layout_height="1dip"
+            android:background="@color/colorAccentCUSTOM" />
+
+        <TableRow
+            android:layout_marginTop="60px"
+            android:layout_width="match_parent"
+            android:layout_height="264dp"
+            android:layout_marginBottom="60px">
+
+            <TextView
+                android:id="@+id/textTime2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/cancelReminder2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorPrimaryCUSTOM"
+                android:text="Delete"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:visibility="gone" />
+        </TableRow>
+
+        <View
+            android:visibility="gone"
+            android:id="@+id/view4"
+            android:layout_height="1dip"
+            android:background="@color/colorAccentCUSTOM" />
+
+    </TableLayout>
+
+    <TextView
+        android:id="@+id/textViewNoAlarms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="10dp"
+        android:text="There are no reminders set."
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:gravity="center|bottom"
+        android:paddingBottom="20dp"
+        android:orientation="vertical" >
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addNewReminder"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="15dp"
+        app:srcCompat="@drawable/ic_add_black_24dp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

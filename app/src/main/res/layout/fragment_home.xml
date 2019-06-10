@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDarkCUSTOM"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+    <TableLayout
+        android:id="@+id/table_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <TableRow>
         <TableLayout>
             <TableRow>
@@ -30,13 +38,40 @@
             </TableRow>
         </TableLayout>
 
-
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="4dip"
             android:src="@drawable/bb74793e6be9106b" />
     </TableRow>
+    </TableLayout>
 
+        <View
+            android:id="@+id/view1"
+            android:layout_width="wrap_content"
+            android:layout_height="15dip"
+            android:layout_below="@+id/table_id"
+            android:background="@color/colorAccentCUSTOM" />
 
-</TableLayout>
+        <TextView
+            android:layout_below="@+id/view1"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:id="@+id/historyTitle"
+            android:text="Most Recent Analysis"
+            android:fontFamily="sans-serif"
+            android:padding="3dip"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/historyTitle"
+        android:padding="4dp"></android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+</ScrollView>

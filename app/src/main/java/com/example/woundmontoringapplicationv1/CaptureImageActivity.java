@@ -34,6 +34,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -43,6 +44,9 @@ public class CaptureImageActivity extends AppCompatActivity {
 
     //setup the class' instance variables
     FloatingActionButton captureButton;
+
+    //Timestamp for the capture
+    Timestamp timestamp;
 
     CameraManager cameraManager;
     CameraDevice.StateCallback stateCallback;
@@ -63,9 +67,6 @@ public class CaptureImageActivity extends AppCompatActivity {
 
     //variables for the storage of the captured images
     File galleryFolder;
-    Bitmap bitmap;
-    ByteArrayOutputStream byteArrayOutputStream;
-    byte[] bytes;
     String imageLocation;
 
     //create a bundle to check why the camera is being used
@@ -137,6 +138,11 @@ public class CaptureImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                //get current timestamp
+                Date date= new Date();
+                long time = date.getTime();
+                timestamp = new Timestamp(time);
+
                 //first, we'll create the gallery if it doesn't yet exist
                 imageLocation = createImageGallery();
 
@@ -169,6 +175,7 @@ public class CaptureImageActivity extends AppCompatActivity {
                             //create the intent that goes to the next activity & pass it the path to the captured image
                             Intent imageIntent = new Intent(getApplicationContext(), ProcessImageActivity.class);
                             imageIntent.putExtra("imageName", imageFile.getAbsoluteFile());
+                            imageIntent.putExtra("timestamp", timestamp);
                             Log.d("FEARGS CHECK", imageFile.getAbsolutePath());
                             startActivity(imageIntent);
                         }

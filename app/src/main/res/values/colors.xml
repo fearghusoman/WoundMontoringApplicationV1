@@ -9,7 +9,12 @@
     <color name="colorPrimaryDarkCUSTOM">#232F34</color>
     <color name="colorAccentCUSTOM">#F9AA33</color>
 
+    <!--<color name="colorPrimaryCUSTOM">#ffffff</color>
+    <color name="colorPrimaryDarkCUSTOM">#A0522D</color>
+    <color name="colorAccentCUSTOM">#FFD700</color>-->
+
     <color name="colorAccentCUSTOM1">#4CAF50</color>
 
+    <color name="whiteO">#FFFFFF</color>
     <color name="white">#FFFFFF</color>
 </resources>

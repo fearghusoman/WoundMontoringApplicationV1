@@ -60,10 +60,10 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         //assign IDs to the objects created
-        Email = (EditText) findViewById(R.id.plain_text_input_email);
-        Password = (EditText) findViewById(R.id.input_password);
-        LoginButton = (Button) findViewById(R.id.btn_login);
-        textView = (TextView) findViewById(R.id.link_signup);
+        Email = findViewById(R.id.plain_text_input_email);
+        Password = findViewById(R.id.input_password);
+        LoginButton = findViewById(R.id.btn_login);
+        textView = findViewById(R.id.link_signup);
 
         requestQueue = Volley.newRequestQueue(LoginActivity.this);
         progressDialog = new ProgressDialog(LoginActivity.this);

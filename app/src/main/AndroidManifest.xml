@@ -18,7 +18,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/CustomWMAStyle">
-        <activity android:name=".RegisterDressingActivity"></activity>
+        <activity android:name=".RegisteredDressingsActivity"></activity>
+        <activity android:name=".HistoryActivity" />
+        <activity android:name=".OpenCVColorAnalysisActivity" />
+        <activity android:name=".AnalysisSubmissionActivity" />
+
+        <receiver android:name=".AlertReceiver" />
+
+        <activity android:name=".RegisterDressingActivity" />
         <activity android:name=".RemindersActivity" />
         <activity android:name=".ProcessImageActivity" />
         <activity android:name=".CaptureImageActivity" />

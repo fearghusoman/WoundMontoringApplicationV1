@@ -38,7 +38,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class OpenCVColorAnalysisActivity extends AppCompatActivity {
+public class DressingCirclesColouranalysisActivity extends AppCompatActivity {
 
     private static final String TAG = "FEARGS CHECK";
 
@@ -82,8 +82,8 @@ public class OpenCVColorAnalysisActivity extends AppCompatActivity {
     Rect rect;
     Point centreC1, centreC2, centreC3, centreC4;
 
-    TextView textViewRED, textViewGREEN, textViewBLUE, textViewYELLOW, textViewDISTANCE, tvC1, tvC2, tvC3, tvC4;
-    ImageView imageViewRED, imageViewGREEN, imageViewBLUE, imageViewYELLOW, imageViewDISTANCE, imageViewC1, imageViewC2, imageViewC3, imageViewC4;
+    TextView textViewDISTANCE, tvC1, tvC2, tvC3, tvC4;
+    ImageView imageViewDISTANCE, imageViewC1, imageViewC2, imageViewC3, imageViewC4;
 
     //an array of colors to store the primary colors we allow in our analysis
     //Color[] colors = {Color.valueOf(Color.WHITE), Color.valueOf(Color.RED), Color.valueOf(Color.GREEN), Color.valueOf(Color.BLUE), Color.valueOf(Color.YELLOW)};
@@ -94,47 +94,14 @@ public class OpenCVColorAnalysisActivity extends AppCompatActivity {
 
     Bundle bundle;
 
-    Scalar scalarREDLower = new Scalar(120,50, 50);
-    Scalar scalarREDUpper = new Scalar(180, 255, 255);
-
-    Scalar scalarGREENLower = new Scalar(50,50, 50);
-    Scalar scalarGREENUpper = new Scalar(70, 255, 255);
-
-    Scalar scalarBLUELower = new Scalar(0,50, 50);
-    Scalar scalarBLUEUpper = new Scalar(60, 255, 255);
-
-    Scalar scalarYELLOWLower = new Scalar(60,50, 50);
-    Scalar scalarYELLOWUpper = new Scalar(120, 255, 255);
-
     //hash maps for the colour results of each circle
     HashMap<String, Boolean> c1HashMap, c2HashMap, c3HashMap, c4HashMap;
-
-    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
-        @Override
-        public void onManagerConnected(int status) {
-            switch(status){
-                case LoaderCallbackInterface.SUCCESS:{
-                    Log.i(TAG, "OpenCV loaded successfully");
-                } break;
-                default:
-                {
-                    super.onManagerConnected(status);
-                } break;
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_open_cvcolor_analysis);
+        setContentView(R.layout.activity_dressing_circles_colouranalysis);
 
-        OpenCVLoader.initDebug();
-
-        textViewRED = findViewById(R.id.textViewRED);
-        textViewGREEN = findViewById(R.id.textViewGREEN);
-        textViewBLUE = findViewById(R.id.textViewBLUE);
-        textViewYELLOW = findViewById(R.id.textViewYELLOW);
         textViewDISTANCE = findViewById(R.id.textViewDISTANCE);
 
         tvC1 = findViewById(R.id.textViewC1hm);
@@ -142,10 +109,6 @@ public class OpenCVColorAnalysisActivity extends AppCompatActivity {
         tvC3 = findViewById(R.id.textViewC3hm);
         tvC4 = findViewById(R.id.textViewC4hm);
 
-        imageViewRED = findViewById(R.id.imageViewRED);
-        imageViewGREEN = findViewById(R.id.imageViewGREEN);
-        imageViewBLUE = findViewById(R.id.imageViewBLUE);
-        imageViewYELLOW = findViewById(R.id.imageViewYELLOW);
         imageViewDISTANCE = findViewById(R.id.imageViewDISTANCE);
         imageViewC1 = findViewById(R.id.imageViewC1);
         imageViewC2 = findViewById(R.id.imageViewC2);
@@ -164,11 +127,6 @@ public class OpenCVColorAnalysisActivity extends AppCompatActivity {
             try {
                 FileInputStream fIS = new FileInputStream(new File(path));
                 bitmap = BitmapFactory.decodeStream(fIS);
-
-                processImage(bitmap, imageViewRED, scalarREDLower, scalarREDUpper);
-                processImage(bitmap, imageViewGREEN, scalarGREENLower, scalarGREENUpper);
-                processImage(bitmap, imageViewBLUE, scalarBLUELower, scalarBLUEUpper);
-                processImage(bitmap, imageViewYELLOW, scalarYELLOWLower, scalarYELLOWUpper);
 
                 rotatedBitmap = createNewBitmapRotateAndClosestColorConversion(bitmap, rect1, slope);
 
@@ -242,69 +200,6 @@ public class OpenCVColorAnalysisActivity extends AppCompatActivity {
             }
         }
 
-    }
-
-    /**
-     *
-     * @param bmp
-     * @param imageView
-     * @param lower
-     * @param upper
-     */
-    private void processImage(Bitmap bmp, ImageView imageView, Scalar lower, Scalar upper){
-
-        //Reading the image
-        Mat image = new Mat();
-        Bitmap bmp32 = bmp.copy(Bitmap.Config.ARGB_8888, true);
-        Utils.bitmapToMat(bmp32, image);
-
-        Mat oImg = detectColor(image, lower, upper);
-
-        //converting image from mat to bitmap to display it in the imageview
-        Bitmap bm = Bitmap.createBitmap(oImg.cols(), oImg.rows(), Bitmap.Config.ARGB_8888);
-        Utils.matToBitmap(oImg, bm);
-        imageView.setImageBitmap(bm);
-
-    }
-
-    /**
-     *
-     * @param sourceImage
-     * @param lower
-     * @param upper
-     * @return
-     */
-    private Mat detectColor(Mat sourceImage, Scalar lower, Scalar upper){
-
-        Mat blurImg = new Mat();
-        Mat hsvImg = new Mat();
-        Mat colorRange = new Mat();
-
-        //blur the image to filter small noises
-        Imgproc.GaussianBlur(sourceImage, blurImg, new Size(5,5), 0);
-
-        //converting blurred image from rgb to hsv
-        Imgproc.cvtColor(blurImg, hsvImg, Imgproc.COLOR_BGR2HSV);
-
-        Core.inRange(hsvImg, lower, upper, colorRange);
-
-        return colorRange;
-    }
-
-    /**
-     *
-     */
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        if (!OpenCVLoader.initDebug()) {
-            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
-            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, mLoaderCallback);
-        } else {
-            Log.d(TAG, "OpenCV library found inside package. Using it!");
-            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
-        }
     }
 
     /**

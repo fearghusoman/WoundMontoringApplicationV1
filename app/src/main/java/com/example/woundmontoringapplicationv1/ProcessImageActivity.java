@@ -60,13 +60,11 @@ public class ProcessImageActivity extends AppCompatActivity {
 
     //store our known real-life measurements for the distance between points on a dressing
     //distance between the top two corners of the qr code in cm
-    //final static double L1 = 7.1;
     final static double L1 = 5.2;
     //distance between the top right corner of qr code and top left corner of the area to be
     //analysed for colour in cm
     final static double L2 = 2.2;
     //distance between the top two points of the rectangle in cm
-    //final static double L3 = 15.5;
     final static double L3 = 16.2;
 
     //Measurements for the circles
@@ -94,18 +92,14 @@ public class ProcessImageActivity extends AppCompatActivity {
 
     Button processImgBtn, submitAnalysisBtn, opencvBtn;
     FloatingActionButton floatingActionButton;
-    ImageView imageView, imageView2, imageView3;
+    ImageView imageView, imageView2;
 
-    Bitmap bitmap, bitmap2, bitmapForPixelColor;
+    Bitmap bitmap, bitmapForPixelColor;
     BarcodeDetector barcodeDetector;
 
-    View view1, view2, view3, view4, view5, view7, view10, view8, view9, view11, view12;
-    View view7QR, view10QR, view8QR, view9QR, view11QR, view12QR;
-    View viewCAL1, viewBetweenBitmaps;
+    View view1, view2, view3, view4, view5;
 
-    TextView textView, textView2, textView3, textView4, textView5, textView6, textView7, textView8, textView9, textView10, textView11, textView12;
-    TextView textView7QR, textView8QR, textView9QR, textView10QR, textView11QR, textView12QR;
-    TextView textViewCAL1;
+    TextView textView, textView2, textView3, textView4, textView5, textView6;
     TableLayout tableLayout;
 
     Frame frame, frame1;
@@ -118,8 +112,6 @@ public class ProcessImageActivity extends AppCompatActivity {
 
     //CIE LAB conversion
     ColorSpace.Connector connector, connector2;
-    float[] labDeltaE;
-    int[][] updatedPixelValues;
 
     Palette palette;
     int dominantColour, a, r, g, b, r1, g1, b1, a1;
@@ -156,51 +148,18 @@ public class ProcessImageActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(ProcessImageActivity.this);
 
-        tableLayout = findViewById(R.id.main_table);
-
         textView = findViewById(R.id.txtContent) ;
         textView2 = findViewById(R.id.txtContent2) ;
         textView3 = findViewById(R.id.txtContent3) ;
         textView4 = findViewById(R.id.txtContent4) ;
         textView5 = findViewById(R.id.txtContent5) ;
         textView6 = findViewById(R.id.txtContent6) ;
-        textView7 = findViewById(R.id.txtContent7) ;
-        textView8 = findViewById(R.id.txtContent8) ;
-        textView9 = findViewById(R.id.txtContent9) ;
-        textView10 = findViewById(R.id.txtContent10) ;
-        textView11 = findViewById(R.id.txtContent11) ;
-        textView12 = findViewById(R.id.txtContent12) ;
-
-        textView7QR = findViewById(R.id.txtContent7QR) ;
-        textView8QR = findViewById(R.id.txtContent8QR) ;
-        textView9QR = findViewById(R.id.txtContent9QR) ;
-        textView10QR = findViewById(R.id.txtContent10QR) ;
-        textView11QR = findViewById(R.id.txtContent11QR) ;
-        textView12QR = findViewById(R.id.txtContent12QR) ;
-
-        textViewCAL1 = findViewById(R.id.txtContentCAL1) ;
 
         view1 =  findViewById(R.id.view1);
         view2 =  findViewById(R.id.view2);
         view3 =  findViewById(R.id.view3);
         view4 =  findViewById(R.id.view4);
         view5 =  findViewById(R.id.view5);
-        view7 =  findViewById(R.id.view7);
-        view8 =  findViewById(R.id.view8);
-        view9 =  findViewById(R.id.view9);
-        view10 =  findViewById(R.id.view10);
-        view11 =  findViewById(R.id.view11);
-        view12 =  findViewById(R.id.view12);
-
-        view7QR =  findViewById(R.id.view7QR);
-        view8QR =  findViewById(R.id.view8QR);
-        view9QR =  findViewById(R.id.view9QR);
-        view10QR =  findViewById(R.id.view10QR);
-        view11QR =  findViewById(R.id.view11QR);
-        view12QR =  findViewById(R.id.view12QR);
-
-        viewCAL1 = findViewById(R.id.viewCAL1);
-        viewBetweenBitmaps = findViewById(R.id.viewBETWEENBITMAPS);
 
         imageView2 = findViewById(R.id.imgview2);
         imageView = findViewById(R.id.imgview);
@@ -224,8 +183,8 @@ public class ProcessImageActivity extends AppCompatActivity {
             try {
                 FileInputStream fIS = new FileInputStream(new File(path));
 
-                bitmap2 = BitmapFactory.decodeStream(fIS);
-                imageView.setImageBitmap(bitmap2);
+                bitmap = BitmapFactory.decodeStream(fIS);
+                imageView.setImageBitmap(bitmap);
             }
             catch(FileNotFoundException e){
                 e.printStackTrace();
@@ -258,7 +217,7 @@ public class ProcessImageActivity extends AppCompatActivity {
                     textView.setText("Couldn't setup the detector1");
                     return;
                 } else {
-                    frame = new Frame.Builder().setBitmap(bitmap2).build();
+                    frame = new Frame.Builder().setBitmap(bitmap).build();
 
                     barcodes = barcodeDetector.detect(frame);
 
@@ -418,17 +377,6 @@ public class ProcessImageActivity extends AppCompatActivity {
     }
 
     /**
-     *
-     * @param palette
-     */
-    private void getRGBValuesFromPaletteInt(int palette){
-        a1 = Color.alpha(palette);
-        r1 = Color.red(palette);
-        g1 = Color.green(palette);
-        b1 = Color.blue(palette);
-    }
-
-    /**
      * The method receives an imageView, rectangle, and bitmap as parameters. The imageview is set
      * to the passed bitmap, and draws a black rectangle over the bitmap using the coordinates passed
      * by the rectangle parameter.
@@ -489,18 +437,8 @@ public class ProcessImageActivity extends AppCompatActivity {
                 //once response has been received we'll call the analysis method
                 carryOutColourAnalysis();
 
-                //and we'll call the method that attempts the calibration process
-                //calculateCalibration(qrCornerPoints);
-
-                //call the other calibration method
-                //labDeltaE = calculateDistanceFromWhiteUsingLAB(qrCornerPoints, bitmap2);
-                //updatedPixelValues = correctErrorDueToLightingConditions(labDeltaE, bitmap2);
-
-                //create the new, updated bitmap
-                //createCorrectedBitmap(updatedPixelValues);
-
                 //check the bitmap for red, green, blue
-                checkBitmapForRGBValues(bitmap2);
+                checkBitmapForRGBValues(bitmap);
 
                 progressDialog.dismiss();
 
@@ -525,7 +463,7 @@ public class ProcessImageActivity extends AppCompatActivity {
                 opencvBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent openIntent = new Intent(getApplicationContext(), OpenCVColorAnalysisActivity.class);
+                        Intent openIntent = new Intent(getApplicationContext(), DressingCirclesColouranalysisActivity.class);
                         openIntent.putExtra("imageName", path);
                         openIntent.putExtra("rectangleForAnalysis", rect);
                         openIntent.putExtra("slope", slope);
@@ -589,9 +527,9 @@ public class ProcessImageActivity extends AppCompatActivity {
     private void carryOutColourAnalysis(){
         if(continueWithProcessing == true){
             Log.d("FEARGS CHECK", "Value of QR Registered should be true: " + continueWithProcessing);
+
             textView.setText(qrInfoHolder);
 
-            tableLayout.setVisibility(View.VISIBLE);
             textView2.setVisibility(View.VISIBLE);
             textView3.setVisibility(View.VISIBLE);
             textView4.setVisibility(View.VISIBLE);
@@ -603,7 +541,8 @@ public class ProcessImageActivity extends AppCompatActivity {
             view4.setVisibility(View.VISIBLE);
             view5.setVisibility(View.VISIBLE);
 
-            palette = Palette.from(bitmap2).generate();
+            //generate a palette from the original bitmap and set the dominant color from it
+            palette = Palette.from(bitmap).generate();
             dominantColour = palette.getDominantColor(0);
 
             a = Color.alpha(dominantColour);
@@ -658,7 +597,7 @@ public class ProcessImageActivity extends AppCompatActivity {
             //now, let's begin analysing the geometric properties of our qr code
             //within our image
             qrCornerPoints = getQRCoordinates(barcodeDetector, frame);
-            String corners = "";
+            String corners = "Original QR Code coordinates: ";
 
             for (int i = 0; i < 4; i++) {
                 corners = corners + i + ": (" + qrCornerPoints[i].x + ", " + qrCornerPoints[i].y + ")  ";
@@ -671,103 +610,12 @@ public class ProcessImageActivity extends AppCompatActivity {
             //rectangle for analusys
             calculateOurRectangle(qrCornerPoints);
 
-            textView6.setText("A1: (" + A1.x + ", " + A1.y + "), " + "A2: (" + A2.x + ", " + A2.y + "), " +
+            textView6.setText("Original Rectangle coordinates: A1: (" + A1.x + ", " + A1.y + "), " + "A2: (" + A2.x + ", " + A2.y + "), " +
                     "A3: (" + A3.x + ", " + A3.y + "), " + "A4: (" + A4.x + ", " + A4.y + ")");
-
-            //use the Palette API to extract the colours from the QR code - these can
-            //potentially be used to calibrate the colours in the rest of the picture
-            Palette paletteQR = Palette.from(bitmap2).setRegion(qrCornerPoints[0].x, qrCornerPoints[0].y, qrCornerPoints[1].x, qrCornerPoints[2].y).generate();
-            int dominantColourQR = paletteQR.getDominantColor(0);
-            int colourLightVibrantQR = paletteQR.getLightVibrantColor(dominantColourQR);
-            int colourVibrantQR = paletteQR.getVibrantColor(dominantColourQR);
-            int colourDarkVibrantQR = paletteQR.getDarkVibrantColor(dominantColourQR);
-            int colourLightMutedQR = paletteQR.getLightMutedColor(dominantColourQR);
-            int colourMutedQR = paletteQR.getMutedColor(dominantColourQR);
-            int colourDarkMutedQR = paletteQR.getDarkMutedColor(dominantColourQR);
-
-            getRGBValuesFromPaletteInt(colourLightVibrantQR);
-            textView7QR.setText("QR: The lightvibrant packed RGB value for the subset of the image is: " + colourLightVibrantQR + ", RGB is (" + r1 + ", " + g1 + ", " + b1 + ")");
-            //textView7.setBackgroundColor(Color.rgb(r1, g1, b1));
-            view7QR.setBackgroundColor(Color.rgb(r1, g1, b1));
-
-            getRGBValuesFromPaletteInt(colourLightMutedQR);
-            textView8QR.setText("QR: The lightmuted packed RGB value for the subset of the image is: " + colourLightMutedQR+ ", RGB is (" + r1 + ", " + g1 + ", " + b1 + ")");
-            //textView8.setBackgroundColor(Color.rgb(r1, g1, b1));
-            view8QR.setBackgroundColor(Color.rgb(r1, g1, b1));
-
-            getRGBValuesFromPaletteInt(colourVibrantQR);
-            textView9QR.setText("QR: The vibrant packed RGB value for the subset of the image is: " + colourVibrantQR + ", RGB is (" + r1 + ", " + g1 + ", " + b1 + ")");
-            //textView9.setBackgroundColor(Color.rgb(r1, g1, b1));
-            view9QR.setBackgroundColor(Color.rgb(r1, g1, b1));
-
-            getRGBValuesFromPaletteInt(colourDarkMutedQR);
-            textView10QR.setText("QR: The darkmuted packed RGB value for the subset of the image is: " + colourDarkMutedQR + ", RGB is (" + r1 + ", " + g1 + ", " + b1 + ")");
-            //textView10.setBackgroundColor(Color.rgb(r1, g1, b1));
-            view10QR.setBackgroundColor(Color.rgb(r1, g1, b1));
-
-            getRGBValuesFromPaletteInt(colourMutedQR);
-            textView11QR.setText("QR: The muted packed RGB value for the subset of the image is: " + colourMutedQR + ", RGB is (" + r1 + ", " + g1 + ", " + b1 + ")");
-            //textView11.setBackgroundColor(Color.rgb(r1, g1, b1));
-            view11.setBackgroundColor(Color.rgb(r1, g1, b1));
-
-            getRGBValuesFromPaletteInt(colourDarkVibrantQR);
-            textView12QR.setText("QR: The darkvibrant packed RGB value for the subset of the image is: " + colourDarkVibrantQR + ", RGB is (" + r1 + ", " + g1 + ", " + b1 + ")");
-            //textView12.setBackgroundColor(Color.rgb(r1, g1, b1));
-            view12QR.setBackgroundColor(Color.rgb(r1, g1, b1));
-
-
-            //use the Palette API to set the are of the bitmap to analyse
-            Palette palette1 = Palette.from(bitmap2).setRegion(A1.x, A1.y, A2.x, A3.y).generate();
-            int dominantColour1 = palette1.getDominantColor(0);
-            int colourLightVibrant = palette1.getLightVibrantColor(dominantColour1);
-            int colourVibrant = palette1.getVibrantColor(dominantColour1);
-            int colourDarkVibrant = palette1.getDarkVibrantColor(dominantColour1);
-            int colourLightMuted = palette1.getLightMutedColor(dominantColour1);
-            int colourMuted = palette1.getMutedColor(dominantColour1);
-            int colourDarkMuted = palette1.getDarkMutedColor(dominantColour1);
-
-            try {
-                List<Palette.Swatch> list = palette1.getSwatches();
-                Palette.Swatch swatch = palette1.getDarkMutedSwatch();
-                //textView6.setBackgroundColor(swatch.getRgb());
-
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-
-            getRGBValuesFromPaletteInt(colourLightVibrant);
-            textView7.setText("The lightvibrant packed RGB value for the subset of the image is: " + colourLightVibrant + ", RGB is (" + r1 + ", " + g1 + ", " + b1 + ")");
-            //textView7.setBackgroundColor(Color.rgb(r1, g1, b1));
-            view7.setBackgroundColor(Color.rgb(r1, g1, b1));
-
-            getRGBValuesFromPaletteInt(colourLightMuted);
-            textView8.setText("The lightmuted packed RGB value for the subset of the image is: " + colourLightMuted + ", RGB is (" + r1 + ", " + g1 + ", " + b1 + ")");
-            //textView8.setBackgroundColor(Color.rgb(r1, g1, b1));
-            view8.setBackgroundColor(Color.rgb(r1, g1, b1));
-
-            getRGBValuesFromPaletteInt(colourVibrant);
-            textView9.setText("The vibrant packed RGB value for the subset of the image is: " + colourVibrant + ", RGB is (" + r1 + ", " + g1 + ", " + b1 + ")");
-            //textView9.setBackgroundColor(Color.rgb(r1, g1, b1));
-            view9.setBackgroundColor(Color.rgb(r1, g1, b1));
-
-            getRGBValuesFromPaletteInt(colourDarkMuted);
-            textView10.setText("The darkmuted packed RGB value for the subset of the image is: " + colourDarkMuted + ", RGB is (" + r1 + ", " + g1 + ", " + b1 + ")");
-            //textView10.setBackgroundColor(Color.rgb(r1, g1, b1));
-            view10.setBackgroundColor(Color.rgb(r1, g1, b1));
-
-            getRGBValuesFromPaletteInt(colourMuted);
-            textView11.setText("The muted packed RGB value for the subset of the image is: " + colourMuted + ", RGB is (" + r1 + ", " + g1 + ", " + b1 + ")");
-            //textView11.setBackgroundColor(Color.rgb(r1, g1, b1));
-            view11.setBackgroundColor(Color.rgb(r1, g1, b1));
-
-            getRGBValuesFromPaletteInt(colourDarkVibrant);
-            textView12.setText("The darkvibrant packed RGB value for the subset of the image is: " + colourDarkVibrant + ", RGB is (" + r1 + ", " + g1 + ", " + b1 + ")");
-            //textView12.setBackgroundColor(Color.rgb(r1, g1, b1));
-            view12.setBackgroundColor(Color.rgb(r1, g1, b1));
 
             //calculate the slope of the qrcode in the original bitmap
             slope = getSlopeOfRectangle(qrCornerPoints);
-            Bitmap rotatedBitmap = rotateBitmap(bitmap2, slope);
+            Bitmap rotatedBitmap = rotateBitmap(bitmap, slope);
 
             //now let's try to create new imageview with the original image
             //with a rectangle drawn over the desired area
@@ -784,153 +632,6 @@ public class ProcessImageActivity extends AppCompatActivity {
             Log.d("FEARGS CHECK", "Value of QR Registered: " + continueWithProcessing);
         }
 
-    }
-
-    /**
-     * This method takes an array of points as a parameter - these points are the corner points
-     * of the image's QR Code.
-     * The idea here is that we draw a diagonal line from the top left corner to the bottom right corner,
-     * every pixel along this straight line should be one of two colours: black or white
-     * At the moment the method finds the pixel closest to white and the pixel closest to black.
-     * A better alternative could be to take every pixel in the QR Code and assign them to one of two groups:
-     * closer to black, or closer to white. Then (using an appropriate colour space) we could get the average
-     * distance of each cluster from their desired colour and use this as the delta error due to lighting
-     * conditions - check the validity of this method with Darryl.
-     * @param qrCornerPoints
-     */
-    private void calculateCalibration(Point[] qrCornerPoints){
-        //first two corner points are the top left and top right corners
-        //if we go along the diagonal we should get pixels with only two different values: black and white
-        //let's iterate along this line and store every integer value that appears at least once
-        Point topLeft = qrCornerPoints[0];
-        Point bottomRight = qrCornerPoints[2];
-        Log.d("FEARGS LINE", "The top left corner is (" + topLeft.x + ", " + topLeft.y + ")");
-        Log.d("FEARGS LINE", "The bottom right corner is (" + bottomRight.x + ", " + bottomRight.y + ")");
-
-        ArrayList<Integer> coloursInQRCode = new ArrayList<>();
-
-        double slope = (bottomRight.y - topLeft.y) / (bottomRight.x - topLeft.x);
-        double yIntercept = (-bottomRight.y + (slope*bottomRight.x)) / slope;
-
-        Log.d("FEARGS LINE", "The eqaution of the line is y = " + slope + "x + " + yIntercept);
-
-        for(int i = topLeft.x; i <= bottomRight.x; i++){
-            double j = (slope * i) - yIntercept;
-
-            int pixel = bitmap2.getPixel((int) i, (int) j);
-
-            coloursInQRCode.add(pixel);
-        }
-
-        Collections.sort(coloursInQRCode);
-        int size = coloursInQRCode.size();
-
-        int r1lowest = Color.red(coloursInQRCode.get(0));
-        int g1lowest = Color.green(coloursInQRCode.get(0));
-        int b1lowest = Color.blue(coloursInQRCode.get(0));
-        int checkLowestCOvnersion = coloursInQRCode.get(0) & 0xFFFFFF;
-
-        int r1highest = Color.red(coloursInQRCode.get(size - 1));
-        int g1highest = Color.green(coloursInQRCode.get(size - 1));
-        int b1highest = Color.blue(coloursInQRCode.get(size - 1));
-        int checkHighestCOvnersion = coloursInQRCode.get(size - 1) & 0xFFFFFF;
-
-        textViewCAL1.setText("The blackest colour on the line is: " + coloursInQRCode.get(0) + "(" + checkLowestCOvnersion + ")" + "(" + r1lowest + ", " + g1lowest + ", " + b1lowest + ")." + "The whitest colour on the line is: "+ coloursInQRCode.get(size - 1) + "(" + checkHighestCOvnersion + ")" + "(" + r1highest + ", " + g1highest + ", " + b1highest + ")");
-        viewCAL1.setBackgroundColor(Color.rgb(r1lowest, g1lowest, b1lowest));
-        textViewCAL1.setBackgroundColor(Color.rgb(r1highest, g1highest, b1highest));
-    }
-
-    /**
-     * takes original bitmap and cornerpoints of the QR code as parameters
-     * iterates through all pixels along the top of the qr code and identifies the point with the highest
-     * sum of rgb values: logic behind this is that we want the point as close to (255, 255, 255) as possible
-     * as this gives us our white point
-     * converts to CIELAB and uses Euclidean distance formula to find the distance to 'pure' white
-     * returns this distance in the form of a double (float array)
-     * @param points, bitmap
-     */
-    private float[] calculateDistanceFromWhiteUsingLAB(Point[] points, Bitmap bitmap){
-
-        Point topLeft = points[0];
-        Point topRight = points[1];
-
-        Point pixelForCalibration = new Point();
-
-        int maxRGB = 0;
-
-        for(int x = topLeft.x; x < topRight.x; x++){
-            Log.d("FEARGS TOP LINE", x + ": (" + Color.red(bitmap.getPixel(x, topLeft.y)) + ", " + Color.green(bitmap.getPixel(x, topLeft.y)) + ", " + Color.blue(bitmap.getPixel(x, topLeft.y)) + ")");
-
-            int rgbCombined = Color.red(bitmap.getPixel(x, topLeft.y)) + Color.green(bitmap.getPixel(x, topLeft.y)) + Color.blue(bitmap.getPixel(x, topLeft.y));
-
-            if(rgbCombined > maxRGB){
-                maxRGB = rgbCombined;
-                pixelForCalibration.set(x, topLeft.y);
-            }
-        }
-
-        Log.d("FEARGS EUCLIDEAN", "the pixel chosen: " + pixelForCalibration.x + ", " + pixelForCalibration.y);
-        Log.d("FEARGS EUCLIDEAN", "the pixel chosen(RGB): " + Color.red(bitmap.getPixel(pixelForCalibration.x, pixelForCalibration.y)) + ", " + Color.green(bitmap.getPixel(pixelForCalibration.x, pixelForCalibration.y)) + ", " + Color.blue(bitmap.getPixel(pixelForCalibration.x, pixelForCalibration.y)));
-
-        float[] cie_lab = connector.transform(Color.red(bitmap.getPixel(pixelForCalibration.x, pixelForCalibration.y)), Color.green(bitmap.getPixel(pixelForCalibration.x, pixelForCalibration.y)), Color.blue(bitmap.getPixel(pixelForCalibration.x, pixelForCalibration.y)));
-
-        //euclidean distance is used for LAB color distance measurement
-        float[] whiteLAB = connector.transform(255, 255, 255);
-        double distanceBetween = Math.sqrt((cie_lab[0] * whiteLAB[0]) + (cie_lab[1] * whiteLAB[1]) + (cie_lab[2] * whiteLAB[2]));
-
-        Log.d("FEARGS LAB", "Our shite white: " + cie_lab[0] + "." + cie_lab[1] + "." + cie_lab[2]);
-        Log.d("FEARGS LAB", "Pure angelic white: " + whiteLAB[0] + "." + whiteLAB[1] + "." + whiteLAB[2]);
-
-        float lDifference = whiteLAB[0] - cie_lab[0];
-        float aDifference = whiteLAB[1] - cie_lab[1];
-        float bDifference = whiteLAB[2] - cie_lab[2];
-
-        float[] deltaValues = {lDifference, aDifference, bDifference};
-
-        Log.d("FEARGS EUCLIDEAN", "Distance according to Euclid: " + distanceBetween);
-        Log.d("FEARGS LAB", "Difference between the whites: " + deltaValues[0] + "." + deltaValues[1] + "." + deltaValues[2]);
-        return deltaValues;
-    }
-
-    /**
-     *
-     * @param deltas
-     * @param bitmap
-     * @return
-     */
-    private int[][] correctErrorDueToLightingConditions(float[] deltas, Bitmap bitmap){
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-
-        int[][] newPixelValues = new int[width][height];
-
-        for(int i = 0; i < width; i++){
-            for(int j = 0; j < height; j++){
-                newPixelValues[i][j] = correctPixelValue(bitmap.getPixel(i, j), deltas);
-            }
-        }
-
-        return newPixelValues;
-    }
-
-    /**
-     *
-     * @param pixel
-     * @param deltas
-     * @return
-     */
-    private int correctPixelValue(int pixel, float[] deltas){
-        int pixelCorrected;
-
-        float[] labPixelValues = connector.transform(Color.red(pixel), Color.green(pixel), Color.blue(pixel));
-        float[] correctedLabPixelValues = {labPixelValues[0] + deltas[0], labPixelValues[1] + deltas[1], labPixelValues[2] + deltas[2]};
-
-        float[] pixelsCorrected = connector2.transform(correctedLabPixelValues);
-        float rgb = 65536 * pixelsCorrected[0] * 256 * pixelsCorrected[1] * pixelsCorrected[2];
-
-        pixelCorrected = Math.round(rgb);
-
-        return pixelCorrected;
     }
 
 

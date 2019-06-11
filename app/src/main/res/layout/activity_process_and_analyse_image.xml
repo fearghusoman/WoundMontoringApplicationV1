@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProcessAndAnalyseImageActivity"
+    android:background="@color/colorPrimaryDarkCUSTOM">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="vertical"
+        android:paddingTop="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/backToTakeImage"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_arrow_back_black_18dp" />
+
+        <Button
+            android:id="@+id/button"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/colorPrimaryCUSTOM"
+            android:text="Process Image"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/txtContent"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="" />
+
+        <ImageView
+            android:id="@+id/imgview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="30dp"/>
+
+        <TextView
+            android:id="@+id/txtContent2"
+            android:layout_width="wrap_content"
+            android:layout_height="75dp"
+            android:paddingBottom="30dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="wrap_content"
+            android:layout_height="15dip"
+            android:background="@color/colorAccentCUSTOM"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/txtContent3"
+            android:layout_width="wrap_content"
+            android:layout_height="75dp"
+            android:paddingBottom="30dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="wrap_content"
+            android:layout_height="15dip"
+            android:background="@color/colorAccentCUSTOM"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/txtContent4"
+            android:layout_width="wrap_content"
+            android:layout_height="75dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/view3"
+            android:layout_width="wrap_content"
+            android:layout_height="15dip"
+            android:background="@color/colorAccentCUSTOM"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/txtContent5"
+            android:layout_width="wrap_content"
+            android:layout_height="75dp"
+            android:paddingBottom="30dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/view4"
+            android:layout_width="wrap_content"
+            android:layout_height="15dip"
+            android:background="@color/colorAccentCUSTOM"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/txtContent6"
+            android:layout_width="wrap_content"
+            android:layout_height="75dp"
+            android:paddingBottom="30dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/view5"
+            android:layout_width="wrap_content"
+            android:layout_height="15dip"
+            android:background="@color/colorAccentCUSTOM"
+            android:visibility="gone" />
+
+        <TableLayout
+            android:id="@+id/main_table"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:stretchColumns="0"
+            android:visibility="gone">
+
+
+
+            <View
+                android:layout_height="15dip"
+                android:background="@color/colorAccentCUSTOM" />
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:paddingBottom="30dp">
+
+                <TextView
+                    android:id="@+id/txtContentCAL1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white" />
+
+                <View
+                    android:id="@+id/viewCAL1"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_weight="0.25"
+                    android:background="@color/white" />
+            </TableRow>
+        </TableLayout>
+
+        <ImageView
+            android:id="@+id/imgview2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:id="@+id/viewBETWEENBITMAPS"
+            android:layout_width="match_parent"
+            android:layout_height="15dip"
+            android:background="@color/colorAccentCUSTOM"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/textViewC1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:visibility="visible"
+            android:text="Circle1 cropped:" />
+
+        <TextView
+            android:id="@+id/textViewC1hm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:visibility="visible"
+            />
+
+        <ImageView
+            android:id="@+id/imageViewC1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/bandage_mock_up" />
+
+        <TextView
+            android:id="@+id/textViewC2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:visibility="visible"
+            android:text="Circle2 cropped:" />
+
+        <TextView
+            android:id="@+id/textViewC2hm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:visibility="visible"
+            />
+
+        <ImageView
+            android:id="@+id/imageViewC2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/bandage_mock_up" />
+
+        <TextView
+            android:id="@+id/textViewC3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:visibility="visible"
+            android:text="Circle3 cropped:" />
+
+        <TextView
+            android:id="@+id/textViewC3hm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:visibility="visible"
+            />
+
+        <ImageView
+            android:id="@+id/imageViewC3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/bandage_mock_up" />
+
+        <TextView
+            android:id="@+id/textViewC4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:visibility="visible"
+            android:text="Circle4 cropped:" />
+
+        <TextView
+            android:id="@+id/textViewC4hm"
+            android:layout_width="match_parent"
+            android:layout_height= "wrap_content"
+            android:textColor="@color/white"
+            android:visibility="visible"
+            />
+
+        <ImageView
+            android:id="@+id/imageViewC4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/bandage_mock_up" />
+
+        <Button
+            android:id="@+id/buttonSubmit"
+            android:visibility="gone"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/colorPrimaryCUSTOM"
+            android:text="Submit Analysis"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+</ScrollView>

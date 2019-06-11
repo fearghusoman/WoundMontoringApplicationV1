@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OpenCVColorAnalysisActivity"
+    tools:context=".DressingCirclesColouranalysisActivity"
     android:background="@color/colorPrimaryDarkCUSTOM">
 
     <LinearLayout
@@ -21,80 +21,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textViewRED"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:visibility="visible"
-            android:text="Analysis has found the colour RED in the following patches of the bandage:" />
-
-        <ImageView
-            android:id="@+id/imageViewRED"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/bandage_mock_up" />
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="15dip"
-            android:background="@color/colorAccentCUSTOM"
-            />
-
-        <TextView
-            android:id="@+id/textViewGREEN"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:visibility="visible"
-            android:text="Analysis has found the colour GREEN in the following patches of the bandage:" />
-
-        <ImageView
-            android:id="@+id/imageViewGREEN"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/bandage_mock_up" />
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="15dip"
-            android:background="@color/colorAccentCUSTOM"
-            />
-
-        <TextView
-            android:id="@+id/textViewBLUE"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:visibility="visible"
-            android:text="Analysis has found the colour BLUE in the following patches of the bandage:" />
-
-        <ImageView
-            android:id="@+id/imageViewBLUE"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/bandage_mock_up" />
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="15dip"
-            android:background="@color/colorAccentCUSTOM"
-            />
-
-        <TextView
-            android:id="@+id/textViewYELLOW"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:visibility="visible"
-            android:text="Analysis has found the colour YELLOW in the following patches of the bandage:" />
-
-        <ImageView
-            android:id="@+id/imageViewYELLOW"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/bandage_mock_up" />
-
-        <TextView
             android:id="@+id/textViewDISTANCE"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -107,6 +33,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/bandage_mock_up" />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="15dip"
+            android:background="@color/colorAccentCUSTOM"
+            />
 
         <TextView
             android:id="@+id/textViewC1"
@@ -130,6 +62,12 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/bandage_mock_up" />
 
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="15dip"
+            android:background="@color/colorAccentCUSTOM"
+            />
+
         <TextView
             android:id="@+id/textViewC2"
             android:layout_width="match_parent"
@@ -152,6 +90,12 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/bandage_mock_up" />
 
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="15dip"
+            android:background="@color/colorAccentCUSTOM"
+            />
+
         <TextView
             android:id="@+id/textViewC3"
             android:layout_width="match_parent"
@@ -173,6 +117,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/bandage_mock_up" />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="15dip"
+            android:background="@color/colorAccentCUSTOM"
+            />
 
         <TextView
             android:id="@+id/textViewC4"

@@ -182,8 +182,6 @@ public class CaptureImageActivity extends AppCompatActivity {
                         else{
                             Log.d("FEARGS CHECK", "Intent extras are not being processed correctly.");
                         }
-
-
                     }
 
                 }

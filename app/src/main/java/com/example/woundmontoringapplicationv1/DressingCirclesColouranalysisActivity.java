@@ -70,6 +70,8 @@ public class DressingCirclesColouranalysisActivity extends AppCompatActivity {
     final static double radius4 = 1.5 / 2;
 
     double Q = 0;
+    double deltaE;
+    Point[] deltaEPoints;
 
     //Variables with regards to QR Codes
     Frame frame;
@@ -82,7 +84,7 @@ public class DressingCirclesColouranalysisActivity extends AppCompatActivity {
     Rect rect;
     Point centreC1, centreC2, centreC3, centreC4;
 
-    TextView textViewDISTANCE, tvC1, tvC2, tvC3, tvC4;
+    TextView textViewDISTANCE, tvC1, tvC2, tvC3, tvC4, textViewDeltaEFromQR;
     ImageView imageViewDISTANCE, imageViewC1, imageViewC2, imageViewC3, imageViewC4;
 
     //an array of colors to store the primary colors we allow in our analysis
@@ -108,6 +110,7 @@ public class DressingCirclesColouranalysisActivity extends AppCompatActivity {
         tvC2 = findViewById(R.id.textViewC2hm);
         tvC3 = findViewById(R.id.textViewC3hm);
         tvC4 = findViewById(R.id.textViewC4hm);
+        textViewDeltaEFromQR = findViewById(R.id.textViewDeltaEFromQR);
 
         imageViewDISTANCE = findViewById(R.id.imageViewDISTANCE);
         imageViewC1 = findViewById(R.id.imageViewC1);
@@ -192,6 +195,10 @@ public class DressingCirclesColouranalysisActivity extends AppCompatActivity {
                         tvC3.setText(c3HashMap.toString());
                         tvC4.setText(c4HashMap.toString());
 
+                        //calibration - deltaE
+                        deltaEPoints = getQRCodeMidpointAndMidEndPoint(qrCornerPoints);
+                        deltaE = getImageDeltaEFromQR(deltaEPoints, rotatedBitmap);
+                        textViewDeltaEFromQR.setText("The lowest deltaE value from the QR code was: " + deltaE);
                     }
                 }
             }
@@ -203,7 +210,6 @@ public class DressingCirclesColouranalysisActivity extends AppCompatActivity {
     }
 
     /**
-     *
      * @param color
      * @param colorCheck
      * @return
@@ -225,7 +231,37 @@ public class DressingCirclesColouranalysisActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Create an instance of the class CIELab
+     * then use the ColorUtils class' method called distanceEuclidean; this calculates the
+     * delta E difference between two LAB colors
+     * @param color
+     * @param colorCheck
+     * @return
+     */
+    private double euclideanDistanceBetweenLABs(int color, int colorCheck){
+        double deltaE;
+
+        CIELab cieLab = new CIELab();
+
+        int r = Color.red(color);
+        int g = Color.green(color);
+        int b = Color.blue(color);
+
+        double[] colorLAB = cieLab.rgbToLab(r, g, b);
+
+        int rX = Color.red(colorCheck);
+        int gX = Color.green(colorCheck);
+        int bX = Color.blue(colorCheck);
+
+        double[] colorCheckLAB = cieLab.rgbToLab(rX,gX, bX);
+
+        deltaE = ColorUtils.distanceEuclidean(colorLAB, colorCheckLAB);
+
+        return deltaE;
+    }
+
+    /**
+     * Check closest color to each pixel using Euclidean distance within the RGB color space
      * @param color
      * @param colorsInt
      * @return
@@ -238,6 +274,27 @@ public class DressingCirclesColouranalysisActivity extends AppCompatActivity {
             if(euclideanDistanceBetweenRGBs(color, i) < distance){
                 closestColor = i;
                 distance = euclideanDistanceBetweenRGBs(color, i);
+            }
+        }
+
+        return closestColor;
+    }
+
+    /**
+     * checking closest color to each pixel using CIELab's Delta E
+     * Note: green and blue being assigned to black - check why
+     * @param color
+     * @param colorsInt
+     * @return
+     */
+    private int checkClosestColorInCIELABSpace(int color, int[] colorsInt){
+        int closestColor = Color.WHITE;
+        double distance = 10000000000.0;
+
+        for(int i : colorsInt){
+            if(euclideanDistanceBetweenLABs(color, i) < distance){
+                closestColor = i;
+                distance = euclideanDistanceBetweenLABs(color, i);
             }
         }
 
@@ -260,7 +317,12 @@ public class DressingCirclesColouranalysisActivity extends AppCompatActivity {
 
         for(int i = rect.left; i <= rect.right; i++){
             for(int j = rect.top; j <= rect.bottom; j++) {
-                c = checkClosestColorINRGBSpace(newBitmap.getPixel(i, j), colorsInt);
+                //use Euclidean within RGB color space
+                //c = checkClosestColorINRGBSpace(newBitmap.getPixel(i, j), colorsInt);
+
+                //use Delta E distance in CIELab color space
+                c = checkClosestColorInCIELABSpace(newBitmap.getPixel(i, j), colorsInt);
+
                 newBitmap.setPixel(i, j, c);
             }
         }
@@ -405,5 +467,61 @@ public class DressingCirclesColouranalysisActivity extends AppCompatActivity {
             }
         }
         return stringBooleanHashMap;
+    }
+
+    /**
+     * Pass the qrcornerpoints and get the midpoint of the qr code
+     * @param qr
+     * @return
+     */
+    private Point[] getQRCodeMidpointAndMidEndPoint(Point[] qr){
+        Point[] midEndPoints = new Point[2];
+
+        Point midPoint = new Point();
+        Point midEndPoint = new Point();
+
+        midPoint.set((qr[0].x + qr[1].x) / 2,
+                     (qr[0].y + qr[1].y) / 2);
+
+        midEndPoint.set(qr[1].x,
+                        midPoint.y);
+
+        midEndPoints[0] = midPoint;
+        midEndPoints[1] = midEndPoint;
+
+        return midEndPoints;
+    }
+
+    /**
+     * find the lowest deltaE value from the midline of the qr code
+     * idea: lowest deltaE gives us closest to white value; this should be pure white
+     * @param midEndPoints
+     * @param bitmap
+     * @return
+     */
+    private double getImageDeltaEFromQR(Point[] midEndPoints, Bitmap bitmap){
+        double deltaE;
+
+        deltaE = euclideanDistanceBetweenLABs(bitmap.getPixel(midEndPoints[0].x, midEndPoints[0].y), Color.WHITE);
+
+       if(deltaE > 1.0){
+           for(int i = midEndPoints[0].x + 1; i <= midEndPoints[1].x; i++){
+
+               if(euclideanDistanceBetweenLABs(bitmap.getPixel(i, midEndPoints[0].y), Color.WHITE) < deltaE) {
+
+                   deltaE = euclideanDistanceBetweenLABs(bitmap.getPixel(i, midEndPoints[0].y), Color.WHITE);
+                   Log.d("FEARGS DELTAE", "" + deltaE);
+
+                   if(deltaE < 1.0){
+                       break;
+                   }
+               }
+           }
+       }
+       else{
+           Log.d("FEARGS DELTAE", "Final deltaE" + deltaE);
+       }
+
+        return deltaE;
     }
 }

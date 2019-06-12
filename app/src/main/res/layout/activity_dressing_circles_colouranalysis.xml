@@ -145,5 +145,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/bandage_mock_up" />
+
+        <TextView
+            android:id="@+id/textViewDeltaEFromQR"
+            android:layout_marginBottom="4dp"
+            android:layout_width="match_parent"
+            android:layout_height= "wrap_content"
+            android:textColor="@color/white"
+            android:visibility="visible"
+            />
     </LinearLayout>
 </ScrollView>

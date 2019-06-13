@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String TEXT = "email";
 
-    private String text;
+    private String text_email;
 
     //EditText objects
     EditText Email, Password;
@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
     String responseUserChecker;
 
     //textView object for signup
-    TextView textView;
+    TextView textView, textViewForgotPW;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         Password = findViewById(R.id.input_password);
         LoginButton = findViewById(R.id.btn_login);
         textView = findViewById(R.id.link_signup);
+        textViewForgotPW = findViewById(R.id.link_forgotpassword);
 
         requestQueue = Volley.newRequestQueue(LoginActivity.this);
         progressDialog = new ProgressDialog(LoginActivity.this);
@@ -72,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
         loadData();
 
         //if user already logged in then just go to HomeActivity
-        if(!text.equalsIgnoreCase("")){
+        if(!text_email.equalsIgnoreCase("")){
             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(intent);
         }
@@ -97,6 +98,15 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent registerIntent = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(registerIntent);
+            }
+        });
+
+        //if the user has forgotten their password then start the forgot password activity
+        textViewForgotPW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent forgotPwIntent = new Intent(getApplicationContext(), ForgotPasswordActivity.class);
+                startActivity(forgotPwIntent);
             }
         });
     }
@@ -134,11 +144,13 @@ public class LoginActivity extends AppCompatActivity {
                             userLoggedIn = true;
                             Log.d("FEARGS LOGIN", "This is the log in val: " + userLoggedIn);
 
-                            if(userLoggedIn == true){ //build an intent to link the home activity
-                                //save the users data using shared preferences - for now we'' just save true
-                                saveUserData();
+                            if(userLoggedIn){ //build an intent to link the home activity
+
+                                //save the users data using shared preferences - for now we just save true
+                                saveUserData(EmailHolder);
                                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                                 startActivity(intent);
+
                             }
                             else{ //otherwise end the whole shenanigans
                                 finish();
@@ -220,13 +232,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * this will save the email data to the shared preferences
+     * @param userEmail
      */
-    private void saveUserData(){
+    private void saveUserData(String userEmail){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        editor.putString(TEXT, EmailHolder);
+        editor.putString(TEXT, userEmail);
+
+        //important: **must apply to the Editor instance
+        editor.apply();
     }
 
     /**
@@ -234,7 +250,6 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void loadData(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-
-        text = sharedPreferences.getString(TEXT, "");
+        text_email = sharedPreferences.getString(TEXT, "");
     }
 }

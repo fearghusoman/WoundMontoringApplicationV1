@@ -5,10 +5,12 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +25,8 @@ import java.util.Calendar;
  *
  */
 public class RemindersActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener{
+
+    SharedPreferences sharedPreferences;
 
     TextView textView, textView2, textView3, textViewEmpty;
     View view2, view3, view4;
@@ -40,6 +44,11 @@ public class RemindersActivity extends AppCompatActivity implements TimePickerDi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminders);
+
+        sharedPreferences = getApplicationContext().getSharedPreferences("APPLICATION_PREFS", Context.MODE_PRIVATE);
+        String testSharedPrefs = sharedPreferences.getString("QRID0", "Default initiated");
+
+        Log.d("FEARGS SHARED", testSharedPrefs);
 
         textView = findViewById(R.id.textTime);
         textView2 = findViewById(R.id.textTime1);

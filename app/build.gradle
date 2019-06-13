@@ -46,6 +46,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     //Implement Volley for restful api services
     implementation 'com.android.volley:volley:1.1.1'
+    //for email builder
+    implementation 'de.cketti.mailto:email-intent-builder:1.0.0'
     implementation project(path: ':openCVLibrary343')
 
 }

@@ -34,12 +34,7 @@ public class YourDataFragment extends Fragment {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                editor.putString("email", "");
-
-                Intent intent = new Intent(getContext(), LoginActivity.class);
+                Intent intent = new Intent(getContext(), LogoutActivity.class);
                 startActivity(intent);
             }
         });

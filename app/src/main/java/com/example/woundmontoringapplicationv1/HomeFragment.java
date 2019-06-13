@@ -2,7 +2,9 @@ package com.example.woundmontoringapplicationv1;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -41,6 +43,12 @@ public class HomeFragment extends Fragment {
 
     JsonObjectRequest jsonObjectRequest;
 
+    Context context;
+
+    SharedPreferences sharedPreferences;
+
+    SharedPreferences.Editor editor;
+
     JSONObject jsonObject;
 
     RequestQueue requestQueue;
@@ -66,11 +74,18 @@ public class HomeFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        //set-up the variables for the shared preferences
+        context = getActivity();
+        sharedPreferences = context.getSharedPreferences("APPLICATION_PREFS", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
+        //set-up the recycler view settings
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.HORIZONTAL));
 
+        //instantiate the recycler item arraylist
         snapshotItems = new ArrayList<>();
 
         textView1 = view.findViewById(R.id.register_qr);
@@ -116,6 +131,9 @@ public class HomeFragment extends Fragment {
                                 Log.d("FEARG FORLOOP", i + ": " + qrid + ", " + timestamp);
 
                                 snapshotItems.add(new SnapshotItem(qrid, timestamp));
+
+                                //also add the id to shared preferences
+                                editor.putString("QRID" + i, qrid);
                             }
 
                             homeFragmentRecyclerAdapter = new HomeFragmentRecyclerAdapter(getActivity(), snapshotItems);
@@ -149,7 +167,7 @@ public class HomeFragment extends Fragment {
     }
 
     /**
-     *
+     * checks whether the camera has been granted permission
      * @return
      */
     private boolean checkPermission(){
@@ -162,7 +180,7 @@ public class HomeFragment extends Fragment {
     }
 
     /**
-     *
+     * If camera access has not been granted; this method is called to request
      */
     private void requestPermission(){
         ActivityCompat.requestPermissions(getActivity(),
@@ -171,7 +189,7 @@ public class HomeFragment extends Fragment {
     }
 
     /**
-     *
+     * Checks the request permission result and either continues or re-requests it
      * @param requestCode
      * @param permissions
      * @param grantResults

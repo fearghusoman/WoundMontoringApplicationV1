@@ -18,7 +18,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/CustomWMAStyle">
-        <activity android:name=".DressingCirclesColouranalysisActivity"></activity>
+        <activity android:name=".ForgotPasswordActivity"></activity>
+        <activity android:name=".LogoutActivity" />
+        <activity android:name=".DressingCirclesColouranalysisActivity" />
         <activity android:name=".ProcessAndAnalyseImageActivity" />
         <activity android:name=".RegisteredDressingsActivity" />
         <activity android:name=".HistoryActivity" />

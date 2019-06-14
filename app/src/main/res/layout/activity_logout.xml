@@ -27,39 +27,20 @@
 
     <TextView
         android:id="@+id/textViewLogout"
-        android:layout_width="215dp"
-        android:layout_height="0dp"
+        android:layout_width="364dp"
+        android:layout_height="63dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="424dp"
+        android:layout_marginBottom="380dp"
         android:gravity="center_horizontal"
         android:text="Are you sure you want to Logout?"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.527"
+        app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textViewLogoutDetails"
-        android:layout_width="209dp"
-        android:layout_height="79dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:gravity="center_horizontal"
-        android:text="Logging out means you will need to log back in with your user credentials in order to access you wound monitoring account."
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/button_logout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewLogout"
-        app:layout_constraintVertical_bias="0.41" />
 
     <Button
         android:id="@+id/button_logout"
@@ -74,13 +55,14 @@
         android:layout_marginBottom="252dp"
         android:backgroundTint="@color/colorAccentCUSTOM"
         android:paddingBottom="5dp"
-        android:text="Logout"
+        android:text="Yes, Logout"
+        android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.957" />
 
 </android.support.constraint.ConstraintLayout>

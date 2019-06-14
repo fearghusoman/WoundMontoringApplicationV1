@@ -318,10 +318,10 @@ public class DressingCirclesColouranalysisActivity extends AppCompatActivity {
         for(int i = rect.left; i <= rect.right; i++){
             for(int j = rect.top; j <= rect.bottom; j++) {
                 //use Euclidean within RGB color space
-                //c = checkClosestColorINRGBSpace(newBitmap.getPixel(i, j), colorsInt);
+                c = checkClosestColorINRGBSpace(newBitmap.getPixel(i, j), colorsInt);
 
                 //use Delta E distance in CIELab color space
-                c = checkClosestColorInCIELABSpace(newBitmap.getPixel(i, j), colorsInt);
+                //c = checkClosestColorInCIELABSpace(newBitmap.getPixel(i, j), colorsInt);
 
                 newBitmap.setPixel(i, j, c);
             }

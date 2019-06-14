@@ -281,15 +281,198 @@ public class ProcessImageActivity extends AppCompatActivity {
      * @param bitmap
      * @param slope
      */
-    private Bitmap rotateBitmap(Bitmap bitmap, double slope){
+    private Bitmap rotateBitmap(Bitmap bitmap, double slope, Barcode barcode){
+
         Matrix rotationMatrix = new Matrix();
         rotationMatrix.postRotate((float) (Math.abs(slope)));
-
 
         Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), rotationMatrix, false);
 
         //imageView.setImageBitmap(rotatedBitmap);
         return rotatedBitmap;
+    }
+
+    /**
+     *
+     * @param bitmap
+     * @param points
+     * @return
+     */
+    private Bitmap orientateBitmap(Bitmap bitmap, Point[] points){
+        Bitmap bitmap1;
+
+        int orientation = getOrientationOfBitmap(bitmap, points);
+        Log.d("FEARGS ORIENTATION", "orientation: " + orientation);
+
+        Matrix rotationMatrix = new Matrix();
+        rotationMatrix.postRotate((float) (Math.abs(orientation)));
+
+        bitmap1 = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), rotationMatrix, false);
+
+        return bitmap1;
+    }
+
+    /**
+     *
+     * @param bitmap
+     * @param points
+     * @return
+     */
+    private int getOrientationOfBitmap(Bitmap bitmap, Point[] points){
+        int ORIENTATION = 0;
+
+        boolean corner1 = setupArrayOfPoints(new ArrayList<Point>(), 0, points[0], bitmap);
+        boolean corner2 = setupArrayOfPoints(new ArrayList<Point>(), 1, points[1], bitmap);
+        boolean corner3 = setupArrayOfPoints(new ArrayList<Point>(), 2, points[2], bitmap);
+        boolean corner4 = setupArrayOfPoints(new ArrayList<Point>(), 3, points[3], bitmap);
+
+        String orientationCorner = getOrientationCorner(corner1, corner2, corner3, corner4);
+
+        switch (orientationCorner){
+            case "topLeft":
+                ORIENTATION = 180;
+                break;
+            case "topRight":
+                ORIENTATION = 90;
+                break;
+            case "bottomRight":
+                ORIENTATION = 0;
+                break;
+            case "bottomLeft":
+                ORIENTATION = 270;
+                break;
+        }
+
+        return ORIENTATION;
+    }
+
+    /**
+     *
+     * @param points
+     * @param corner
+     * @return
+     */
+    private boolean setupArrayOfPoints(ArrayList<Point> points, int corner, Point point, Bitmap bitmap){
+
+        points = new ArrayList<>();
+
+        boolean orientationCorner;
+
+        int signX = 1, signY = 1;
+
+        if(corner == 0){
+            signX = 1;
+            signY = 1;
+        }
+        else if(corner == 1){
+            signX = -1;
+            signY = 1;
+        }
+        else if(corner == 2){
+            signX = -1;
+            signY = -1;
+        }
+        else if(corner == 3){
+            signX = 1;
+            signY = -1;
+        }
+
+        points.add(new Point(point.x + (1 * signX), point.y + (1 * signY)));
+        points.add(new Point(point.x + (1 * signX), point.y + (10 * signY)));
+        points.add(new Point(point.x + (1 * signX), point.y + (20 * signY)));
+        points.add(new Point(point.x + (1 * signX), point.y + (30 * signY)));
+
+        points.add(new Point(point.x + (1 * signX), point.y + (1 * signY)));
+        points.add(new Point(point.x + (10 * signX), point.y + (1 * signY)));
+        points.add(new Point(point.x + (20 * signX), point.y + (1 * signY)));
+        points.add(new Point(point.x + (30 * signX), point.y + (1 * signY)));
+
+        Log.d("FEARGS CORNER", "WE ARE NOW CHECKING CORNER " + corner);
+
+        boolean dataCorner = closerToBlack(points, bitmap);
+
+        if(dataCorner == true){
+            orientationCorner = false;
+        }
+        else{
+            orientationCorner = true;
+        }
+
+        return orientationCorner;
+    }
+
+    /**
+     *
+     * @param points
+     * @return
+     */
+    private boolean closerToBlack(ArrayList<Point> points, Bitmap bitmap){
+        boolean closerToBlack = true;
+
+        for(int i = 0; i < points.size(); i++){
+            closerToBlack = checkWhetherPixelCloserToBlack(bitmap, points.get(i));
+            Log.d("FEARGS CHECK", "Checking the point: (" + points.get(i).x + ", " + points.get(i).y + ")");
+            if(closerToBlack == false){
+                break;
+            }
+        }
+
+        return closerToBlack;
+    }
+
+    /**
+     *
+     * @param bitmap
+     * @param point
+     * @return
+     */
+    private boolean checkWhetherPixelCloserToBlack(Bitmap bitmap, Point point){
+        boolean closerToBlack;
+
+        int colorToCheck = bitmap.getPixel(point.x,point.y);
+
+        int r = Color.red(colorToCheck);
+        int g = Color.green(colorToCheck);
+        int b = Color.blue(colorToCheck);
+
+        int white = 765;
+
+        if((r + g + b) > (white / 2)){
+            closerToBlack = false;
+        }
+        else{
+            closerToBlack = true;
+        }
+
+        return closerToBlack;
+    }
+
+    /**
+     *
+     * @param c1
+     * @param c2
+     * @param c3
+     * @param c4
+     * @return
+     */
+    private String getOrientationCorner(boolean c1, boolean c2, boolean c3, boolean c4){
+        String orientationCorner = "";
+
+        Log.d("FEARGS ORIENTATION", "C1: " + c1);
+        Log.d("FEARGS ORIENTATION", "C2: " + c2);
+        Log.d("FEARGS ORIENTATION", "C3: " + c3);
+        Log.d("FEARGS ORIENTATION", "C4: " + c4);
+
+        if(c1){ orientationCorner = "topLeft";
+        }
+        else if(c2){ orientationCorner = "topRight";
+        }
+        else if(c3){ orientationCorner = "bottomRight";
+        }
+        else if(c4){ orientationCorner = "bottomLeft";
+        }
+
+        return orientationCorner;
     }
 
     /**
@@ -332,21 +515,6 @@ public class ProcessImageActivity extends AppCompatActivity {
 
         x4 = x1;
         y4 = y1 + l1;
-
-        /**
-        //now calculate the coordinates
-        x1 = q1.x + l1 + l2;
-        y1 = q1.y;
-
-        x2 = x1 + l3;
-        y2 = y1;
-
-        x3 = x2;
-        y3 = q3.y;
-
-        x4 = x1;
-        y4 = y3;
-        **/
 
         //add the coordinates to the point variables
         A1 = new Point(x1, y1);
@@ -438,7 +606,7 @@ public class ProcessImageActivity extends AppCompatActivity {
                 carryOutColourAnalysis();
 
                 //check the bitmap for red, green, blue
-                checkBitmapForRGBValues(bitmap);
+                //checkBitmapForRGBValues(bitmap);
 
                 progressDialog.dismiss();
 
@@ -615,12 +783,20 @@ public class ProcessImageActivity extends AppCompatActivity {
 
             //calculate the slope of the qrcode in the original bitmap
             slope = getSlopeOfRectangle(qrCornerPoints);
-            Bitmap rotatedBitmap = rotateBitmap(bitmap, slope);
+            Bitmap rotatedBitmap = rotateBitmap(bitmap, slope, thisBarCode);
 
             //now let's try to create new imageview with the original image
             //with a rectangle drawn over the desired area
             frame1 = new Frame.Builder().setBitmap(rotatedBitmap).build();
             qrCornerPoints1 = getQRCoordinates(barcodeDetector, frame1);
+
+            //now that the qr code is horizontal lets update the orientation
+            rotatedBitmap = orientateBitmap(rotatedBitmap, qrCornerPoints1);
+
+            //overwrite the frame and cornerpoints variables with the values from the newly orientated bitmap
+            frame1 = new Frame.Builder().setBitmap(rotatedBitmap).build();
+            qrCornerPoints1 = getQRCoordinates(barcodeDetector, frame1);
+
             calculateOurRectangle(qrCornerPoints1);
             rect = new Rect(A1.x, A1.y, A2.x, A3.y);
             calculateOurCircles(rect, q);

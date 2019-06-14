@@ -124,6 +124,7 @@ public class DressingCirclesColouranalysisActivity extends AppCompatActivity {
             String path = bundle.get("imageName").toString();
             Rect rect1 = (Rect) bundle.get("rectangleForAnalysis");
             double slope = (double) bundle.get("slope");
+            int orientation = (int) bundle.get("orientation");
             Log.d(TAG, "Bundle: " + path);
             Log.d(TAG, "RECT: " + rect1.left + " " + rect1.top);
 
@@ -131,7 +132,7 @@ public class DressingCirclesColouranalysisActivity extends AppCompatActivity {
                 FileInputStream fIS = new FileInputStream(new File(path));
                 bitmap = BitmapFactory.decodeStream(fIS);
 
-                rotatedBitmap = createNewBitmapRotateAndClosestColorConversion(bitmap, rect1, slope);
+                rotatedBitmap = createNewBitmapRotateAndClosestColorConversion(bitmap, rect1, slope, orientation);
 
                 barcodeDetector = new BarcodeDetector.Builder(getApplicationContext()).setBarcodeFormats(Barcode.QR_CODE).build();
 
@@ -307,9 +308,9 @@ public class DressingCirclesColouranalysisActivity extends AppCompatActivity {
      * @param rect
      * @param slope
      */
-    private Bitmap createNewBitmapRotateAndClosestColorConversion(Bitmap bitmap, Rect rect, double slope){
+    private Bitmap createNewBitmapRotateAndClosestColorConversion(Bitmap bitmap, Rect rect, double slope, int orientation){
         Matrix rotationMatrix = new Matrix();
-        rotationMatrix.postRotate((float) (Math.abs(slope)));
+        rotationMatrix.postRotate((float) (Math.abs(slope) + orientation));
 
         Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), rotationMatrix, false);
 

@@ -87,6 +87,8 @@ public class ProcessImageActivity extends AppCompatActivity {
     static final String checkurl = "http://foman01.lampt.eeecs.qub.ac.uk/woundmonitoring/process_image.php";
     boolean continueWithProcessing = false;
 
+    int orientation;
+
     String timestamp = "";
     String path = "";
 
@@ -301,7 +303,7 @@ public class ProcessImageActivity extends AppCompatActivity {
     private Bitmap orientateBitmap(Bitmap bitmap, Point[] points){
         Bitmap bitmap1;
 
-        int orientation = getOrientationOfBitmap(bitmap, points);
+        orientation = getOrientationOfBitmap(bitmap, points);
         Log.d("FEARGS ORIENTATION", "orientation: " + orientation);
 
         Matrix rotationMatrix = new Matrix();
@@ -635,6 +637,7 @@ public class ProcessImageActivity extends AppCompatActivity {
                         openIntent.putExtra("imageName", path);
                         openIntent.putExtra("rectangleForAnalysis", rect);
                         openIntent.putExtra("slope", slope);
+                        openIntent.putExtra("orientation", orientation);
                         startActivity(openIntent);
                     }
                 });

@@ -27,6 +27,20 @@
         <item>Settings</item>
     </string-array>
 
+    <!--Strings for registering -->
+    <string name="fname"><i>First Name</i></string>
+    <string name="lname"><i>Last Name</i></string>
+    <string name="dob"><i>dd/mm/yyyy</i></string>
+    <string name="add1"><i>Address Line 1</i></string>
+    <string name="add2"><i>Address Line 2</i></string>
+    <string name="town"><i>Town/City</i></string>
+    <string name="country"><i>Country</i></string>
+    <string name="postcode"><i>Postcode</i></string>
+    <string name="email"><i>Email</i></string>
+    <string name="pw"><i>Password</i></string>
+    <string name="pw2"><i>Re-enter Password</i></string>
+    <string name="clinician"><i>Your GPs email</i></string>
+
     <string-array name="wound_locations">
         <item>Left Arm</item>
         <item>Left Leg</item>

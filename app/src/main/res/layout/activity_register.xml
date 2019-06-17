@@ -9,42 +9,45 @@
 
     <TableLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <TableLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="30dp"
+            >
 
-            <TableRow>
 
                 <TextView
                     android:id="@+id/textView6"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="Personal Details"
+                    android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="@color/white"
                     android:textSize="24sp" />
-            </TableRow>
 
             <TableRow>
 
                 <EditText
                     android:id="@+id/editFName"
-                    android:backgroundTint="@color/colorAccentCUSTOM"
+                    android:backgroundTint="@color/colorPrimaryCUSTOM"
                     android:ems="10"
                     android:fontFamily="sans-serif-thin"
-                    android:hint="First Name"
+                    android:hint="@string/fname"
                     android:inputType="textPersonName"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/white" />
 
                 <EditText
                     android:id="@+id/editLName"
-                    android:backgroundTint="@color/colorAccentCUSTOM"
+                    android:backgroundTint="@color/colorPrimaryCUSTOM"
                     android:ems="10"
                     android:fontFamily="sans-serif-thin"
-                    android:hint="Last Name"
+                    android:hint="@string/lname"
                     android:inputType="textPersonName"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/white" />
@@ -52,38 +55,56 @@
 
             <TableRow>
 
-                <EditText
-                    android:id="@+id/editDOB"
+                <Button
+                    android:id="@+id/btnDOB"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorAccentCUSTOM"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:backgroundTint="@color/colorPrimaryCUSTOM"
                     android:ems="10"
                     android:fontFamily="sans-serif-thin"
-                    android:hint="dd/mm/yyyy"
-                    android:inputType="date"
+                    android:text="Choose Date"
                     android:textColor="@android:color/white"
-                    android:textColorHint="@android:color/white" />
+                    android:textColorHint="@android:color/white"
+                    tools:text="Choose Date" />
+
+                <TextView
+                    android:id="@+id/tvDOB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|clip_vertical"
+                    android:textColor="@android:color/white" />
             </TableRow>
 
         </TableLayout>
 
+        <View
+            android:id="@+id/view1"
+            android:layout_width="wrap_content"
+            android:layout_height="15dip"
+            android:background="@color/colorAccentCUSTOM" />
+
         <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="20dp">
+            android:paddingTop="20dp"
+            android:paddingBottom="30dp"
+            >
 
-            <TableRow>
 
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Address Details"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@android:color/white"
-                    android:textSize="24sp"
-                    tools:text="Address Details" />
-            </TableRow>
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Address Details"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                tools:text="Address Details" />
 
             <TableRow>
 
@@ -91,10 +112,10 @@
                     android:id="@+id/editAddress1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorAccentCUSTOM"
+                    android:backgroundTint="@color/colorPrimaryCUSTOM"
                     android:ems="10"
                     android:fontFamily="sans-serif-thin"
-                    android:hint="Address Line 1"
+                    android:hint="@string/add1"
                     android:inputType="textPersonName"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/white" />
@@ -106,10 +127,10 @@
                     android:id="@+id/editAddress2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorAccentCUSTOM"
+                    android:backgroundTint="@color/colorPrimaryCUSTOM"
                     android:ems="10"
                     android:fontFamily="sans-serif-thin"
-                    android:hint="Address Line 2"
+                    android:hint="@string/add2"
                     android:inputType="textPersonName"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/white" />
@@ -121,10 +142,10 @@
                     android:id="@+id/editTown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorAccentCUSTOM"
+                    android:backgroundTint="@color/colorPrimaryCUSTOM"
                     android:ems="10"
                     android:fontFamily="sans-serif-thin"
-                    android:hint="Town/City"
+                    android:hint="@string/town"
                     android:inputType="textPersonName"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/white" />
@@ -136,10 +157,10 @@
                     android:id="@+id/editCountry"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorAccentCUSTOM"
+                    android:backgroundTint="@color/colorPrimaryCUSTOM"
                     android:ems="10"
                     android:fontFamily="sans-serif-thin"
-                    android:hint="Country"
+                    android:hint="@string/country"
                     android:inputType="textPersonName"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/white" />
@@ -151,10 +172,10 @@
                     android:id="@+id/editPCode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorAccentCUSTOM"
+                    android:backgroundTint="@color/colorPrimaryCUSTOM"
                     android:ems="10"
                     android:fontFamily="sans-serif-thin"
-                    android:hint="Postcode"
+                    android:hint="@string/postcode"
                     android:inputType="textPersonName"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/white" />
@@ -162,23 +183,28 @@
 
         </TableLayout>
 
+        <View
+            android:id="@+id/view2"
+            android:layout_width="wrap_content"
+            android:layout_height="15dip"
+            android:background="@color/colorAccentCUSTOM" />
+
         <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="20dp">
 
-            <TableRow>
 
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Login Details"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@android:color/white"
-                    android:textSize="24sp"
-                    app:layout_constraintStart_toStartOf="parent" />
-            </TableRow>
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Login Details"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TableRow>
 
@@ -186,10 +212,10 @@
                     android:id="@+id/editEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorAccentCUSTOM"
+                    android:backgroundTint="@color/colorPrimaryCUSTOM"
                     android:ems="10"
                     android:fontFamily="sans-serif-thin"
-                    android:hint="@string/prompt_email"
+                    android:hint="@string/email"
                     android:inputType="textEmailAddress"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/white" />
@@ -199,20 +225,20 @@
 
                 <EditText
                     android:id="@+id/editPassword2"
-                    android:backgroundTint="@color/colorAccentCUSTOM"
+                    android:backgroundTint="@color/colorPrimaryCUSTOM"
                     android:ems="10"
                     android:fontFamily="sans-serif-thin"
-                    android:hint="@string/prompt_password"
+                    android:hint="@string/pw"
                     android:inputType="textPassword"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/white" />
 
                 <EditText
                     android:id="@+id/editPassword"
-                    android:backgroundTint="@color/colorAccentCUSTOM"
+                    android:backgroundTint="@color/colorPrimaryCUSTOM"
                     android:ems="10"
                     android:fontFamily="sans-serif-thin"
-                    android:hint="Re-enter Password"
+                    android:hint="@string/pw2"
                     android:inputType="textPassword"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/white" />
@@ -220,6 +246,46 @@
 
 
         </TableLayout>
+
+        <View
+            android:id="@+id/view3"
+            android:layout_width="wrap_content"
+            android:layout_height="15dip"
+            android:background="@color/colorAccentCUSTOM" />
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp">
+
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Clinician Details"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TableRow>
+
+            <EditText
+                android:id="@+id/editClinicianEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorPrimaryCUSTOM"
+                android:ems="10"
+                android:fontFamily="sans-serif-thin"
+                android:hint="@string/clinician"
+                android:inputType="textEmailAddress"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white" />
+        </TableRow>
+
+    </TableLayout>
 
         <TableRow android:layout_height="73dp"
             android:gravity="center_horizontal"

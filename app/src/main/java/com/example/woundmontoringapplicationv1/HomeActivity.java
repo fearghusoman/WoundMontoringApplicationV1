@@ -15,15 +15,19 @@ public class HomeActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     Bundle bundle;
 
+    View homeView, monitorView, yourDataView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        //getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+
+        homeView = findViewById(R.id.homeview);
+        monitorView = findViewById(R.id.monitorview);
+        yourDataView = findViewById(R.id.yourdataview);
 
         bundle = getIntent().getExtras();
 
@@ -31,13 +35,17 @@ public class HomeActivity extends AppCompatActivity {
             if(bundle.getString("message").equalsIgnoreCase("yourdatafragment")){
                 getSupportFragmentManager().beginTransaction().replace(R.id.constraint_container_home,
                         new YourDataFragment()).commit();
+                homeView.setVisibility(View.INVISIBLE);
+                monitorView.setVisibility(View.INVISIBLE);
+                yourDataView.setVisibility(View.VISIBLE);
             }
         }else{
             getSupportFragmentManager().beginTransaction().replace(R.id.constraint_container_home,
                     new HomeFragment()).commit();
+            homeView.setVisibility(View.VISIBLE);
+            monitorView.setVisibility(View.INVISIBLE);
+            yourDataView.setVisibility(View.INVISIBLE);
         }
-
-
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
@@ -54,12 +62,21 @@ public class HomeActivity extends AppCompatActivity {
                     switch(menuItem.getItemId()){
                         case R.id.first_item:
                             selectedFragment = new HomeFragment();
+                            homeView.setVisibility(View.VISIBLE);
+                            monitorView.setVisibility(View.INVISIBLE);
+                            yourDataView.setVisibility(View.INVISIBLE);
                             break;
                         case R.id.second_item:
                             selectedFragment = new MonitorFragment();
+                            monitorView.setVisibility(View.VISIBLE);
+                            yourDataView.setVisibility(View.INVISIBLE);
+                            homeView.setVisibility(View.INVISIBLE);
                             break;
                         case R.id.third_item:
                             selectedFragment = new YourDataFragment();
+                            homeView.setVisibility(View.INVISIBLE);
+                            monitorView.setVisibility(View.INVISIBLE);
+                            yourDataView.setVisibility(View.VISIBLE);
                             break;
 
                     }
@@ -70,4 +87,19 @@ public class HomeActivity extends AppCompatActivity {
                     return true;
                 }
             };
+
+    /**
+     * override the onBackPressed method to disallow the back button
+     */
+    @Override
+    public void onBackPressed() {
+
+        if(homeView.getVisibility() == View.VISIBLE){
+            moveTaskToBack(false);
+        }
+        else{
+            moveTaskToBack(true);
+        }
+
+    }
 }

@@ -16,6 +16,14 @@ public class DressingItem {
     /**
      *
      * @param QRID
+     */
+    public DressingItem(String QRID){
+        this.QRID = QRID;
+    }
+
+    /**
+     *
+     * @param QRID
      * @param QRInfo
      * @param location
      */

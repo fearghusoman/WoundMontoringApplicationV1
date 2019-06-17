@@ -151,6 +151,10 @@ public class LoginActivity extends AppCompatActivity {
                                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                                 startActivity(intent);
 
+                                //if user has properly logged in then finish this activity - prevents user
+                                //from accessing the screen using the back button
+                                finish();
+
                             }
                             else{ //otherwise end the whole shenanigans
                                 finish();

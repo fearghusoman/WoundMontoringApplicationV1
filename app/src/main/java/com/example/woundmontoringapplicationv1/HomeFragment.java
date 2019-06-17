@@ -121,6 +121,9 @@ public class HomeFragment extends Fragment {
 
                             Log.d("FEARGS TRY", "Made it past getJSONArray");
 
+                            ArrayList<String> strings = new ArrayList<>();
+                            int x = 0;
+
                             for(int i = 0; i < jsonArray.length(); i++){
 
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -133,7 +136,17 @@ public class HomeFragment extends Fragment {
                                 snapshotItems.add(new SnapshotItem(qrid, timestamp));
 
                                 //also add the id to shared preferences
-                                editor.putString("QRID" + i, qrid);
+                                if(strings.contains(qrid)){
+                                    //then do nothing
+                                }
+                                else{
+                                    strings.add(qrid);
+                                    editor.putString("QRID" + x, qrid);
+                                    editor.putInt("X", x);
+                                    editor.apply();
+                                    x++;
+                                }
+
                             }
 
                             homeFragmentRecyclerAdapter = new HomeFragmentRecyclerAdapter(getActivity(), snapshotItems);
@@ -210,4 +223,6 @@ public class HomeFragment extends Fragment {
                 }
         }
     }
+
+
 }

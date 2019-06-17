@@ -1,12 +1,17 @@
 package com.example.woundmontoringapplicationv1;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -18,20 +23,25 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
-    EditText fn, ln, dob, a1, a2, town, country, postcode, email, pw, pwCheck;
-    Button registerBtn;
+    EditText fn, ln, a1, a2, town, country, postcode, email, pw, pwCheck, clinicianEmail;
+
+    Button registerBtn, dob;
+
+    TextView textViewDOB;
 
     Boolean fieldsFilled;
 
     RequestQueue requestQueue;
     ProgressDialog progressDialog;
 
-    String fnS, lnS, dobS, a1S, a2S, townS, countryS, postcodeS, emailS, pwS, pwCheckS;
+    String fnS, lnS, dobS, a1S, a2S, townS, countryS, postcodeS, emailS, pwS, pwCheckS, clinicianEmailS;
     String url = "http://foman01.lampt.eeecs.qub.ac.uk/woundmonitoring/register.php";
 
     @Override
@@ -41,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         fn = findViewById(R.id.editFName);
         ln = findViewById(R.id.editLName);
-        dob = findViewById(R.id.editDOB);
+        dob = findViewById(R.id.btnDOB);
         a1 = findViewById(R.id.editAddress1);
         a2 = findViewById(R.id.editAddress2);
         town = findViewById(R.id.editTown);
@@ -50,6 +60,16 @@ public class RegisterActivity extends AppCompatActivity {
         email = findViewById(R.id.editEmail);
         pw = findViewById(R.id.editPassword2);
         pwCheck = findViewById(R.id.editPassword);
+        clinicianEmail = findViewById(R.id.editClinicianEmail);
+        textViewDOB = findViewById(R.id.tvDOB);
+
+        dob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getSupportFragmentManager(), "date picker");
+            }
+        });
 
         registerBtn = findViewById(R.id.buttonRegister);
 
@@ -77,12 +97,32 @@ public class RegisterActivity extends AppCompatActivity {
 
     /**
      *
+     * @param view
+     * @param year
+     * @param month
+     * @param dayOfMonth
+     */
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
+
+        textViewDOB.setText(currentDateString);
+    }
+
+    /**
+     *
      */
     public void UserRegister(){
         progressDialog.setMessage("Please wait...");
         progressDialog.show();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+        final StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d("FEARGS REGISTER", response.toString());
@@ -91,17 +131,23 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if(response.equalsIgnoreCase("Successful Registration")){
                     Log.d("FEARGS REGISTER", "EVERYTHING SHOULD BE PERFECT NOW");
-                    Toast.makeText(RegisterActivity.this, "Well done, you've registered a new account!", Toast.LENGTH_LONG);
+                    Toast.makeText(RegisterActivity.this, "Well done, you've registered a new account!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
                 }
                 else if(response.equalsIgnoreCase("Email already exists")){
                     Log.d("FEARGS REGISTER", "WE'VE GOTTEN AS FAR AS THE RESPONSE - AND THE RESPONSE SAYS EMAIL ALREADY IN USE");
                     Toast.makeText(RegisterActivity.this, "Sorry, this email looks like it's already in use!", Toast.LENGTH_SHORT).show();
                 }
+                else if(response.equalsIgnoreCase("Clinician does not exist")){
+                    Log.d("FEARGS REGISTER", "GOTTEN RESPONSE - DR DOESNT EXIST");
+                    Toast.makeText(RegisterActivity.this, "Sorry, this clinicisn does nt exist - check email!", Toast.LENGTH_SHORT).show();
+                }
                 else{
                     Log.d("FEARGS REGISTER", "WE'VE GOTTEN AS FAR AS THE RESPONSE - AND THE RESPONSE RUBBISH");
-                    Log.d("FEARGS REGISTER", response.toString());
+                    Log.d("FEARGS REGISTER", response);
                     Log.d("FEARGS REGISTER", pwS);
-                    Toast.makeText(RegisterActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, response, Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {
@@ -128,6 +174,7 @@ public class RegisterActivity extends AppCompatActivity {
                 params.put("Town", townS);
                 params.put("Country", countryS);
                 params.put("PostCode", postcodeS);
+                params.put("Clinician", clinicianEmailS);
 
                 return params;
             }
@@ -173,9 +220,10 @@ public class RegisterActivity extends AppCompatActivity {
         emailS = email.getText().toString().trim();
         pwS = pw.getText().toString().trim();
         pwCheckS = pwCheck.getText().toString().trim();
+        clinicianEmailS = clinicianEmail.getText().toString().trim();
 
         if(fnS.isEmpty() || lnS.isEmpty() || dobS.isEmpty() || a1S.isEmpty() || a2S.isEmpty() || townS.isEmpty() || countryS.isEmpty()
-                || postcodeS.isEmpty() || emailS.isEmpty() || pwS.isEmpty() || pwCheckS.isEmpty()){
+                || postcodeS.isEmpty() || emailS.isEmpty() || pwS.isEmpty() || pwCheckS.isEmpty() || clinicianEmailS.isEmpty()){
 
             Log.d("FEARGS REGISTER", "NOT ALL FIELDS ARE FILLED");
             Toast.makeText(RegisterActivity.this, "Please fill in all the fields in the form!", Toast.LENGTH_LONG).show();

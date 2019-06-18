@@ -256,4 +256,13 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         text_email = sharedPreferences.getString(TEXT, "");
     }
+
+    /**
+     * override the onBack pressed method - if the back button is pressed we don't want to undo
+     * the logout process!!!
+     */
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(false);
+    }
 }

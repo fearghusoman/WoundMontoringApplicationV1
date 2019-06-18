@@ -49,6 +49,7 @@ public class LogoutActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 editor.putString("email", "");
+                editor.putString("status", "logged_out");
                 editor.apply();
 
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);

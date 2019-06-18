@@ -13,12 +13,20 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/app_design2"
+        android:icon="@mipmap/app_design_wma"
         android:label="Wound Montoring Application V1"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/CustomWMAStyle">
-        <activity android:name=".RemindersActivityV2"></activity>
+
+        <activity android:name=".LaunchActivity" android:theme="@style/LaunchTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".RemindersActivityV2" />
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".LogoutActivity" />
         <activity android:name=".DressingCirclesColouranalysisActivity" />
@@ -37,11 +45,6 @@
         <activity android:name=".HomeActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

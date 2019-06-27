@@ -82,14 +82,19 @@ public class DressingCirclesColouranalysisActivity extends AppCompatActivity {
     //point array to hold the corner points of the QR Code
     Point[] qrCornerPoints;
     Rect rect;
+    String path;
+    double slope;
+    int orientation;
+    Rect rect1;
     Point centreC1, centreC2, centreC3, centreC4;
 
     TextView textViewDISTANCE, tvC1, tvC2, tvC3, tvC4, textViewDeltaEFromQR;
     ImageView imageViewDISTANCE, imageViewC1, imageViewC2, imageViewC3, imageViewC4;
 
     //an array of colors to store the primary colors we allow in our analysis
-    //Color[] colors = {Color.valueOf(Color.WHITE), Color.valueOf(Color.RED), Color.valueOf(Color.GREEN), Color.valueOf(Color.BLUE), Color.valueOf(Color.YELLOW)};
-    int[] colorsInt = {Color.WHITE, Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.BLACK};
+    //int[] colorsInt = {Color.WHITE, Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.BLACK};
+    //the same array but with black removed
+    int[] colorsInt = {Color.WHITE, Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW};
 
     Bitmap bitmap, rotatedBitmap;
     Bitmap circle1, circle2, circle3, circle4;
@@ -121,12 +126,12 @@ public class DressingCirclesColouranalysisActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
 
         if (bundle != null) {
-            String path = bundle.get("imageName").toString();
-            Rect rect1 = (Rect) bundle.get("rectangleForAnalysis");
-            double slope = (double) bundle.get("slope");
-            int orientation = (int) bundle.get("orientation");
+            path = bundle.get("imageName").toString();
+            rect1 = (Rect) bundle.get("rectangleForAnalysis");
+            slope = (double) bundle.get("slope");
+            orientation = (int) bundle.get("orientation");
             Log.d(TAG, "Bundle: " + path);
-            Log.d(TAG, "RECT: " + rect1.left + " " + rect1.top);
+            Log.d(TAG, "RECT: left x:" + rect1.left + ", top y:" + rect1.top + ", right x: " + rect1.right + ", bottom y: " + rect1.bottom);
 
             try {
                 FileInputStream fIS = new FileInputStream(new File(path));
@@ -318,6 +323,7 @@ public class DressingCirclesColouranalysisActivity extends AppCompatActivity {
 
         for(int i = rect.left; i <= rect.right; i++){
             for(int j = rect.top; j <= rect.bottom; j++) {
+                Log.d("FEARGS LOOP", "createNEwBitmapRotate: (" + i + ", " + j + ")");
                 //use Euclidean within RGB color space
                 c = checkClosestColorINRGBSpace(newBitmap.getPixel(i, j), colorsInt);
 

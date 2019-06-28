@@ -43,6 +43,9 @@ import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint2f;
@@ -105,7 +108,7 @@ public class ProcessImageActivity extends AppCompatActivity {
     Barcode thisBarCode;
     BarcodeDetector barcodeDetector;
 
-    Bitmap bitmap, bitmapForPixelColor;
+    Bitmap bitmap;
     Bitmap circle1, circle2, circle3, circle4;
 
     boolean continueWithProcessing = false;
@@ -122,30 +125,26 @@ public class ProcessImageActivity extends AppCompatActivity {
     double q;
 
     FloatingActionButton floatingActionButton;
-    Frame frame, frame1;
+    Frame frame, frameRotated;
 
     //hash maps for the colour results of each circle
     HashMap<String, Boolean> c1HashMap, c2HashMap, c3HashMap, c4HashMap;
 
-    ImageView imageView, imageView2, imgviewDrawCirclesOnCorners1, imgviewDrawCirclesOnCorners2, imgviewDrawCirclesOnCorners3, imgviewDrawCirclesOnCorners4;
-    ImageView imageViewC1, imageViewC2, imageViewC3, imageViewC4;
+    ImageView imageViewOriginal, imageView2, imgviewDrawCirclesOnCorners1, imgviewDrawCirclesOnCorners2, imgviewDrawCirclesOnCorners3, imgviewDrawCirclesOnCorners4;
+    ImageView imageViewC1, imageViewC2, imageViewC3, imageViewC4, imgviewWarpedAndAffineTransformation, imgviewWarpedTransformation;
 
     int orientation;
     //variables to hold the calculated four corners of the rectangle to be analysed
     int x1, y1, x2, y2, x3, y3, x4, y4;
     int l1, l2, l3;
-    int dominantColour, a, r, g, b, r1, g1, b1, a1;
+    int a, r, g, b;
     int circ1x, circ1y, circ2x, circ2y, circ3x, circ3y, circ4x, circ4y;
-    //integers for the reg, green, blue rgb values
-    int redR = 255, redG = 0, redB = 0, greenR = 0, greenG = 128, greenB = 0, blueR = 0, blueG = 0, blueB = 255;
-    //an array of colors to store the primary colors we allow in our analysis
-    //int[] colorsInt = {Color.WHITE, Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.BLACK};
-    //the same array but with black removed
+    int circle1Color = Color.BLUE, circle2Color = Color.RED, circle3Color = Color.GREEN, circle4Color = Color.YELLOW;
+
     int[] colorsInt = {Color.WHITE, Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW};
+    int[] colorsByCircle = {circle1Color, circle2Color, circle3Color, circle4Color};
 
-    Palette palette;
-
-    Point[] qrCornerPoints, qrCornerPoints1;
+    Point[] qrCornerPoints, qrCornerPointsRotated;
     Point centreC1, centreC2, centreC3, centreC4;
     Point A1, A2, A3, A4;
     //coordinates for circles
@@ -168,12 +167,34 @@ public class ProcessImageActivity extends AppCompatActivity {
     View view3, view4, view5;
 
     /**-----------------------------------------------------------------------**/
-    /**---------------------ONCREATE METHOD -------------------------------**/
+    /**---------------------BASE LOADER CALLBACK -----------------------------**/
+    /**-----------------------------------------------------------------------**/
+
+    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
+        @Override
+        public void onManagerConnected(int status) {
+            switch(status){
+                case LoaderCallbackInterface.SUCCESS:{
+                    Log.i("FEARG", "OpenCV loaded successfully");
+                } break;
+                default:
+                {
+                    super.onManagerConnected(status);
+                } break;
+            }
+        }
+    };
+
+
+    /**-----------------------------------------------------------------------**/
+    /**---------------------ONCREATE METHOD ----------------------------------**/
     /**-----------------------------------------------------------------------**/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_process_image);
+
+        OpenCVLoader.initDebug();
 
         processImgBtn = findViewById(R.id.button);
         submitAnalysisBtn = findViewById(R.id.buttonSubmit);
@@ -203,11 +224,13 @@ public class ProcessImageActivity extends AppCompatActivity {
         imageViewC4 = findViewById(R.id.imageViewC4);
 
         imageView2 = findViewById(R.id.imgview2);
-        imageView = findViewById(R.id.imgview);
+        imageViewOriginal = findViewById(R.id.imgViewOriginal);
         imgviewDrawCirclesOnCorners1 = findViewById(R.id.imgviewDrawCirclesOnCorners1);
         imgviewDrawCirclesOnCorners2 = findViewById(R.id.imgviewDrawCirclesOnCorners2);
         imgviewDrawCirclesOnCorners3 = findViewById(R.id.imgviewDrawCirclesOnCorners3);
         imgviewDrawCirclesOnCorners4 = findViewById(R.id.imgviewDrawCirclesOnCorners4);
+        imgviewWarpedAndAffineTransformation = findViewById(R.id.imgviewWarpedAndAffineTransformation);;
+        imgviewWarpedTransformation = findViewById(R.id.imgviewAffineTransformation);;
 
         requestQueue = Volley.newRequestQueue(ProcessImageActivity.this);
         progressDialog = new ProgressDialog(ProcessImageActivity.this);
@@ -229,7 +252,8 @@ public class ProcessImageActivity extends AppCompatActivity {
                 FileInputStream fIS = new FileInputStream(new File(path));
 
                 bitmap = BitmapFactory.decodeStream(fIS);
-                imageView.setImageBitmap(bitmap);
+                Log.d("FEARGS BITMAP", "Bitmap:" + bitmap.getHeight() + " " + bitmap.getWidth());
+                imageViewOriginal.setImageBitmap(bitmap);
             }
             catch(FileNotFoundException e){
                 e.printStackTrace();
@@ -251,9 +275,9 @@ public class ProcessImageActivity extends AppCompatActivity {
             }
         });
 
-        /**
-         * begin the processing image functionality
-         */
+        /**-----------------------------------------------------------------------**/
+        /**----------------------BEGIN IMAGE PROCESSING---------------------------**/
+        /**-----------------------------------------------------------------------**/
         processImgBtn.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("ClickableViewAccessibility")
             @Override
@@ -291,6 +315,24 @@ public class ProcessImageActivity extends AppCompatActivity {
 
         });
     }
+
+    /**
+     * When onResume is called, the OpenCV loader checks whether openCv has been loaded
+     * into the project correctly
+     */
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if (!OpenCVLoader.initDebug()) {
+            Log.d("FEARG", "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, mLoaderCallback);
+        } else {
+            Log.d("FEARG", "OpenCV library found inside package. Using it!");
+            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+        }
+    }
+
 
     /**
      * return an array of coordinates for the four corners of the qr code identified in the image
@@ -658,6 +700,7 @@ public class ProcessImageActivity extends AppCompatActivity {
      * registered with the logged in user.
      * If it is then the boolean continueWithProcessing is set to true - this is checked in the next method
      * (carryOutColourAnalysis)
+     *
      * The methods carryOutColourAnalysis, calculateCalibration, checkBitmapForRGBValues are all called from within here
      **/
     private void checkQRRegisteredWithCurrentUser(){StringRequest stringRequest = new StringRequest(Request.Method.POST, checkurl, new Response.Listener<String>() {
@@ -693,16 +736,17 @@ public class ProcessImageActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         Intent intent = new Intent(getApplicationContext(), AnalysisSubmissionActivity.class);
                         intent.putExtra("QRInfo", qrInfoHolder);
-                        intent.putExtra("DominantColour", "(" + r + ", " + g + ", " + b + ")");
-                        intent.putExtra("RedPresent", redPresent);
-                        intent.putExtra("GreenPresent", greenPresent);
-                        intent.putExtra("BluePresent", bluePresent);
                         intent.putExtra("UserEmail", LoggedInEmail);
                         intent.putExtra("Timestamp", timestamp);
+                        intent.putExtra("Circle1", c1HashMap.toString());
+                        intent.putExtra("Circle2", c2HashMap.toString());
+                        intent.putExtra("Circle3", c3HashMap.toString());
+                        intent.putExtra("Circle4", c4HashMap.toString());
                         startActivity(intent);
                     }
                 });
 
+                /**
                 opencvBtn.setVisibility(View.VISIBLE);
                 opencvBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -715,6 +759,7 @@ public class ProcessImageActivity extends AppCompatActivity {
                         startActivity(openIntent);
                     }
                 });
+                 **/
             }
         }, new Response.ErrorListener() {
             @Override
@@ -791,31 +836,59 @@ public class ProcessImageActivity extends AppCompatActivity {
             }
             textView5.setText(corners);
 
-            //let's set up our rectangle
-            //this method takes the qr codes coordinates as input and applies geomtric
-            //arithmetic to the corners to calculate the location of our desired
-            //rectangle for analysis
+            //let's set up our rectangle this method takes the qr codes coordinates as input and applies geometric
+            //arithmetic to the corners to calculate the location of our desired rectangle for analysis
             calculateOurRectangle(qrCornerPoints);
 
             textView6.setText("Original Rectangle coordinates: A1: (" + A1.x + ", " + A1.y + "), " + "A2: (" + A2.x + ", " + A2.y + "), " +
                     "A3: (" + A3.x + ", " + A3.y + "), " + "A4: (" + A4.x + ", " + A4.y + ")");
 
+            /**-----------------------------------------------------------------------**/
+            /**-----------------------------------------------------------------------**/
+            /**---------------------------ROTATION -----------------------------------**/
+            /**-----------------------------------------------------------------------**/
             //calculate the slope of the qrcode in the original bitmap
             slope = getSlopeOfRectangle(qrCornerPoints);
             Bitmap rotatedBitmap = rotateBitmap(bitmap, slope, thisBarCode);
 
-            //now let's try to create new imageview with the original image
-            //with a rectangle drawn over the desired area
-            frame1 = new Frame.Builder().setBitmap(rotatedBitmap).build();
-            qrCornerPoints1 = getQRCoordinates(barcodeDetector, frame1);
+            frameRotated = new Frame.Builder().setBitmap(rotatedBitmap).build();
+            qrCornerPointsRotated = getQRCoordinates(barcodeDetector, frameRotated);
 
-            //now that the qr code is horizontal lets update the orientation
-            Bitmap rotatedAndOrientatedBitmap = orientateBitmap(rotatedBitmap, qrCornerPoints1);
+            /**---------------------------------------------------------------------------------**/
+            /**---------------------------------------------------------------------------------**/
+            /**---------------------WARP PERSPECTIVE TRANSFORMATION ----------------------------**/
+            /**---------------------------------------------------------------------------------**/
+            org.opencv.core.Point[] srcPointsForWarp = getQRCornerPointsWarp(qrCornerPointsRotated);
+            org.opencv.core.Point[] referencePointsForWarp = getReferencePointsWarp(qrCornerPointsRotated);
+            Bitmap warpedBitmap = performWarpPerspective(rotatedBitmap, srcPointsForWarp, referencePointsForWarp, imgviewWarpedTransformation);
 
-            //overwrite the frame and cornerpoints variables with the values from the newly orientated bitmap
+            Frame frameWarpPerspective = new Frame.Builder().setBitmap(warpedBitmap).build();
+            Point[] qrCornerPointsWarpPerspective = getQRCoordinates(barcodeDetector, frameWarpPerspective);
+
+            /**-----------------------------------------------------------------------**/
+            /**-----------------------------------------------------------------------**/
+            /**---------------------AFFINE TRANSFORMATION ----------------------------**/
+            /**-----------------------------------------------------------------------**/
+            org.opencv.core.Point[] sourcePoints = getQRCornerPoints(qrCornerPointsWarpPerspective);
+            org.opencv.core.Point[] referencePoints = getReferencePoints(qrCornerPointsWarpPerspective);
+            Bitmap affineTransformedBitmap = performAffineTransformation(warpedBitmap, sourcePoints, referencePoints, imgviewWarpedAndAffineTransformation);
+
+            Frame frameAffine = new Frame.Builder().setBitmap(affineTransformedBitmap).build();
+            Point[] qrCornerPointsAffine = getQRCoordinates(barcodeDetector, frameAffine);
+
+            /**-----------------------------------------------------------------------**/
+            /**-----------------------------------------------------------------------**/
+            /**-----------------------ORIENTATION ------------------------------------**/
+            /**-----------------------------------------------------------------------**/
+            Bitmap rotatedAndOrientatedBitmap = orientateBitmap(affineTransformedBitmap, qrCornerPointsAffine);
+
             Frame frame2 = new Frame.Builder().setBitmap(rotatedAndOrientatedBitmap).build();
             Point[] qrCornerPoints2 = getQRCoordinates(barcodeDetector, frame2);
 
+            /**-------------------------------------------------------------------------------------**/
+            /**-------------------------------------------------------------------------------------**/
+            /**-----------------------RECTANGLE SUPERIMPOSITION ------------------------------------**/
+            /**-------------------------------------------------------------------------------------**/
             calculateOurRectangle(qrCornerPoints2);
             rect = new Rect(A1.x, A1.y, A2.x, A3.y);
             Log.d("FEARGS RECT", "RECT: left x:" + rect.left + ", top y:" + rect.top + ", right x: " + rect.right + ", bottom y: " + rect.bottom);
@@ -823,13 +896,17 @@ public class ProcessImageActivity extends AppCompatActivity {
 
             drawRectOnImage(imageView2, rect, rotatedAndOrientatedBitmap);
 
-            /**
-             * begin the methods to start draw the circular bitmaps and analysing the colours in them
-             */
+            /**-------------------------------------------------------------------------------------**/
+            /**-------------------------------------------------------------------------------------**/
+            /**---------------------PIXEL CONVERSION TO NEAREST PRIMARY COLOR ----------------------**/
+            /**-------------------------------------------------------------------------------------**/
             Bitmap rotatedAndOrientatedAndConvertedBitmap = createNewBitmapRotateAndClosestColorConversion(rotatedAndOrientatedBitmap, rect, slope, orientation);
 
-            //call the method to calculate the centres of the 4 circles to draw - calculated with
-            //relation to the rect
+            /**-------------------------------------------------------------------------------------**/
+            /**-------------------------------------------------------------------------------------**/
+            /**-----------------------DRAWING EACH CIRCLE'S BITMAP ---------------------------------**/
+            /**-------------------------------------------------------------------------------------**/
+            //call the method to calculate the centres of the 4 circles to draw - calculated with relation to the rect
             getCirclesOnImage(rect, q);
 
             //method to draw the first circle as its own bitmap
@@ -848,6 +925,10 @@ public class ProcessImageActivity extends AppCompatActivity {
             circle3 = bitmapDrawableC3.getBitmap();
             circle4 = bitmapDrawableC4.getBitmap();
 
+            /**-------------------------------------------------------------------------------------**/
+            /**-------------------------------------------------------------------------------------**/
+            /**-------------------PRIMARY COLOR ANALYSIS OF EACH CIRCLE ----------------------------**/
+            /**-------------------------------------------------------------------------------------**/
             c1HashMap = getColoursInCircle(circle1);
             c2HashMap = getColoursInCircle(circle2);
             c3HashMap = getColoursInCircle(circle3);
@@ -862,7 +943,6 @@ public class ProcessImageActivity extends AppCompatActivity {
             tvC2.setText(c2HashMap.toString());
             tvC3.setText(c3HashMap.toString());
             tvC4.setText(c4HashMap.toString());
-
         }
         else{
             textView.setText("Make sure you've registered the QR Code..");
@@ -1060,12 +1140,12 @@ public class ProcessImageActivity extends AppCompatActivity {
      * @param qrCornerPoints
      * @return
      */
-    private org.opencv.core.Point[] getReferencePoints(org.opencv.core.Point[] qrCornerPoints){
+    private org.opencv.core.Point[] getReferencePoints(Point[] qrCornerPoints){
         org.opencv.core.Point[] referencePoints = new org.opencv.core.Point[3];
 
         referencePoints[0] = new org.opencv.core.Point(qrCornerPoints[0].x, qrCornerPoints[0].y);
-        referencePoints[1] = new org.opencv.core.Point((int) qrCornerPoints[0].x + (L1 * 70), qrCornerPoints[0].y);
-        referencePoints[2] = new org.opencv.core.Point(qrCornerPoints[0].x, (int) qrCornerPoints[0].y + (L1 * 70));
+        referencePoints[1] = new org.opencv.core.Point((int) qrCornerPoints[0].x + (L1 * q), qrCornerPoints[0].y);
+        referencePoints[2] = new org.opencv.core.Point(qrCornerPoints[0].x, (int) qrCornerPoints[0].y + (L1 * q));
 
         return referencePoints;
     }
@@ -1073,15 +1153,15 @@ public class ProcessImageActivity extends AppCompatActivity {
     /**
      * Takes barcode as parameter. Extracts the top left, top right, bottom left corners of the barcode and
      * stores them in an array. These points will be the source points used for the Affine transformation
-     * @param barcode
+     * @param cornerPoints
      * @return
      */
-    private org.opencv.core.Point[] getQRCornerPoints(Barcode barcode){
+    private org.opencv.core.Point[] getQRCornerPoints(Point[] cornerPoints){
         org.opencv.core.Point[] srcPoints = new org.opencv.core.Point[3];
 
-        srcPoints[0] = new org.opencv.core.Point(barcode.cornerPoints[0].x, barcode.cornerPoints[0].y);
-        srcPoints[1] = new org.opencv.core.Point(barcode.cornerPoints[1].x, barcode.cornerPoints[1].y);
-        srcPoints[2] = new org.opencv.core.Point(barcode.cornerPoints[3].x, barcode.cornerPoints[3].y);
+        srcPoints[0] = new org.opencv.core.Point(cornerPoints[0].x, cornerPoints[0].y);
+        srcPoints[1] = new org.opencv.core.Point(cornerPoints[1].x, cornerPoints[1].y);
+        srcPoints[2] = new org.opencv.core.Point(cornerPoints[3].x, cornerPoints[3].y);
 
         return srcPoints;
     }
@@ -1110,6 +1190,69 @@ public class ProcessImageActivity extends AppCompatActivity {
         //create new bitmap from our mat and then set it to the passed imageView
         Bitmap bmp = Bitmap.createBitmap(warpDst.cols(), warpDst.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(warpDst, bmp);
+        imageView.setImageBitmap(bmp);
+
+        return bmp;
+    }
+
+    /**
+     *
+     * @param qrCornerPoints
+     * @return
+     */
+    private org.opencv.core.Point[] getReferencePointsWarp(Point[] qrCornerPoints){
+        org.opencv.core.Point[] referencePoints = new org.opencv.core.Point[4];
+
+        referencePoints[0] = new org.opencv.core.Point(qrCornerPoints[0].x, qrCornerPoints[0].y);
+        referencePoints[1] = new org.opencv.core.Point(qrCornerPoints[0].x + (L1 * q), qrCornerPoints[0].y);
+        referencePoints[2] = new org.opencv.core.Point(qrCornerPoints[0].x + (L1 * q), qrCornerPoints[0].y + (L1 * q));
+        referencePoints[3] = new org.opencv.core.Point(qrCornerPoints[0].x,qrCornerPoints[0].y + (L1 * q));
+
+        return referencePoints;
+    }
+
+    /**
+     *
+     * @param cornerPoints
+     * @return
+     */
+    private org.opencv.core.Point[] getQRCornerPointsWarp(Point[] cornerPoints){
+        org.opencv.core.Point[] srcPoints = new org.opencv.core.Point[4];
+
+        srcPoints[0] = new org.opencv.core.Point(cornerPoints[0].x, cornerPoints[0].y);
+        srcPoints[1] = new org.opencv.core.Point(cornerPoints[1].x, cornerPoints[1].y);
+        srcPoints[2] = new org.opencv.core.Point(cornerPoints[2].x, cornerPoints[2].y);
+        srcPoints[3] = new org.opencv.core.Point(cornerPoints[3].x, cornerPoints[3].y);
+
+        return srcPoints;
+    }
+
+    /**
+     *
+     * @param bitmap
+     * @param srcPoints
+     * @param referencePoints
+     * @param imageView
+     * @return
+     */
+    private Bitmap performWarpPerspective(Bitmap bitmap, org.opencv.core.Point[] srcPoints, org.opencv.core.Point[] referencePoints, ImageView imageView){
+        Mat mat = new Mat();
+
+        Bitmap bitmap1 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+
+        Utils.bitmapToMat(bitmap1, mat);
+
+        MatOfPoint2f source = new MatOfPoint2f(srcPoints[0], srcPoints[1], srcPoints[2], srcPoints[3]);
+        MatOfPoint2f dst = new MatOfPoint2f(referencePoints[0], referencePoints[1], referencePoints[2], referencePoints[3]);
+
+        Mat warpMat = Imgproc.getPerspectiveTransform(source, dst);
+        Mat destMat = new Mat();
+
+        Imgproc.warpPerspective(mat, destMat, warpMat, mat.size());
+
+        //create new bitmap from our mat and then set it to the passed imageView
+        Bitmap bmp = Bitmap.createBitmap(destMat.cols(), destMat.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(destMat, bmp);
         imageView.setImageBitmap(bmp);
 
         return bmp;

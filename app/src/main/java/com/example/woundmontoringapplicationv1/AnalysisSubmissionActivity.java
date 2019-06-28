@@ -26,15 +26,15 @@ import java.util.Map;
  */
 public class AnalysisSubmissionActivity extends AppCompatActivity {
 
+    boolean success;
+
     Bundle bundle;
 
     StringRequest stringRequest;
 
-    String dominantColour, userEmail, qrInfo, timestamp;
+    String userEmail, qrInfo, timestamp, c1HashMap, c2HashMap, c3HashMap, c4HashMap;
 
     String url = "http://foman01.lampt.eeecs.qub.ac.uk/woundmonitoring/insert_analysis.php";
-
-    String redPresent = "0", greenPresent = "0", bluePresent = "0";
 
     ProgressDialog progressDialog;
 
@@ -59,17 +59,14 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
 
         if(bundle != null){
             userEmail = bundle.getString("UserEmail");
-            dominantColour = bundle.getString("DominantColour");
+
             qrInfo = bundle.getString("QRInfo");
-            if(bundle.getBoolean("RedPresent")){
-                redPresent = "1";
-            }
-            if(bundle.getBoolean("GreenPresent")){
-                greenPresent = "1";
-            }
-            if(bundle.getBoolean("BluePresent")){
-                bluePresent = "1";
-            }
+
+            c1HashMap = bundle.getString("Circle1");
+            c2HashMap = bundle.getString("Circle2");
+            c3HashMap = bundle.getString("Circle3");
+            c4HashMap = bundle.getString("Circle4");
+
             timestamp = bundle.getString("Timestamp");
 
             progressDialog.setMessage("Please wait...");
@@ -79,6 +76,13 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(String response) {
                     Log.d("FEARGS CHECK", response);
+
+                    if(response.substring(0, 10).equalsIgnoreCase("successful")){
+                        success = true;
+                    }
+                    else{
+                        success = false;
+                    }
 
                     progressDialog.dismiss();
                 }
@@ -96,10 +100,10 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
 
                     params.put("user_email", userEmail);
                     params.put("qr_info", qrInfo);
-                    params.put("Dominant", dominantColour);
-                    params.put("Red", redPresent);
-                    params.put("Green", greenPresent);
-                    params.put("Blue", bluePresent);
+                    params.put("c1", c1HashMap);
+                    params.put("c2", c2HashMap);
+                    params.put("c3", c3HashMap);
+                    params.put("c4", c4HashMap);
                     params.put("Timestamp", timestamp);
 
                     return params;
@@ -116,6 +120,9 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(AnalysisSubmissionActivity.this);
         requestQueue.add(stringRequest);
 
+        if(!success){
+            textView.setText("Something went wrong with the submission. Please try again later.");
+        }
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

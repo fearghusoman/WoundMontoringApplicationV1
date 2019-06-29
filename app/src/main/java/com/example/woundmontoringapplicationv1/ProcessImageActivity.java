@@ -112,7 +112,6 @@ public class ProcessImageActivity extends AppCompatActivity {
     Bitmap circle1, circle2, circle3, circle4;
 
     boolean continueWithProcessing = false;
-    boolean redPresent = false, greenPresent = false, bluePresent = false;
 
     Bundle bundle;
 
@@ -140,6 +139,7 @@ public class ProcessImageActivity extends AppCompatActivity {
     int a, r, g, b;
     int circ1x, circ1y, circ2x, circ2y, circ3x, circ3y, circ4x, circ4y;
     int circle1Color = Color.BLUE, circle2Color = Color.RED, circle3Color = Color.GREEN, circle4Color = Color.YELLOW;
+    int overallRGBC1, overallRGBC2, overallRGBC3, overallRGBC4;
 
     int[] colorsInt = {Color.WHITE, Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW};
     int[] colorsByCircle = {circle1Color, circle2Color, circle3Color, circle4Color};
@@ -160,6 +160,7 @@ public class ProcessImageActivity extends AppCompatActivity {
     String timestamp = "";
     String path = "";
     String LoggedInEmail, qrInfoHolder;
+    String overallRGBC1String, overallRGBC2String, overallRGBC3String, overallRGBC4String;
 
     TextView textView, textView5, textView6;
     TextView tvC1, tvC2, tvC3, tvC4;
@@ -721,6 +722,9 @@ public class ProcessImageActivity extends AppCompatActivity {
                     Toast.makeText(ProcessImageActivity.this, "Something has gone wrong!", Toast.LENGTH_LONG).show();
                 }
 
+                /**-------------------------------------------------------------------------**/
+                /**----------------------CARRY OUT COLOR ANALYSIS---------------------------**/
+                /**-------------------------------------------------------------------------**/
                 //once response has been received we'll call the analysis method
                 carryOutColourAnalysis();
 
@@ -738,10 +742,17 @@ public class ProcessImageActivity extends AppCompatActivity {
                         intent.putExtra("QRInfo", qrInfoHolder);
                         intent.putExtra("UserEmail", LoggedInEmail);
                         intent.putExtra("Timestamp", timestamp);
+
                         intent.putExtra("Circle1", c1HashMap.toString());
                         intent.putExtra("Circle2", c2HashMap.toString());
                         intent.putExtra("Circle3", c3HashMap.toString());
                         intent.putExtra("Circle4", c4HashMap.toString());
+
+                        intent.putExtra("rgbC1", overallRGBC1String);
+                        intent.putExtra("rgbC2", overallRGBC2String);
+                        intent.putExtra("rgbC3", overallRGBC3String);
+                        intent.putExtra("rgbC4", overallRGBC4String);
+
                         startActivity(intent);
                     }
                 });
@@ -943,11 +954,44 @@ public class ProcessImageActivity extends AppCompatActivity {
             tvC2.setText(c2HashMap.toString());
             tvC3.setText(c3HashMap.toString());
             tvC4.setText(c4HashMap.toString());
+
+            /**---------------------------------------------------------------------------------**/
+            /**---------------------------------------------------------------------------------**/
+            /**-------------------AVERAGE RGB VALUES OF EACH CIRCLE ----------------------------**/
+            /**---------------------------------------------------------------------------------**/
+            //overallRGBC1 = getOverallRGBFromCircle(circle1);
+            //overallRGBC2 = getOverallRGBFromCircle(circle2);
+            //overallRGBC3 = getOverallRGBFromCircle(circle3);
+            //overallRGBC4 = getOverallRGBFromCircle(circle4);
+
+            overallRGBC1 = getDominantColourFromCircle(circle1);
+            overallRGBC2 = getDominantColourFromCircle(circle2);
+            overallRGBC3 = getDominantColourFromCircle(circle3);
+            overallRGBC4 = getDominantColourFromCircle(circle4);
+
+            overallRGBC1String = convertIntRGBToString(overallRGBC1);
+            overallRGBC2String = convertIntRGBToString(overallRGBC2);
+            overallRGBC3String = convertIntRGBToString(overallRGBC3);
+            overallRGBC4String = convertIntRGBToString(overallRGBC4);
+
         }
         else{
             textView.setText("Make sure you've registered the QR Code..");
             Log.d("FEARGS CHECK", "Value of QR Registered: " + continueWithProcessing);
         }
+    }
+
+    /**
+     *
+     * @param rgb
+     * @return
+     */
+    private String convertIntRGBToString(int rgb){
+        int r = Color.red(rgb);
+        int g = Color.green(rgb);
+        int b = Color.blue(rgb);
+
+        return "(" + r + ", " + g + ", " + b + ")";
     }
 
     /**
@@ -1009,7 +1053,7 @@ public class ProcessImageActivity extends AppCompatActivity {
         try{
             for(int i = rect.left; i <= rect.right; i++){
                 for(int j = rect.top; j <= rect.bottom; j++) {
-                    Log.d("FEARGS LOOP", "createNEwBitmapRotate: (" + i + ", " + j + ")");
+                    //Log.d("FEARGS LOOP", "createNEwBitmapRotate: (" + i + ", " + j + ")");
                     //use Euclidean within RGB color space
                     c = checkClosestColorINRGBSpace(newBitmap.getPixel(i, j), colorsInt);
 
@@ -1256,5 +1300,79 @@ public class ProcessImageActivity extends AppCompatActivity {
         imageView.setImageBitmap(bmp);
 
         return bmp;
+    }
+
+    /**
+     *
+     * @param bitmap
+     * @return
+     */
+    private int getOverallRGBFromCircle(Bitmap bitmap){
+        int overallRGB;
+
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        int rgb;
+        int r = 0, g = 0, b = 0, count = 0;
+
+        for(int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+
+                rgb = bitmap.getPixel(i, j);
+
+                if(Color.red(rgb) > 0 && Color.blue(rgb) > 0 && Color.green(rgb) > 0){
+                    Log.d("FEARGS R", "" + Color.red(rgb));
+                    Log.d("FEARGS G", "" + Color.green(rgb));
+                    Log.d("FEARGS B", "" + Color.blue(rgb));
+                }
+
+                r += Color.red(rgb);
+                g += Color.green(rgb);
+                b += Color.blue(rgb);
+
+                count += 1;
+
+            }
+        }
+
+        Log.d("FEARGS RGB", "R1: " + r);
+        Log.d("FEARGS RGB", "G1: " + g);
+        Log.d("FEARGS RGB", "B1: " + b);
+
+        Log.d("FEARGS RGB", "COUNT: " + count);
+
+        r = r / count;
+        g = g / count;
+        b = b / count;
+
+        Log.d("FEARGS RGB", "R2: " + r);
+        Log.d("FEARGS RGB", "G2: " + g);
+        Log.d("FEARGS RGB", "B2: " + b);
+
+        overallRGB = r;
+        overallRGB = (overallRGB << 8) + g;
+        overallRGB = (overallRGB << 8) + b;
+
+        Log.d("FEARGS RGB", "OverallRGB: " + overallRGB);
+
+        return overallRGB;
+    }
+
+    /**
+     *
+     * @param bitmap
+     * @return
+     */
+    private int getDominantColourFromCircle(Bitmap bitmap){
+        int dominantColor = 0;
+
+        Palette palette = Palette.from(bitmap).generate();
+
+        dominantColor = palette.getDominantColor(0);
+
+        Log.d("FEARG DOMINANT", "Dominant Color: " + dominantColor);
+
+        return dominantColor;
     }
 }

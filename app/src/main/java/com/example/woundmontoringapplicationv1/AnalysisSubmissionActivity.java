@@ -39,6 +39,9 @@ import java.util.Map;
  */
 public class AnalysisSubmissionActivity extends AppCompatActivity {
 
+    public final static int DELTAE_THRESHOLD_GREEN = 10;
+    public final static int DELTAE_THRESHOLD_AMBER = 30;
+
     boolean success;
 
     Bundle bundle;
@@ -49,7 +52,7 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
 
     String rgbResponseFromServerC1, rgbResponseFromServerC2, rgbResponseFromServerC3, rgbResponseFromServerC4;
 
-    StringRequest stringRequest, stringRequestOriginal;
+    StringRequest stringRequest;
 
     JsonObjectRequest jsonObjectRequest;
 
@@ -63,7 +66,7 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
 
     ProgressDialog progressDialog;
 
-    TextView textView;
+    TextView textView, textViewCO2, textViewO2, textViewH20, textViewRNH2, textViewDeltaE1, textViewDeltaE2, textViewDeltaE3, textViewDeltaE4;
 
     FloatingActionButton floatingActionButton;
 
@@ -80,7 +83,16 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
         progressDialog.setMessage("Please wait...");
         progressDialog.show();
 
+        //setup all the activity's view
         textView = findViewById(R.id.textViewSubmitted);
+        textViewCO2 = findViewById(R.id.textViewFeedback1);
+        textViewO2 = findViewById(R.id.textViewFeedback2);
+        textViewH20 = findViewById(R.id.textViewFeedback3);
+        textViewRNH2 = findViewById(R.id.textViewFeedback4);
+        textViewDeltaE1 = findViewById(R.id.textViewDeltaE1);
+        textViewDeltaE2 = findViewById(R.id.textViewDeltaE2);
+        textViewDeltaE3 = findViewById(R.id.textViewDeltaE3);
+        textViewDeltaE4 = findViewById(R.id.textViewDeltaE4);
         floatingActionButton = findViewById(R.id.buttonHome);
 
         bundle = getIntent().getExtras();
@@ -101,10 +113,8 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
             //create the json object
             jsonObject = new JSONObject();
             try{
-                //jsonObject.put("user_email", userEmail);
-                //jsonObject.put("qr_info", qrInfo);
-                jsonObject.put("user_email", "johndoe@gmail.com");
-                jsonObject.put("qr_info", "QR Code Generator 001");
+                jsonObject.put("user_email", userEmail);
+                jsonObject.put("qr_info", qrInfo);
             }
             catch(Exception e){
                 e.printStackTrace();
@@ -154,6 +164,9 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
 
                                 setupVariables();
 
+                                //now add the next request to the queue
+                                requestQueue.add(stringRequest);
+
                                 progressDialog.dismiss();
 
                             }
@@ -187,76 +200,6 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
             };
 
             /**----------------------------------------------------------------------------------------**/
-            /**------------------STRING REQUEST TO GET ORIGINAL DRESSING ANALYSIS----------------------**/
-            /**----------------------------------------------------------------------------------------**/
-            stringRequestOriginal = new StringRequest(Request.Method.POST, urlInitial, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-
-                    Log.d("FEARGS VOLLEY", "Got a response from 1st request");
-
-                    /**
-                    if(response.equalsIgnoreCase("No analysis done")){
-                        Log.d("FEARGS VOLLEY", "This is the first image of this dressing");
-
-                        deltaEC1 = 0;
-                        deltaEC2 = 0;
-                        deltaEC3 = 0;
-                        deltaEC4 = 0;
-                    }
-                    else{
-                        Log.d("FEARGS VOLLEY", "This is not the first image of this dressing");
-
-                        //this will need to be changed to interpret a json array return
-                        rgbResponseFromServer = response;
-
-                        deltaEC1 = calculateDeltaE(rgbResponseFromServer, rgbC1);
-                        deltaEC2 = calculateDeltaE(rgbResponseFromServer, rgbC2);
-                        deltaEC3 = calculateDeltaE(rgbResponseFromServer, rgbC3);
-                        deltaEC4 = calculateDeltaE(rgbResponseFromServer, rgbC4);
-                    }
-                     **/
-
-                    //when response received then setup the variables for the next request
-                    setupVariables();
-
-                    //now that response has been received and variables have been setup we can add the next request to the queue
-                    //requestQueue.add(stringRequest);
-
-                    progressDialog.dismiss();
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-
-                    Log.d("FEARGS VOLLEY", "Got an error response from 1st request");
-                    Log.d("FEARGS VOLLEY", "Error: " + error.toString());
-                    Toast.makeText(AnalysisSubmissionActivity.this, "ERROR PAL" + error.toString() + "ERROR PAL", Toast.LENGTH_LONG).show();
-
-                    progressDialog.dismiss();
-
-                }
-            })
-
-            {
-                /**
-                 *
-                 * @return
-                 * @throws AuthFailureError
-                 */
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<String, String>();
-
-                    params.put("user_email", userEmail);
-                    params.put("qr_info", qrInfo);
-
-                    return params;                }
-            };
-
-
-
-            /**----------------------------------------------------------------------------------------**/
             /**----------------------STRING REQUEST TO SUBMIT IMAGE ANALYSIS---------------------------**/
             /**----------------------------------------------------------------------------------------**/
             stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -271,6 +214,12 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
                     else{
                         success = false;
                     }
+
+                    //set the text views of the activity to give the user instantaneous feedback
+                    getFeedback(deltaEC1, textViewCO2, textViewDeltaE1);
+                    getFeedback(deltaEC2, textViewO2, textViewDeltaE2);
+                    getFeedback(deltaEC3, textViewH20, textViewDeltaE3);
+                    getFeedback(deltaEC4, textViewRNH2, textViewDeltaE4);
 
                     progressDialog.dismiss();
                 }
@@ -314,19 +263,11 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
             textView.setText("No data submitted to the server.");
         }
 
+
         //create the volley request queue and add only the first request - the other is added onResponse
         requestQueue = Volley.newRequestQueue(AnalysisSubmissionActivity.this);
-
-        // Add the realibility on the connection.
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(10000, -1, 1.0f));
-
-        //requestQueue.add(stringRequestOriginal);
         requestQueue.add(jsonObjectRequest);
-        //requestQueue.add(stringRequest);
-        //requestQueue.start();
-
-        Log.d("FEARGS CHECK", "Request Queue Sequence Number: " + requestQueue.getSequenceNumber());
-        Log.d("FEARGS CHECK", "Request Queue toString: " + requestQueue.toString());
 
         //click the floating action button to return to the home screen
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -361,6 +302,7 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
      * @param rgbString
      */
     private double calculateDeltaE(String rgbString, String colorCurrent){
+        double deltaE;
 
         int[] rgbs = convertStringRGBtoInts(rgbString);
         int[] rgbsCurrent = convertStringRGBtoInts(colorCurrent);
@@ -368,7 +310,11 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
         /**-------------------------------------------------------------------------------------------------------**/
         /**----------------------BEGIN THE CONVERSION TO CIELAB AND DELTA E CALCULATION---------------------------**/
         /**-------------------------------------------------------------------------------------------------------**/
-        return euclideanDistanceBetweenLABs(rgbs, rgbsCurrent);
+        deltaE = euclideanDistanceBetweenLABs(rgbs, rgbsCurrent);
+
+        Log.d("FEARGS DELTAE", "DeltaE: " + deltaE);
+
+        return deltaE;
 
     }
 
@@ -443,5 +389,21 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
         catch (UnsupportedEncodingException errorr) {
             errorr.printStackTrace();
         }
+    }
+
+    /**
+     *
+     * @param deltaE
+     * @param textView
+     */
+    private void getFeedback(double deltaE, TextView textView, TextView textViewD){
+        if(deltaE >= DELTAE_THRESHOLD_AMBER){
+            textView.setText("RED ALERT");
+        }
+        else if(deltaE >= DELTAE_THRESHOLD_GREEN){
+            textView.setText("AMBER ALERT");
+        }
+
+        textViewD.setText("" + deltaE);
     }
 }

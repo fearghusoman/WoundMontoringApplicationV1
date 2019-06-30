@@ -18,8 +18,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/CustomWMAStyle">
-
-        <activity android:name=".LaunchActivity" android:theme="@style/LaunchTheme">
+        <activity android:name=".UserDeclined"></activity>
+        <activity android:name=".UserWaitingForApproval" />
+        <activity
+            android:name=".LaunchActivity"
+            android:theme="@style/LaunchTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,8 +47,7 @@
         <activity android:name=".CaptureImageActivity" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity">
-        </activity>
+        <activity android:name=".LoginActivity" />
     </application>
 
 </manifest>

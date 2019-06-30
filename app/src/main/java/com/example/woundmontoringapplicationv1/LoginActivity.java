@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     //Storing URL in a String variable
     String hhtpUrl = "http://foman01.lampt.eeecs.qub.ac.uk/woundmonitoring/login.php";
 
-    Boolean checkEditText, userLoggedIn;
+    Boolean checkEditText, userLoggedIn, userApproved;
 
     String responseUserChecker;
 
@@ -160,7 +160,18 @@ public class LoginActivity extends AppCompatActivity {
                                 finish();
                             }
 
-                        } else {
+                        }
+                        //else if the login details are correct but user has not yet been approved
+                        else if(ServerResponse.equalsIgnoreCase("user exists but not yet approved")){
+                            Intent intent = new Intent(getApplicationContext(), UserWaitingForApproval.class);
+                            startActivity(intent);
+                        }
+                        //else if the login details are correct but the user has not been declined
+                        else if(ServerResponse.equalsIgnoreCase("user exists but declined")){
+                            Intent intent = new Intent(getApplicationContext(), UserDeclined.class);
+                            startActivity(intent);
+                        }
+                        else {
                             Toast.makeText(LoginActivity.this, "Incorrect login details", Toast.LENGTH_LONG).show();
                             Log.d("FEARGS LOGIN", ServerResponse.toString());
                             userLoggedIn = false;

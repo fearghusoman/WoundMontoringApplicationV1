@@ -16,6 +16,7 @@
         android:icon="@mipmap/app_design_wma"
         android:label="Wound Montoring Application V1"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:usesCleartextTraffic="true"
         android:supportsRtl="true"
         android:theme="@style/CustomWMAStyle">
         <activity android:name=".UserDeclined"></activity>

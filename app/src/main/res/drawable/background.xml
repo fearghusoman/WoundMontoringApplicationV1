@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@color/colorPrimaryCUSTOM"/>
+    <item android:drawable="@color/colorPrimaryDarkCUSTOM"/>
 
     <item>
-        <bitmap android:src="@mipmap/app_design_wma"
+        <bitmap android:src="@mipmap/app_design_wma1"
                 android:gravity="center"
                 />
     </item>

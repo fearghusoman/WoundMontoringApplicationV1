@@ -39,7 +39,7 @@
             android:textColor="@color/white"
             android:textColorHint="#63FFFFFF" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_login"
             android:layout_width="fill_parent"
             android:textColor="#000000"

@@ -1,6 +1,6 @@
 package com.example.woundmontoringapplicationv1;
 
-import android.support.v4.graphics.ColorUtils;
+import androidx.core.graphics.ColorUtils;
 import android.util.Log;
 
 /**

@@ -6,14 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_container_home"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/bottom_nav">
 
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,7 +48,7 @@
 
 
 
-        <android.support.design.widget.BottomNavigationView
+        <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_nav"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,6 +58,6 @@
             app:itemTextColor="@color/whiteO"
             app:itemIconTint="@color/whiteO">
 
-        </android.support.design.widget.BottomNavigationView>
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 </RelativeLayout>

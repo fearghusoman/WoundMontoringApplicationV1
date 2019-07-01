@@ -8,7 +8,7 @@
     android:background="@color/colorPrimaryDarkCUSTOM"
     tools:context=".RemindersActivity">
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_margin="5dp"
         android:id="@+id/backToMenu"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
@@ -155,7 +155,7 @@
         android:paddingBottom="20dp"
         android:orientation="vertical" >
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addNewReminder"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"

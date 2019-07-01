@@ -1,12 +1,11 @@
 package com.example.woundmontoringapplicationv1;
 
-import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.graphics.ColorUtils;
-import android.support.v7.app.AppCompatActivity;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.core.graphics.ColorUtils;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,7 +29,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 

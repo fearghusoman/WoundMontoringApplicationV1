@@ -163,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
                         //if(ServerResponse.equalsIgnoreCase(responseUserChecker)){
                         if(ServerResponse.equalsIgnoreCase("login successful")){
                             //if the responses match then shw the toast
-                            Toast.makeText(LoginActivity.this, "Logged In Succesfully", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(LoginActivity.this, "Logged In Succesfully", Toast.LENGTH_LONG).show();
 
                             //finish the login activity - amend this to actually do something else
                             //if the user has logged in successfully then set the value of userLoggedIn to true
@@ -181,6 +181,8 @@ public class LoginActivity extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull Task<AuthResult> task) {
                                                 if(task.isSuccessful()){
+                                                    Toast.makeText(LoginActivity.this, "Logged In Succesfully", Toast.LENGTH_LONG).show();
+                                                    
                                                     Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                                                     startActivity(intent);
 
@@ -208,9 +210,26 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                         //else if the login details are correct but the user has not been declined
+                        //sign the user into Firebase, as he will then be deleted from the authentication
+                        //list in the next activity
                         else if(ServerResponse.equalsIgnoreCase("user exists but declined")){
-                            Intent intent = new Intent(getApplicationContext(), UserDeclined.class);
-                            startActivity(intent);
+
+                            firebaseAuth.signInWithEmailAndPassword(EmailHolder, PasswordHolder).addOnCompleteListener(
+                                    new OnCompleteListener<AuthResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                            if(task.isSuccessful()){
+
+                                                Intent intent = new Intent(getApplicationContext(), UserDeclined.class);
+                                                startActivity(intent);
+
+                                            }
+                                            else{
+                                                Toast.makeText(LoginActivity.this, "Incorrect login details", Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    }
+                            );
                         }
                         else {
                             Toast.makeText(LoginActivity.this, "Incorrect login details", Toast.LENGTH_LONG).show();

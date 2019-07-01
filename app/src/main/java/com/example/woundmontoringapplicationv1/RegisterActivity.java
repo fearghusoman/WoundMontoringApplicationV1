@@ -154,6 +154,9 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
 
                                         Toast.makeText(RegisterActivity.this, "Well done, you've registered a new account!", Toast.LENGTH_SHORT).show();
 
+                                        //we don't want the user to actually be automatically signed in
+                                        //they need to be approved by clinician first
+                                        firebaseAuth.signOut();
 
                                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                                         startActivity(intent);

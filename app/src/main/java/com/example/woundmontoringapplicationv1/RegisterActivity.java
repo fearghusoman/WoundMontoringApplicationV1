@@ -3,6 +3,8 @@ package com.example.woundmontoringapplicationv1;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +30,12 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
 public class RegisterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
     EditText fn, ln, a1, a2, town, country, postcode, email, pw, pwCheck, clinicianEmail;
@@ -41,6 +49,9 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     RequestQueue requestQueue;
     ProgressDialog progressDialog;
 
+    //try setup the firebase authentication
+    FirebaseAuth firebaseAuth;
+
     String fnS, lnS, dobS, a1S, a2S, townS, countryS, postcodeS, emailS, pwS, pwCheckS, clinicianEmailS;
     String url = "http://foman01.lampt.eeecs.qub.ac.uk/woundmonitoring/register.php";
 
@@ -48,6 +59,8 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        firebaseAuth = FirebaseAuth.getInstance();
 
         fn = findViewById(R.id.editFName);
         ln = findViewById(R.id.editLName);
@@ -131,9 +144,27 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
 
                 if(response.equalsIgnoreCase("Successful Registration")){
                     Log.d("FEARGS REGISTER", "EVERYTHING SHOULD BE PERFECT NOW");
-                    Toast.makeText(RegisterActivity.this, "Well done, you've registered a new account!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(intent);
+
+                    //at this point also create a firebase user
+                    firebaseAuth.createUserWithEmailAndPassword(emailS, pwS).addOnCompleteListener(RegisterActivity.this,
+                            new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if(task.isSuccessful()){
+
+                                        Toast.makeText(RegisterActivity.this, "Well done, you've registered a new account!", Toast.LENGTH_SHORT).show();
+
+
+                                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                        startActivity(intent);
+                                   }
+                                    else{
+                                        Toast.makeText(RegisterActivity.this, "Something went wrong with the Firebase Registration!", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+
+
                 }
                 else if(response.equalsIgnoreCase("Email already exists")){
                     Log.d("FEARGS REGISTER", "WE'VE GOTTEN AS FAR AS THE RESPONSE - AND THE RESPONSE SAYS EMAIL ALREADY IN USE");

@@ -56,6 +56,6 @@ public class App extends ContextWrapper {
                 CHANNEL_ID)
                 .setContentTitle("Reminder!")
                 .setContentText("It's time to start monitoring your wound.")
-                .setSmallIcon(R.drawable.cast_ic_notification_on);
+                .setSmallIcon(R.drawable.ic_add_black_24dp);
     }
 }

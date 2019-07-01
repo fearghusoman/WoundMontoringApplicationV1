@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +21,10 @@ public class LogoutActivity extends AppCompatActivity {
     FloatingActionButton floatingActionButton;
 
     Button button;
+
+    FirebaseAuth firebaseAuth;
+
+    private FirebaseAuth.AuthStateListener authStateListener;
 
     /**
      *
@@ -50,6 +56,9 @@ public class LogoutActivity extends AppCompatActivity {
                 editor.putString("email", "");
                 editor.putString("status", "logged_out");
                 editor.apply();
+
+                //also set the firebase listener to signOut
+                FirebaseAuth.getInstance().signOut();
 
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);

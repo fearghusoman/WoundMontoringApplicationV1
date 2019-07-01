@@ -3,6 +3,8 @@ package com.example.woundmontoringapplicationv1;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +21,11 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +58,10 @@ public class LoginActivity extends AppCompatActivity {
 
     String responseUserChecker;
 
+    //firebase authentication
+    FirebaseAuth firebaseAuth;
+    FirebaseAuth.AuthStateListener authStateListener;
+
     //textView object for signup
     TextView textView, textViewForgotPW;
 
@@ -58,6 +69,21 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //setup firebase authentication
+        firebaseAuth = FirebaseAuth.getInstance();
+        //if user is already logged in then let's just get to it
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                if(user != null){
+                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                    startActivity(intent);
+                }
+            }
+        };
 
         //assign IDs to the objects created
         Email = findViewById(R.id.plain_text_input_email);
@@ -148,12 +174,27 @@ public class LoginActivity extends AppCompatActivity {
 
                                 //save the users data using shared preferences - for now we just save true
                                 saveUserData(EmailHolder);
-                                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                                startActivity(intent);
 
-                                //if user has properly logged in then finish this activity - prevents user
-                                //from accessing the screen using the back button
-                                finish();
+                                //if user logging in right then lets log him into firebase too
+                                firebaseAuth.signInWithEmailAndPassword(EmailHolder, PasswordHolder).addOnCompleteListener(
+                                        new OnCompleteListener<AuthResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                                if(task.isSuccessful()){
+                                                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                                    startActivity(intent);
+
+                                                    //if user has properly logged in then finish this activity - prevents user
+                                                    //from accessing the screen using the back button
+                                                    finish();
+                                                }
+                                                else{
+                                                    Toast.makeText(LoginActivity.this, "Incorrect login details", Toast.LENGTH_LONG).show();
+                                                }
+                                            }
+                                        }
+                                );
+
 
                             }
                             else{ //otherwise end the whole shenanigans
@@ -275,5 +316,14 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         moveTaskToBack(false);
+    }
+
+    /**
+     *
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseAuth.addAuthStateListener(authStateListener);
     }
 }

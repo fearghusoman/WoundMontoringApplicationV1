@@ -1,4 +1,4 @@
-package com.example.woundmontoringapplicationv1;
+package com.example.woundmontoringapplicationv1.activities.LoginAndRegisterActivities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -21,6 +21,8 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.woundmontoringapplicationv1.R;
+import com.example.woundmontoringapplicationv1.activities.MainActivities.HomeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -206,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         //else if the login details are correct but user has not yet been approved
                         else if(ServerResponse.equalsIgnoreCase("user exists but not yet approved")){
-                            Intent intent = new Intent(getApplicationContext(), UserWaitingForApproval.class);
+                            Intent intent = new Intent(getApplicationContext(), UserWaitingForApprovalActivity.class);
                             startActivity(intent);
                         }
                         //else if the login details are correct but the user has not been declined
@@ -220,7 +222,7 @@ public class LoginActivity extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<AuthResult> task) {
                                             if(task.isSuccessful()){
 
-                                                Intent intent = new Intent(getApplicationContext(), UserDeclined.class);
+                                                Intent intent = new Intent(getApplicationContext(), UserDeclinedActivity.class);
                                                 startActivity(intent);
 
                                             }

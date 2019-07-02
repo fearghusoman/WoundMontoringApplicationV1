@@ -1,8 +1,10 @@
-package com.example.woundmontoringapplicationv1;
+package com.example.woundmontoringapplicationv1.activities.MainActivities;
 
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.woundmontoringapplicationv1.activities.LoginAndRegisterActivities.LoginActivity;
 
 /**
  * Launch screen activity as defined by Material Design

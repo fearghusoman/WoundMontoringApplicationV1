@@ -1,4 +1,4 @@
-package com.example.woundmontoringapplicationv1;
+package com.example.woundmontoringapplicationv1.activities.LoginAndRegisterActivities;
 
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class UserWaitingForApproval extends AppCompatActivity {
+import com.example.woundmontoringapplicationv1.R;
+
+public class UserWaitingForApprovalActivity extends AppCompatActivity {
 
     Button button;
 

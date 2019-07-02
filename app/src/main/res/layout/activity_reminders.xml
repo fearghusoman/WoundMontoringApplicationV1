@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/colorPrimaryDarkCUSTOM"
-    tools:context=".RemindersActivity">
+    tools:context=".activities.MainActivities.RemindersActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_margin="5dp"

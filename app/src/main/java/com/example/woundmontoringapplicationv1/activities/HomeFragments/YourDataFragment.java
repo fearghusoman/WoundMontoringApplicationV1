@@ -1,4 +1,4 @@
-package com.example.woundmontoringapplicationv1;
+package com.example.woundmontoringapplicationv1.activities.HomeFragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.woundmontoringapplicationv1.R;
+import com.example.woundmontoringapplicationv1.activities.MainActivities.HistoryActivity;
+import com.example.woundmontoringapplicationv1.activities.LoginAndRegisterActivities.LogoutActivity;
+import com.example.woundmontoringapplicationv1.activities.MainActivities.RegisteredDressingsActivity;
+import com.example.woundmontoringapplicationv1.activities.MainActivities.RemindersActivity;
 
 public class YourDataFragment extends Fragment {
 

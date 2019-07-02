@@ -1,4 +1,4 @@
-package com.example.woundmontoringapplicationv1;
+package com.example.woundmontoringapplicationv1.activities.MainActivities;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -6,6 +6,10 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+
+import com.example.woundmontoringapplicationv1.AlertReceiver;
+import com.example.woundmontoringapplicationv1.R;
+import com.example.woundmontoringapplicationv1.activities.CalendarFragments.TimePickerFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AppCompatActivity;

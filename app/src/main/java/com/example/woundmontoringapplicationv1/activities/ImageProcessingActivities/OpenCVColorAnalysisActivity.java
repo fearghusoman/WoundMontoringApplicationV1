@@ -1,4 +1,4 @@
-package com.example.woundmontoringapplicationv1;
+package com.example.woundmontoringapplicationv1.activities.ImageProcessingActivities;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +17,7 @@ import android.util.SparseArray;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.woundmontoringapplicationv1.R;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;

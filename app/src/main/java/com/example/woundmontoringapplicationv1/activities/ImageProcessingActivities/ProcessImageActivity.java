@@ -1,4 +1,4 @@
-package com.example.woundmontoringapplicationv1;
+package com.example.woundmontoringapplicationv1.activities.ImageProcessingActivities;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -15,6 +15,9 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+
+import com.example.woundmontoringapplicationv1.Dressing;
+import com.example.woundmontoringapplicationv1.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -54,7 +57,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.woundmontoringapplicationv1.LoginActivity.SHARED_PREFS;
+import static com.example.woundmontoringapplicationv1.activities.LoginAndRegisterActivities.LoginActivity.SHARED_PREFS;
 
 /**
  *
@@ -74,7 +77,6 @@ public class ProcessImageActivity extends AppCompatActivity {
     final static double L3 = 16.2;
     //length of the side of qr corner square
     final static double L_QR = 1.4;
-    final static double L_QR_BLACK_WIDTH = .12;
 
 
     //Measurements for the circles
@@ -115,6 +117,8 @@ public class ProcessImageActivity extends AppCompatActivity {
 
     double slope;
     double q;
+
+    Dressing dressing;
 
     FloatingActionButton floatingActionButton;
     Frame frame, frameRotated;
@@ -189,6 +193,9 @@ public class ProcessImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_process_image);
 
         OpenCVLoader.initDebug();
+
+        //create an instance of our dressing
+        dressing = new Dressing(L1,L2, L3, L_QR, LCirc1, LCirc2, LCirc3, LCirc4, radius1, radius2, radius3, radius4);
 
         processImgBtn = findViewById(R.id.button);
         submitAnalysisBtn = findViewById(R.id.buttonSubmit);

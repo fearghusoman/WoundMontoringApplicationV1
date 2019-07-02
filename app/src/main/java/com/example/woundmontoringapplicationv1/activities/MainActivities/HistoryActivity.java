@@ -1,6 +1,10 @@
-package com.example.woundmontoringapplicationv1;
+package com.example.woundmontoringapplicationv1.activities.MainActivities;
 
 import android.content.Intent;
+
+import com.example.woundmontoringapplicationv1.Adapters.HomeFragmentRecyclerAdapter;
+import com.example.woundmontoringapplicationv1.R;
+import com.example.woundmontoringapplicationv1.SnapshotItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;

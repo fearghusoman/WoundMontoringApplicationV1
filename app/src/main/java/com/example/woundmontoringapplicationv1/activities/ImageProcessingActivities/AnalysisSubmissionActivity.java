@@ -1,8 +1,11 @@
-package com.example.woundmontoringapplicationv1;
+package com.example.woundmontoringapplicationv1.activities.ImageProcessingActivities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 
+import com.example.woundmontoringapplicationv1.CIELab;
+import com.example.woundmontoringapplicationv1.R;
+import com.example.woundmontoringapplicationv1.activities.MainActivities.HomeActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.core.graphics.ColorUtils;
 import androidx.appcompat.app.AppCompatActivity;

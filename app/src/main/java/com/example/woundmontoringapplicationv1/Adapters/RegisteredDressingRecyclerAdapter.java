@@ -1,4 +1,4 @@
-package com.example.woundmontoringapplicationv1;
+package com.example.woundmontoringapplicationv1.Adapters;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.woundmontoringapplicationv1.DressingItem;
+import com.example.woundmontoringapplicationv1.R;
 
 import java.util.ArrayList;
 

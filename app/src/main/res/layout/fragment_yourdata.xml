@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDarkCUSTOM"
-    tools:context=".YourDataFragment">
+    tools:context=".activities.HomeFragments.YourDataFragment">
 
     <TableLayout
         android:id="@+id/tableLayout"

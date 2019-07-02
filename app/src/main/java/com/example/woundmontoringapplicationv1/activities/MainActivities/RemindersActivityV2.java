@@ -1,4 +1,4 @@
-package com.example.woundmontoringapplicationv1;
+package com.example.woundmontoringapplicationv1.activities.MainActivities;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -10,6 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TimePicker;
+
+import com.example.woundmontoringapplicationv1.DressingItem;
+import com.example.woundmontoringapplicationv1.R;
+import com.example.woundmontoringapplicationv1.Adapters.RemindersRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;

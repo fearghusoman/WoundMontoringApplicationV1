@@ -1,4 +1,4 @@
-package com.example.woundmontoringapplicationv1;
+package com.example.woundmontoringapplicationv1.activities.LoginAndRegisterActivities;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -30,6 +30,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.example.woundmontoringapplicationv1.activities.CalendarFragments.DatePickerFragment;
+import com.example.woundmontoringapplicationv1.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 

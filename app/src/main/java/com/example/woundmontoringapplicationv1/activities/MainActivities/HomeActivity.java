@@ -1,6 +1,11 @@
-package com.example.woundmontoringapplicationv1;
+package com.example.woundmontoringapplicationv1.activities.MainActivities;
 
 import androidx.annotation.NonNull;
+
+import com.example.woundmontoringapplicationv1.activities.HomeFragments.HomeFragment;
+import com.example.woundmontoringapplicationv1.activities.HomeFragments.MonitorFragment;
+import com.example.woundmontoringapplicationv1.R;
+import com.example.woundmontoringapplicationv1.activities.HomeFragments.YourDataFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AppCompatActivity;

@@ -1,4 +1,4 @@
-package com.example.woundmontoringapplicationv1;
+package com.example.woundmontoringapplicationv1.activities.ImageProcessingActivities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -17,6 +17,9 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+
+import com.example.woundmontoringapplicationv1.R;
+import com.example.woundmontoringapplicationv1.activities.MainActivities.RegisterDressingActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;

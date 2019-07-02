@@ -1,4 +1,4 @@
-package com.example.woundmontoringapplicationv1;
+package com.example.woundmontoringapplicationv1.activities.HomeFragments;
 
 import android.Manifest;
 import android.content.Context;
@@ -28,6 +28,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.woundmontoringapplicationv1.Adapters.HomeFragmentRecyclerAdapter;
+import com.example.woundmontoringapplicationv1.R;
+import com.example.woundmontoringapplicationv1.SnapshotItem;
+import com.example.woundmontoringapplicationv1.activities.MainActivities.RegisterDressingActivity;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

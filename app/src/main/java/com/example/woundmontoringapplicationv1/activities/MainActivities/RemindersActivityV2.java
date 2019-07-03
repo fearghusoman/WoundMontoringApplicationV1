@@ -65,7 +65,7 @@ public class RemindersActivityV2 extends AppCompatActivity implements TimePicker
             dressingItems.add(new DressingItem(qrid));
         }
 
-        remindersRecyclerAdapter = new RemindersRecyclerAdapter(getApplicationContext(), dressingItems);
+        //remindersRecyclerAdapter = new RemindersRecyclerAdapter(getApplicationContext(), dressingItems);
         recyclerView.setAdapter(remindersRecyclerAdapter);
     }
 

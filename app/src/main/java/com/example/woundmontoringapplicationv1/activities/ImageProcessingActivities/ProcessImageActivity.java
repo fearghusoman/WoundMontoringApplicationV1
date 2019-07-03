@@ -240,8 +240,8 @@ public class ProcessImageActivity extends AppCompatActivity {
         //LoggedInEmail = sharedPreferences.getString("email", "");
         LoggedInEmail = "johndoe@gmail.com";
 
-        connector = ColorSpace.connect(ColorSpace.get(ColorSpace.Named.SRGB), ColorSpace.get(ColorSpace.Named.CIE_LAB));
-        connector2 = ColorSpace.connect(ColorSpace.get(ColorSpace.Named.CIE_LAB), ColorSpace.get(ColorSpace.Named.SRGB));
+        //connector = ColorSpace.connect(ColorSpace.get(ColorSpace.Named.SRGB), ColorSpace.get(ColorSpace.Named.CIE_LAB));
+        //connector2 = ColorSpace.connect(ColorSpace.get(ColorSpace.Named.CIE_LAB), ColorSpace.get(ColorSpace.Named.SRGB));
 
         bundle = getIntent().getExtras();
 

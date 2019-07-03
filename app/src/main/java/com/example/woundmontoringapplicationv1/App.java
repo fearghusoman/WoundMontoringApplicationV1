@@ -51,11 +51,11 @@ public class App extends ContextWrapper {
         return mManager;
     }
 
-    public NotificationCompat.Builder getChannelNotification(){
+    public NotificationCompat.Builder getChannelNotification(String content){
         return new NotificationCompat.Builder(getApplicationContext(),
                 CHANNEL_ID)
                 .setContentTitle("Reminder!")
-                .setContentText("It's time to start monitoring your wound.")
+                .setContentText(content)
                 .setSmallIcon(R.drawable.ic_add_black_24dp);
     }
 }

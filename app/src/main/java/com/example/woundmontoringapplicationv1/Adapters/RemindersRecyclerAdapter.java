@@ -91,7 +91,7 @@ public class RemindersRecyclerAdapter extends RecyclerView.Adapter<RemindersRecy
         if(alarmNeedsUpdating == 1){
 
             if(!timestamp.equalsIgnoreCase("null")){
-                setupAlarm(timestamp, qrid, currentWarningLevel, remindersViewHolder);
+                setupAlarm(timestamp, qrid, location, currentWarningLevel, remindersViewHolder);
             }
 
             updateAlarmNeedsUpdating(qrid);
@@ -140,7 +140,7 @@ public class RemindersRecyclerAdapter extends RecyclerView.Adapter<RemindersRecy
      *
      * @param timestamp
      */
-    public void setupAlarm(String timestamp, String qrid, String currentWarningLevel, @NonNull RemindersRecyclerAdapter.RemindersViewHolder remindersViewHolder){
+    public void setupAlarm(String timestamp, String qrid, String location, String currentWarningLevel, @NonNull RemindersRecyclerAdapter.RemindersViewHolder remindersViewHolder){
 
         SharedPreferences sharedPreferences;
         sharedPreferences = context.getSharedPreferences("APPLICATION_PREFS", Context.MODE_PRIVATE);
@@ -156,6 +156,11 @@ public class RemindersRecyclerAdapter extends RecyclerView.Adapter<RemindersRecy
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
         if(currentWarningLevel.equalsIgnoreCase("OK")){
+
+            //send message to the receiver
+            intent.putExtra("QRID", qrid);
+            intent.putExtra("Location", location);
+
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * NO_ALERT_REMINDER_FREQUENCY, pendingIntent);
 
             alarmMessage = "Since your dressing is not on alert, you will receive a notification every day at " + 14 + ":00.";

@@ -19,7 +19,9 @@ public class AlertReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
        App notificationHelper = new App(context);
 
-        NotificationCompat.Builder builder = notificationHelper.getChannelNotification();
-        notificationHelper.getManager().notify(1, builder.build());
+       String contentDescription = "It's time to start monitoring Dressing " + intent.getStringExtra("QRID") + ", which is located on your " + intent.getStringExtra("location");
+
+       NotificationCompat.Builder builder = notificationHelper.getChannelNotification(contentDescription);
+       notificationHelper.getManager().notify(1, builder.build());
     }
 }

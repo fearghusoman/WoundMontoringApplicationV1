@@ -56,6 +56,6 @@ public class App extends ContextWrapper {
                 CHANNEL_ID)
                 .setContentTitle("Reminder!")
                 .setContentText(content)
-                .setSmallIcon(R.drawable.ic_add_black_24dp);
+                .setSmallIcon(R.drawable.ic_camera_alt_black_24dp);
     }
 }

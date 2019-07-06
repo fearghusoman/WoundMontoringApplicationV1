@@ -21,7 +21,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.woundmontoringapplicationv1.AlertReceiver;
-import com.example.woundmontoringapplicationv1.DressingItem;
 import com.example.woundmontoringapplicationv1.DressingReminderItem;
 import com.example.woundmontoringapplicationv1.R;
 
@@ -139,31 +138,42 @@ public class RemindersRecyclerAdapter extends RecyclerView.Adapter<RemindersRecy
     /**
      *
      * @param timestamp
+     * @param qrid
+     * @param location
+     * @param currentWarningLevel
+     * @param remindersViewHolder
      */
     public void setupAlarm(String timestamp, String qrid, String location, String currentWarningLevel, @NonNull RemindersRecyclerAdapter.RemindersViewHolder remindersViewHolder){
+        String[] partsOfTimestamp = timestamp.split(" ");
+
+        String time = partsOfTimestamp[1];
+
+        int hour = Integer.parseInt(time.substring(0, 2));
+        Log.d("FEARGS PARSE HOUR", "" + hour);
 
         SharedPreferences sharedPreferences;
         sharedPreferences = context.getSharedPreferences("APPLICATION_PREFS", Context.MODE_PRIVATE);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 14);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
 
         String alarmMessage;
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
         Intent intent = new Intent(context, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        //send message to the receiver
+        intent.putExtra("QRID", qrid);
+        intent.putExtra("Location", location);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, Integer.parseInt(qrid), intent, 0);
 
         if(currentWarningLevel.equalsIgnoreCase("OK")){
 
-            //send message to the receiver
-            intent.putExtra("QRID", qrid);
-            intent.putExtra("Location", location);
-
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * NO_ALERT_REMINDER_FREQUENCY, pendingIntent);
 
-            alarmMessage = "Since your dressing is not on alert, you will receive a notification every day at " + 14 + ":00.";
+            alarmMessage = "Since your dressing is not on alert, you will receive a notification every day at " + hour + ":00.";
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -180,7 +190,7 @@ public class RemindersRecyclerAdapter extends RecyclerView.Adapter<RemindersRecy
         else if(currentWarningLevel.equalsIgnoreCase("AMBER")){
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * AMBER_ALERT_REMINDER_FREQUENCY, pendingIntent);
 
-            alarmMessage = "Since your dressing is on Amber alert, you are due to monitor your wound every " + AMBER_ALERT_REMINDER_FREQUENCY + " hours, starting at 14:00.";
+            alarmMessage = "Since your dressing is on Amber alert, you are due to monitor your wound every " + AMBER_ALERT_REMINDER_FREQUENCY + " hours, starting at " + hour + ":00.";
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -197,7 +207,7 @@ public class RemindersRecyclerAdapter extends RecyclerView.Adapter<RemindersRecy
         else if(currentWarningLevel.equalsIgnoreCase("RED")){
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * RED_ALERT_REMINDER_FREQUENCY, pendingIntent);
 
-            alarmMessage = "Since your dressing is on Red alert, you are due to monitor your wound every " + RED_ALERT_REMINDER_FREQUENCY + " hours, starting at 14:00.";
+            alarmMessage = "Since your dressing is on Red alert, you are due to monitor your wound every " + RED_ALERT_REMINDER_FREQUENCY + " hours, starting at " + hour + ":00.";
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
 

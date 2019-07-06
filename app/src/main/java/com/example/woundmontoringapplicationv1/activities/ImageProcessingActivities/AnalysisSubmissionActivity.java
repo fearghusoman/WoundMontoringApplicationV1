@@ -59,7 +59,7 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
 
     JSONObject jsonObject;
 
-    String userEmail, qrInfo, timestamp, c1HashMap, c2HashMap, c3HashMap, c4HashMap;
+    String userEmail, qrInfo, timestamp;
 
     String url = "http://foman01.lampt.eeecs.qub.ac.uk/woundmonitoring/insert_analysis.php";
 
@@ -238,10 +238,6 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
 
                     params.put("user_email", userEmail);
                     params.put("qr_info", qrInfo);
-                    params.put("c1", c1HashMap);
-                    params.put("c2", c2HashMap);
-                    params.put("c3", c3HashMap);
-                    params.put("c4", c4HashMap);
                     params.put("Timestamp", timestamp);
 
                     params.put("rgbC1", rgbC1);
@@ -284,11 +280,6 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
      *
      */
     private void setupVariables(){
-
-        c1HashMap = bundle.getString("Circle1");
-        c2HashMap = bundle.getString("Circle2");
-        c3HashMap = bundle.getString("Circle3");
-        c4HashMap = bundle.getString("Circle4");
 
         rgbC1 = bundle.getString("rgbC1");
         rgbC2 = bundle.getString("rgbC2");
@@ -365,31 +356,6 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
 
         return ColorUtils.distanceEuclidean(colorInitialLAB, colorCurrentLAB);
 
-    }
-
-    /**
-     * Response 1 from:
-     * https://stackoverflow.com/questions/35841118/how-to-get-error-message-description-using-volley?rq=1
-     *
-     * To get error response being returned from volley request
-     * @param error
-     */
-    public void parseVolleyError(VolleyError error) {
-        try {
-            String responseBody = new String(error.networkResponse.data, "utf-8");
-            JSONObject data = new JSONObject(responseBody);
-            JSONArray errors = data.getJSONArray("errors");
-            JSONObject jsonMessage = errors.getJSONObject(0);
-            String message = jsonMessage.getString("message");
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
-        catch (UnsupportedEncodingException errorr) {
-            errorr.printStackTrace();
-        }
     }
 
     /**

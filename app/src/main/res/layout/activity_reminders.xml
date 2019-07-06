@@ -27,6 +27,12 @@
         android:textSize="32sp"
         />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_below="@+id/table1"
+        android:background="@color/colorAccentCUSTOM" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"

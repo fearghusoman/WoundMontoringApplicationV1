@@ -15,6 +15,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/app_design_wma"
         android:label="Wound Montoring Application V1"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:usesCleartextTraffic="true"
         android:supportsRtl="true"
@@ -30,25 +31,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MainActivities.RemindersActivityV2" />
-        <activity android:name=".activities.LoginAndRegisterActivities.ForgotPasswordActivity" />
-        <activity android:name=".activities.LoginAndRegisterActivities.LogoutActivity" />
-        <activity android:name=".activities.ImageProcessingActivities.DressingCirclesColouranalysisActivity" />
-        <activity android:name=".activities.ImageProcessingActivities.ProcessAndAnalyseImageActivity" />
-        <activity android:name=".activities.MainActivities.RegisteredDressingsActivity" />
-        <activity android:name=".activities.MainActivities.HistoryActivity" />
-        <activity android:name=".activities.ImageProcessingActivities.OpenCVColorAnalysisActivity" />
-        <activity android:name=".activities.ImageProcessingActivities.AnalysisSubmissionActivity" />
+        <activity android:name=".activities$MainActivities.RemindersActivityV2" />
+        <activity android:name=".activities$LoginAndRegisterActivities.ForgotPasswordActivity" />
+        <activity android:name=".activities$LoginAndRegisterActivities.LogoutActivity" />
+        <activity android:name=".activities$MainActivities.RegisteredDressingsActivity" />
+        <activity android:name=".activities$MainActivities.HistoryActivity" />
+        <activity android:name=".activities$ImageProcessingActivities.AnalysisSubmissionActivity" />
 
         <receiver android:name=".AlertReceiver" />
 
-        <activity android:name=".activities.MainActivities.RegisterDressingActivity" />
-        <activity android:name=".activities.MainActivities.RemindersActivity" />
-        <activity android:name=".activities.ImageProcessingActivities.ProcessImageActivity" />
-        <activity android:name=".activities.ImageProcessingActivities.CaptureImageActivity" />
-        <activity android:name=".activities.MainActivities.HomeActivity" />
-        <activity android:name=".activities.LoginAndRegisterActivities.RegisterActivity" />
-        <activity android:name=".activities.LoginAndRegisterActivities.LoginActivity" />
+        <activity android:name=".activities$MainActivities.RegisterDressingActivity" />
+        <activity android:name=".activities$MainActivities.RemindersActivity" />
+        <activity android:name=".activities$ImageProcessingActivities.ProcessImageActivity" />
+        <activity android:name=".activities$ImageProcessingActivities.CaptureImageActivity" />
+        <activity android:name=".activities$MainActivities.HomeActivity" />
+        <activity android:name=".activities$LoginAndRegisterActivities.RegisterActivity" />
+        <activity android:name=".activities$LoginAndRegisterActivities.LoginActivity" />
     </application>
 
 </manifest>

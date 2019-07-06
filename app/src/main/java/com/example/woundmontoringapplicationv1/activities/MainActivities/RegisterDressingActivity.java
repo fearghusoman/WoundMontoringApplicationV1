@@ -31,6 +31,7 @@ import com.example.woundmontoringapplicationv1.activities.ImageProcessingActivit
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -61,6 +62,7 @@ public class RegisterDressingActivity extends AppCompatActivity {
     Button btn;
     ProgressDialog progressDialog;
     String qrInfoHolder, locationHolder, LoggedInEmail;
+    FloatingActionButton floatingActionButton;
 
     /**
      *
@@ -75,6 +77,7 @@ public class RegisterDressingActivity extends AppCompatActivity {
         textView1 = findViewById(R.id.textView);
         spinner = findViewById(R.id.myspinner);
         btn = findViewById(R.id.button_register_dressing);
+        floatingActionButton = findViewById(R.id.backToTakeImage);
 
         progressDialog = new ProgressDialog(RegisterDressingActivity.this);
 
@@ -87,6 +90,7 @@ public class RegisterDressingActivity extends AppCompatActivity {
             intent.putExtra("CALLING_ACTIVITY", "RegisterDressing");
             startActivityForResult(intent, REQUEST_CODE_CAPTURED_IMAGE);
         //}
+
     }
 
     /**
@@ -97,6 +101,15 @@ public class RegisterDressingActivity extends AppCompatActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), CaptureImageActivity.class);
+                intent.putExtra("CALLING_ACTIVITY", "RegisterDressing");
+                startActivityForResult(intent, REQUEST_CODE_CAPTURED_IMAGE);
+            }
+        });
 
         Log.d("FEARGS CHECK", "A result has been returned from he Capture Activity");
 

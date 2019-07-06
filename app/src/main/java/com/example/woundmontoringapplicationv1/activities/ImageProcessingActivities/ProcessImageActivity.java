@@ -112,9 +112,6 @@ public class ProcessImageActivity extends AppCompatActivity {
 
     Button processImgBtn, submitAnalysisBtn, opencvBtn;
 
-    //CIE LAB conversion
-    ColorSpace.Connector connector, connector2;
-
     double slope;
     double q;
 
@@ -122,9 +119,6 @@ public class ProcessImageActivity extends AppCompatActivity {
 
     FloatingActionButton floatingActionButton;
     Frame frame, frameRotated;
-
-    //hash maps for the colour results of each circle
-    HashMap<String, Boolean> c1HashMap, c2HashMap, c3HashMap, c4HashMap;
 
     ImageView imageViewOriginal, imageView2, imgviewDrawCirclesOnCorners1, imgviewDrawCirclesOnCorners2, imgviewDrawCirclesOnCorners3, imgviewDrawCirclesOnCorners4;
     ImageView imageViewC1, imageViewC2, imageViewC3, imageViewC4, imgviewWarpedAndAffineTransformation, imgviewWarpedTransformation;
@@ -135,11 +129,9 @@ public class ProcessImageActivity extends AppCompatActivity {
     int l1, l2, l3;
     int a, r, g, b;
     int circ1x, circ1y, circ2x, circ2y, circ3x, circ3y, circ4x, circ4y;
-    int circle1Color = Color.BLUE, circle2Color = Color.RED, circle3Color = Color.GREEN, circle4Color = Color.YELLOW;
-    int overallRGBC1, overallRGBC2, overallRGBC3, overallRGBC4;
 
+    int[] overallRGBC1, overallRGBC2, overallRGBC3, overallRGBC4;
     int[] colorsInt = {Color.WHITE, Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW};
-    int[] colorsByCircle = {circle1Color, circle2Color, circle3Color, circle4Color};
 
     Point[] qrCornerPoints, qrCornerPointsRotated;
     Point centreC1, centreC2, centreC3, centreC4;
@@ -240,9 +232,6 @@ public class ProcessImageActivity extends AppCompatActivity {
         //LoggedInEmail = sharedPreferences.getString("email", "");
         LoggedInEmail = "johndoe@gmail.com";
 
-        //connector = ColorSpace.connect(ColorSpace.get(ColorSpace.Named.SRGB), ColorSpace.get(ColorSpace.Named.CIE_LAB));
-        //connector2 = ColorSpace.connect(ColorSpace.get(ColorSpace.Named.CIE_LAB), ColorSpace.get(ColorSpace.Named.SRGB));
-
         bundle = getIntent().getExtras();
 
         if (bundle != null) {
@@ -322,8 +311,7 @@ public class ProcessImageActivity extends AppCompatActivity {
      * into the project correctly
      */
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         if (!OpenCVLoader.initDebug()) {
             Log.d("FEARG", "Internal OpenCV library not found. Using OpenCV Manager for initialization");
@@ -346,6 +334,7 @@ public class ProcessImageActivity extends AppCompatActivity {
         SparseArray<Barcode> barcodeSparseArray;
 
         barcodeSparseArray = barcodeDetector.detect(frame);
+
         Barcode b = barcodeSparseArray.valueAt(0);
         Point[] qrCornerPoints = b.cornerPoints;
 
@@ -688,10 +677,10 @@ public class ProcessImageActivity extends AppCompatActivity {
         canvas.drawRect(rect, paint);
 
         //try to draw the circles
-        canvas.drawCircle(circ1.x, circ1.y, (float) (radius1 * q), paint);
-        canvas.drawCircle(circ2.x, circ2.y, (float) (radius2 * q), paint);
-        canvas.drawCircle(circ3.x, circ3.y, (float) (radius3 * q), paint);
-        canvas.drawCircle(circ4.x, circ4.y, (float) (radius4 * q), paint);
+        //canvas.drawCircle(circ1.x, circ1.y, (float) (radius1 * q), paint);
+        //canvas.drawCircle(circ2.x, circ2.y, (float) (radius2 * q), paint);
+        //canvas.drawCircle(circ3.x, circ3.y, (float) (radius3 * q), paint);
+        //canvas.drawCircle(circ4.x, circ4.y, (float) (radius4 * q), paint);
 
         imageView.setImageBitmap(myBitmap);
     }
@@ -728,9 +717,6 @@ public class ProcessImageActivity extends AppCompatActivity {
                 //once response has been received we'll call the analysis method
                 carryOutColourAnalysis();
 
-                //check the bitmap for red, green, blue
-                //checkBitmapForRGBValues(bitmap);
-
                 progressDialog.dismiss();
 
                 //add an on click listener to the submit analysis button
@@ -743,11 +729,6 @@ public class ProcessImageActivity extends AppCompatActivity {
                         intent.putExtra("UserEmail", LoggedInEmail);
                         intent.putExtra("Timestamp", timestamp);
 
-                        intent.putExtra("Circle1", c1HashMap.toString());
-                        intent.putExtra("Circle2", c2HashMap.toString());
-                        intent.putExtra("Circle3", c3HashMap.toString());
-                        intent.putExtra("Circle4", c4HashMap.toString());
-
                         intent.putExtra("rgbC1", overallRGBC1String);
                         intent.putExtra("rgbC2", overallRGBC2String);
                         intent.putExtra("rgbC3", overallRGBC3String);
@@ -756,21 +737,6 @@ public class ProcessImageActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
-
-                /**
-                opencvBtn.setVisibility(View.VISIBLE);
-                opencvBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent openIntent = new Intent(getApplicationContext(), DressingCirclesColouranalysisActivity.class);
-                        openIntent.putExtra("imageName", path);
-                        openIntent.putExtra("rectangleForAnalysis", rect);
-                        openIntent.putExtra("slope", slope);
-                        openIntent.putExtra("orientation", orientation);
-                        startActivity(openIntent);
-                    }
-                });
-                 **/
             }
         }, new Response.ErrorListener() {
             @Override
@@ -826,9 +792,7 @@ public class ProcessImageActivity extends AppCompatActivity {
      *    is drawn over the calculated area
      */
     private void carryOutColourAnalysis(){
-        if(continueWithProcessing == true){
-            Log.d("FEARGS CHECK", "Value of QR Registered should be true: " + continueWithProcessing);
-
+        if(continueWithProcessing){
             textView.setText(qrInfoHolder);
 
             textView5.setVisibility(View.VISIBLE);
@@ -837,8 +801,6 @@ public class ProcessImageActivity extends AppCompatActivity {
             view4.setVisibility(View.VISIBLE);
             view5.setVisibility(View.VISIBLE);
 
-            //now, let's begin analysing the geometric properties of our qr code
-            //within our image
             qrCornerPoints = getQRCoordinates(barcodeDetector, frame);
             String corners = "Original QR Code coordinates: ";
 
@@ -909,22 +871,16 @@ public class ProcessImageActivity extends AppCompatActivity {
 
             /**-------------------------------------------------------------------------------------**/
             /**-------------------------------------------------------------------------------------**/
-            /**---------------------PIXEL CONVERSION TO NEAREST PRIMARY COLOR ----------------------**/
-            /**-------------------------------------------------------------------------------------**/
-            Bitmap rotatedAndOrientatedAndConvertedBitmap = createNewBitmapRotateAndClosestColorConversion(rotatedAndOrientatedBitmap, rect, slope, orientation);
-
-            /**-------------------------------------------------------------------------------------**/
-            /**-------------------------------------------------------------------------------------**/
             /**-----------------------DRAWING EACH CIRCLE'S BITMAP ---------------------------------**/
             /**-------------------------------------------------------------------------------------**/
             //call the method to calculate the centres of the 4 circles to draw - calculated with relation to the rect
             getCirclesOnImage(rect, q);
 
             //method to draw the first circle as its own bitmap
-            getBitmapClippedCirclePath(rotatedAndOrientatedAndConvertedBitmap, centreC1,radius1 * q, imageViewC1);
-            getBitmapClippedCirclePath(rotatedAndOrientatedAndConvertedBitmap, centreC2,radius2 * q, imageViewC2);
-            getBitmapClippedCirclePath(rotatedAndOrientatedAndConvertedBitmap, centreC3,radius3 * q, imageViewC3);
-            getBitmapClippedCirclePath(rotatedAndOrientatedAndConvertedBitmap, centreC4,radius4 * q, imageViewC4);
+            getBitmapClippedCirclePath(rotatedAndOrientatedBitmap, centreC1,radius1 * q, imageViewC1);
+            getBitmapClippedCirclePath(rotatedAndOrientatedBitmap, centreC2,radius2 * q, imageViewC2);
+            getBitmapClippedCirclePath(rotatedAndOrientatedBitmap, centreC3,radius3 * q, imageViewC3);
+            getBitmapClippedCirclePath(rotatedAndOrientatedBitmap, centreC4,radius4 * q, imageViewC4);
 
             BitmapDrawable bitmapDrawableC1 = (BitmapDrawable) imageViewC1.getDrawable();
             BitmapDrawable bitmapDrawableC2 = (BitmapDrawable) imageViewC2.getDrawable();
@@ -936,43 +892,19 @@ public class ProcessImageActivity extends AppCompatActivity {
             circle3 = bitmapDrawableC3.getBitmap();
             circle4 = bitmapDrawableC4.getBitmap();
 
-            /**-------------------------------------------------------------------------------------**/
-            /**-------------------------------------------------------------------------------------**/
-            /**-------------------PRIMARY COLOR ANALYSIS OF EACH CIRCLE ----------------------------**/
-            /**-------------------------------------------------------------------------------------**/
-            c1HashMap = getColoursInCircle(circle1);
-            c2HashMap = getColoursInCircle(circle2);
-            c3HashMap = getColoursInCircle(circle3);
-            c4HashMap = getColoursInCircle(circle4);
-
-            Log.d("FEARGS HASH", "C1: " + c1HashMap.toString());
-            Log.d("FEARGS HASH", "C2: " + c2HashMap.toString());
-            Log.d("FEARGS HASH", "C3: " + c3HashMap.toString());
-            Log.d("FEARGS HASH", "C4: " + c4HashMap.toString());
-
-            tvC1.setText(c1HashMap.toString());
-            tvC2.setText(c2HashMap.toString());
-            tvC3.setText(c3HashMap.toString());
-            tvC4.setText(c4HashMap.toString());
-
             /**---------------------------------------------------------------------------------**/
             /**---------------------------------------------------------------------------------**/
             /**-------------------AVERAGE RGB VALUES OF EACH CIRCLE ----------------------------**/
             /**---------------------------------------------------------------------------------**/
-            //overallRGBC1 = getOverallRGBFromCircle(circle1);
-            //overallRGBC2 = getOverallRGBFromCircle(circle2);
-            //overallRGBC3 = getOverallRGBFromCircle(circle3);
-            //overallRGBC4 = getOverallRGBFromCircle(circle4);
+            overallRGBC1 = getAverageRGBValue(circle1);
+            overallRGBC2 = getAverageRGBValue(circle2);
+            overallRGBC3 = getAverageRGBValue(circle3);
+            overallRGBC4 =getAverageRGBValue(circle4);
 
-            overallRGBC1 = getDominantColourFromCircle(circle1);
-            overallRGBC2 = getDominantColourFromCircle(circle2);
-            overallRGBC3 = getDominantColourFromCircle(circle3);
-            overallRGBC4 = getDominantColourFromCircle(circle4);
-
-            overallRGBC1String = convertIntRGBToString(overallRGBC1);
-            overallRGBC2String = convertIntRGBToString(overallRGBC2);
-            overallRGBC3String = convertIntRGBToString(overallRGBC3);
-            overallRGBC4String = convertIntRGBToString(overallRGBC4);
+            overallRGBC1String = convertIntArrayRGBToString(overallRGBC1);
+            overallRGBC2String = convertIntArrayRGBToString(overallRGBC2);
+            overallRGBC3String = convertIntArrayRGBToString(overallRGBC3);
+            overallRGBC4String = convertIntArrayRGBToString(overallRGBC4);
 
         }
         else{
@@ -981,97 +913,6 @@ public class ProcessImageActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     *
-     * @param rgb
-     * @return
-     */
-    private String convertIntRGBToString(int rgb){
-        int r = Color.red(rgb);
-        int g = Color.green(rgb);
-        int b = Color.blue(rgb);
-
-        return "(" + r + ", " + g + ", " + b + ")";
-    }
-
-    /**
-     * @param color
-     * @param colorCheck
-     * @return
-     */
-    private double euclideanDistanceBetweenRGBs(int color, int colorCheck){
-        double distance;
-
-        int r = Color.red(color);
-        int g = Color.green(color);
-        int b = Color.blue(color);
-
-        int rX = Color.red(colorCheck);
-        int gX = Color.green(colorCheck);
-        int bX = Color.blue(colorCheck);
-
-        distance = Math.sqrt(Math.pow((r - rX), 2) + Math.pow((g - gX), 2) + Math.pow((b - bX), 2));
-
-        return distance;
-    }
-
-    /**
-     * Check closest color to each pixel using Euclidean distance within the RGB color space
-     * @param color
-     * @param colorsInt
-     * @return
-     */
-    private int checkClosestColorINRGBSpace(int color, int[] colorsInt){
-        int closestColor = Color.WHITE;
-        double distance = 10000000000.0;
-
-        for(int i : colorsInt){
-            if(euclideanDistanceBetweenRGBs(color, i) < distance){
-                closestColor = i;
-                distance = euclideanDistanceBetweenRGBs(color, i);
-            }
-        }
-        return closestColor;
-    }
-
-    /**
-     *
-     * @param bitmap
-     * @param rect
-     * @param slope
-     */
-    private Bitmap createNewBitmapRotateAndClosestColorConversion(Bitmap bitmap, Rect rect, double slope, int orientation){
-        //Matrix rotationMatrix = new Matrix();
-        //rotationMatrix.postRotate((float) (Math.abs(slope) + orientation));
-
-        //Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), rotationMatrix, false);
-        Bitmap newBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-
-        int c;
-
-        //the try-catch here is in case the rotation has not been done properly
-        try{
-            for(int i = rect.left; i <= rect.right; i++){
-                for(int j = rect.top; j <= rect.bottom; j++) {
-                    //Log.d("FEARGS LOOP", "createNEwBitmapRotate: (" + i + ", " + j + ")");
-                    //use Euclidean within RGB color space
-                    c = checkClosestColorINRGBSpace(newBitmap.getPixel(i, j), colorsInt);
-
-                    //use Delta E distance in CIELab color space
-                    //c = checkClosestColorInCIELABSpace(newBitmap.getPixel(i, j), colorsInt);
-
-                    newBitmap.setPixel(i, j, c);
-                }
-            }
-        }
-        catch(IllegalArgumentException e){
-            e.printStackTrace();
-            Log.d("FEARGS CATCH", "The color check for the rectangle of the rotate bitmap is going off the edge of the bitmap.");
-            Toast.makeText(ProcessImageActivity.this, "The image is not clear enough for precise analysis..", Toast.LENGTH_LONG).show();
-        }
-
-        return newBitmap;
-    }
 
     /**
      *
@@ -1110,71 +951,6 @@ public class ProcessImageActivity extends AppCompatActivity {
         canvas.drawBitmap(bitmap, 0, 0, null);
         imageView.setImageBitmap(circleBitmap);
 
-    }
-
-    /**
-     *
-     * @param bitmap
-     * @return
-     */
-    private HashMap<String, Boolean> getColoursInCircle(Bitmap bitmap){
-
-        HashMap<String, Boolean> stringBooleanHashMap = new HashMap<>();
-
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-
-        int redCount = 0;
-        int greenCount = 0;;
-        int blueCount = 0;
-        int yellowCount = 0;
-
-        for(int i = 0; i < width; i++){
-            for(int j = 0; j < height; j++){
-
-                switch(bitmap.getPixel(i, j)){
-
-                    case Color.RED:
-                        redCount += 1;
-
-                        if(redCount >= 50){
-                            if(!stringBooleanHashMap.containsKey("RED")){
-                                stringBooleanHashMap.put("RED", true);
-                            }
-                        }
-                        break;
-                    case Color.GREEN:
-                        greenCount += 1;
-
-                        if(greenCount >= 50) {
-                            if (!stringBooleanHashMap.containsKey("GREEN")) {
-                                stringBooleanHashMap.put("GREEN", true);
-                            }
-                        }
-                        break;
-                    case Color.BLUE:
-                        blueCount += 1;
-
-                        if(blueCount >= 50) {
-                            if (!stringBooleanHashMap.containsKey("BLUE")) {
-                                stringBooleanHashMap.put("BLUE", true);
-                            }
-                        }
-                        break;
-                    case Color.YELLOW:
-                        yellowCount += 1;
-
-                        if(yellowCount >= 50) {
-                            if (!stringBooleanHashMap.containsKey("YELLOW")) {
-                                stringBooleanHashMap.put("YELLOW", true);
-                            }
-                        }
-                        break;
-
-                }
-            }
-        }
-        return stringBooleanHashMap;
     }
 
     /**
@@ -1305,74 +1081,62 @@ public class ProcessImageActivity extends AppCompatActivity {
     /**
      *
      * @param bitmap
-     * @return
      */
-    private int getOverallRGBFromCircle(Bitmap bitmap){
-        int overallRGB;
+    private int[] getAverageRGBValue(Bitmap bitmap){
+        int[] rgb = new int[3];
+        int totalR = 0, totalG = 0, totalB = 0;
+        int count = 0;
 
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
 
-        int rgb;
-        int r = 0, g = 0, b = 0, count = 0;
+        Log.d("FEARGS RGB SIZE", "Width: " + width + ", height: " + height);
 
-        for(int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
+        for(int i = 0; i < width; i++){
+            for(int j = 0; j < height; j++){
 
-                rgb = bitmap.getPixel(i, j);
+                if(Color.red(bitmap.getPixel(i, j)) > 0 && Color.green(bitmap.getPixel(i, j)) > 0 && Color.blue(bitmap.getPixel(i, j)) > 0){
 
-                if(Color.red(rgb) > 0 && Color.blue(rgb) > 0 && Color.green(rgb) > 0){
-                    Log.d("FEARGS R", "" + Color.red(rgb));
-                    Log.d("FEARGS G", "" + Color.green(rgb));
-                    Log.d("FEARGS B", "" + Color.blue(rgb));
+                    totalR += Color.red(bitmap.getPixel(i, j));
+                    totalG += Color.green(bitmap.getPixel(i, j));
+                    totalB += Color.blue(bitmap.getPixel(i, j));
+
+                    count += 1;
+
                 }
-
-                r += Color.red(rgb);
-                g += Color.green(rgb);
-                b += Color.blue(rgb);
-
-                count += 1;
-
             }
         }
+        Log.d("FEARGS RGB TOTS", "R: " + totalR + ", G: " + totalG + ", " + "B: " + totalB + ". count: " + count);
 
-        Log.d("FEARGS RGB", "R1: " + r);
-        Log.d("FEARGS RGB", "G1: " + g);
-        Log.d("FEARGS RGB", "B1: " + b);
+        try {
+            Log.d("FEARGS RGB", "RGB: (" + (totalR / count) + ", " + (totalG / count) + ", " + (totalB / count) + ")");
 
-        Log.d("FEARGS RGB", "COUNT: " + count);
+            rgb[0] = totalR / count;
+            rgb[1] = totalG / count;
+            rgb[2] = totalB / count;
+        }
+        catch(ArithmeticException e){
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Please retake the image", Toast.LENGTH_LONG).show();
+        }
 
-        r = r / count;
-        g = g / count;
-        b = b / count;
-
-        Log.d("FEARGS RGB", "R2: " + r);
-        Log.d("FEARGS RGB", "G2: " + g);
-        Log.d("FEARGS RGB", "B2: " + b);
-
-        overallRGB = r;
-        overallRGB = (overallRGB << 8) + g;
-        overallRGB = (overallRGB << 8) + b;
-
-        Log.d("FEARGS RGB", "OverallRGB: " + overallRGB);
-
-        return overallRGB;
+        return rgb;
     }
 
     /**
      *
-     * @param bitmap
+     * @param rgb
      * @return
      */
-    private int getDominantColourFromCircle(Bitmap bitmap){
-        int dominantColor = 0;
+    private String convertIntArrayRGBToString(int[] rgb){
+        int r = Color.red(rgb[0]);
+        int g = Color.green(rgb[1]);
+        int b = Color.blue(rgb[2]);
 
-        Palette palette = Palette.from(bitmap).generate();
+        Log.d("FEARGS RGB STRING", "(" + r + ", " + g + ", " + b + ")");
 
-        dominantColor = palette.getDominantColor(0);
-
-        Log.d("FEARG DOMINANT", "Dominant Color: " + dominantColor);
-
-        return dominantColor;
+        return "(" + r + ", " + g + ", " + b + ")";
     }
+
+
 }

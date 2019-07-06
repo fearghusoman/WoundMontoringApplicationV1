@@ -157,7 +157,14 @@ public class CaptureImageActivity extends AppCompatActivity {
 
                     //this compresses the bitmap within the textureView and writes the compressed version
                     //to the output stream 'outputPhoto'
-                    textureView.getBitmap().compress(Bitmap.CompressFormat.PNG, 100, outputPhoto);
+                    Bitmap textureViewBitmap = Bitmap.createBitmap(textureView.getBitmap().getWidth(), textureView.getBitmap().getHeight(), Bitmap.Config.RGB_565);
+                    //textureView.getBitmap().compress(Bitmap.CompressFormat.PNG, 100, outputPhoto);
+                    textureViewBitmap = textureView.getBitmap();
+
+                    textureViewBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputPhoto);
+                    //textureView.getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, outputPhoto);
+
+                    Log.d("FEARGS CHECK", "bitmap compressed");
 
                     if (bundle != null) {
                         String reason = bundle.get("CALLING_ACTIVITY").toString();
@@ -376,6 +383,7 @@ public class CaptureImageActivity extends AppCompatActivity {
      */
     private void lock(){
         try{
+            Log.d("FEARGS CAMERA", "LOCKED");
             cameraCaptureSession.capture(captureRequestBuilder.build(), null, backgroundHandler);
         }
         catch(CameraAccessException e){
@@ -388,6 +396,7 @@ public class CaptureImageActivity extends AppCompatActivity {
      */
     private void unlock(){
         try{
+            Log.d("FEARGS CAMERA", "UNLOCKED");
             cameraCaptureSession.setRepeatingRequest(captureRequestBuilder.build(), null, backgroundHandler);
         }
         catch(CameraAccessException e){

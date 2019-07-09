@@ -31,12 +31,17 @@ import com.android.volley.toolbox.Volley;
 import com.example.woundmontoringapplicationv1.Adapters.HomeFragmentRecyclerAdapter;
 import com.example.woundmontoringapplicationv1.R;
 import com.example.woundmontoringapplicationv1.SnapshotItem;
+import com.example.woundmontoringapplicationv1.activities.MainActivities.HomeActivity;
 import com.example.woundmontoringapplicationv1.activities.MainActivities.RegisterDressingActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
+
+import static com.example.woundmontoringapplicationv1.activities.LoginAndRegisterActivities.LoginActivity.TEXT;
 
 public class HomeFragment extends Fragment {
 
@@ -45,6 +50,10 @@ public class HomeFragment extends Fragment {
     TextView textView1;
 
     JsonObjectRequest jsonObjectRequest;
+
+    FirebaseAuth firebaseAuth;
+
+    FirebaseAuth.AuthStateListener authStateListener;
 
     Context context;
 
@@ -58,7 +67,7 @@ public class HomeFragment extends Fragment {
 
     String url = "http://foman01.lampt.eeecs.qub.ac.uk/woundmonitoring/most_recent_analysis.php";
 
-    String email = "johndoe@gmail.com";
+    String email;
 
     private RecyclerView recyclerView;
     private HomeFragmentRecyclerAdapter homeFragmentRecyclerAdapter;
@@ -81,6 +90,11 @@ public class HomeFragment extends Fragment {
         context = getActivity();
         sharedPreferences = context.getSharedPreferences("APPLICATION_PREFS", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+
+        //use firebase auth to setup the email variable
+        //firebaseAuth = FirebaseAuth.getInstance();
+        //email = firebaseAuth.getCurrentUser().getEmail();
+        email = sharedPreferences.getString(TEXT, "");
 
         //set-up the recycler view settings
         recyclerView = view.findViewById(R.id.recycler_view);
@@ -118,6 +132,11 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("FEARGS CHECK", response.toString());
+                        try {
+                            Log.d("FEARGS JSON", "JSON: " + jsonObject.getString("EmailVar"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
                         try {
                             JSONArray jsonArray = response.getJSONArray("Recent_User_Snaps");

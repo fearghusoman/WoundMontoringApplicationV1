@@ -31,9 +31,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     String emailHolder;
 
-    String emailBody = "Hello there, we are sorry you've misplaced your password. Follow the link below to reset your password:";
-
-    String emailSubject = "Password Reset: ";
     /**
      *
      * @param savedInstanceState
@@ -61,33 +58,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 emailHolder = editText.getText().toString().trim();
-
-                //set the text of the email's body
-                //String body = emailBody;
-
-                //emailSubject = emailSubject + " " + emailHolder;
-
-                /**
-                //create the email send intent
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-                emailIntent.setData(Uri.parse("mailto:" + emailHolder +
-                                                "&subject=" + Uri.encode(emailSubject) +
-                                                "&body=" + Uri.encode(body)));
-
-                try{
-                    startActivity(emailIntent);
-                }
-                catch(ActivityNotFoundException e){
-                    e.printStackTrace();
-                }
-
-                //using emailBuilder
-                boolean success = EmailIntentBuilder.from(getApplicationContext())
-                                        .to(emailHolder)
-                                        .subject(emailSubject)
-                                        .body(body)
-                                        .start();
-                 **/
 
                 firebaseAuth.sendPasswordResetEmail(emailHolder).addOnCompleteListener(
                         new OnCompleteListener<Void>() {

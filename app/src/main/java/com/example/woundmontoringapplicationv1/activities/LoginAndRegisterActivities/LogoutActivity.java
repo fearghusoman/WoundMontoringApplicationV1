@@ -27,8 +27,6 @@ public class LogoutActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
 
-    private FirebaseAuth.AuthStateListener authStateListener;
-
     /**
      *
      * @param savedInstanceState

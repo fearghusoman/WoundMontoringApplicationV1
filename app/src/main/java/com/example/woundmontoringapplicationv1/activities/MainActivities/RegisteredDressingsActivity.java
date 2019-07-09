@@ -1,5 +1,6 @@
 package com.example.woundmontoringapplicationv1.activities.MainActivities;
 
+import android.content.Context;
 import android.content.Intent;
 
 import com.example.woundmontoringapplicationv1.DressingItem;
@@ -7,6 +8,8 @@ import com.example.woundmontoringapplicationv1.R;
 import com.example.woundmontoringapplicationv1.Adapters.RegisteredDressingRecyclerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,6 +30,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.example.woundmontoringapplicationv1.activities.LoginAndRegisterActivities.LoginActivity.TEXT;
+
 public class RegisteredDressingsActivity extends AppCompatActivity {
 
     JsonObjectRequest jsonObjectRequest;
@@ -35,9 +40,11 @@ public class RegisteredDressingsActivity extends AppCompatActivity {
 
     RequestQueue requestQueue;
 
+    SharedPreferences sharedPreferences;
+
     String url = "http://foman01.lampt.eeecs.qub.ac.uk/woundmonitoring/registered_dressing.php";
 
-    String email = "johndoe@gmail.com";
+    String email;
 
     private RecyclerView recyclerView;
     private RegisteredDressingRecyclerAdapter registeredDressingRecyclerAdapter;
@@ -49,6 +56,10 @@ public class RegisteredDressingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registered_dressings);
+
+        sharedPreferences = getApplicationContext().getSharedPreferences("APPLICATION_PREFS", Context.MODE_PRIVATE);
+        email = sharedPreferences.getString(TEXT, "");
+
 
         floatingActionButton = findViewById(R.id.backToMenu);
         recyclerView = findViewById(R.id.recycler_view);

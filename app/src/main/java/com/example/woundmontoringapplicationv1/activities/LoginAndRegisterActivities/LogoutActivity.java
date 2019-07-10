@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 
 import com.example.woundmontoringapplicationv1.R;
 import com.example.woundmontoringapplicationv1.activities.MainActivities.HomeActivity;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 

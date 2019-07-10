@@ -31,7 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MainActivities.RemindersActivityV2" />
         <activity android:name=".activities.LoginAndRegisterActivities.ForgotPasswordActivity" />
         <activity android:name=".activities.LoginAndRegisterActivities.LogoutActivity" />
         <activity android:name=".activities.MainActivities.RegisteredDressingsActivity" />

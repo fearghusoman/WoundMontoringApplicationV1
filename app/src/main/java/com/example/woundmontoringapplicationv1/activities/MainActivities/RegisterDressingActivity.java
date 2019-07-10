@@ -32,6 +32,8 @@ import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -61,8 +63,10 @@ public class RegisterDressingActivity extends AppCompatActivity {
     ArrayAdapter<CharSequence> adapter;
     Button btn;
     ProgressDialog progressDialog;
-    String qrInfoHolder, locationHolder, LoggedInEmail;
+    String qrInfoHolder, locationHolder, loggedInEmail;
     FloatingActionButton floatingActionButton;
+    FirebaseAuth firebaseAuth;
+    FirebaseUser firebaseUser;
 
     /**
      *
@@ -73,6 +77,11 @@ public class RegisterDressingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_dressing);
 
+        //use firebase auth to setup the email variable
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        loggedInEmail = firebaseUser.getEmail();
+
         imageView = findViewById(R.id.dressing_image);
         textView1 = findViewById(R.id.textView);
         spinner = findViewById(R.id.myspinner);
@@ -81,15 +90,9 @@ public class RegisterDressingActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(RegisterDressingActivity.this);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        //LoggedInEmail = sharedPreferences.getString("email", "");
-        LoggedInEmail = "johndoe@gmail.com";
-
-        //if(!LoggedInEmail.equalsIgnoreCase("")){
-            Intent intent = new Intent(getApplicationContext(), CaptureImageActivity.class);
-            intent.putExtra("CALLING_ACTIVITY", "RegisterDressing");
-            startActivityForResult(intent, REQUEST_CODE_CAPTURED_IMAGE);
-        //}
+        Intent intent = new Intent(getApplicationContext(), CaptureImageActivity.class);
+        intent.putExtra("CALLING_ACTIVITY", "RegisterDressing");
+        startActivityForResult(intent, REQUEST_CODE_CAPTURED_IMAGE);
 
     }
 
@@ -138,9 +141,6 @@ public class RegisterDressingActivity extends AppCompatActivity {
                             frame = new Frame.Builder().setBitmap(bitmap).build();
                             barcodes = barcodeDetector.detect(frame);
 
-                            //.detect return a sparsearray of all barcodes in the frame
-                            //since we'll only have one per image, we can take the first value in the array
-                            //if it's not empty then:
                             if (barcodes.size() > 0) {
                                 dressingBarcode = barcodes.valueAt(0);
                                 textView1.setText(dressingBarcode.rawValue);
@@ -159,7 +159,6 @@ public class RegisterDressingActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View v) {
                                         Toast.makeText(RegisterDressingActivity.this,"Registering dressing...", Toast.LENGTH_SHORT);
-
                                         qrInfoHolder = textView1.getText().toString().trim();
                                         locationHolder = spinner.getSelectedItem().toString();
                                         RegisterDressing();
@@ -239,7 +238,7 @@ public class RegisterDressingActivity extends AppCompatActivity {
                 //keys are fields from database
                 params.put("qr_info", qrInfoHolder);
                 params.put("location", locationHolder);
-                params.put("user_email", LoggedInEmail);
+                params.put("user_email", loggedInEmail);
 
                 return params;
             }

@@ -15,6 +15,13 @@
         <item name="colorAccent">@color/colorAccentCUSTOM</item>
     </style>
 
+    <style name="CustomWMAStyleLighthouse" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#f7f7f7</item>
+        <item name="colorPrimaryDark">#facb2f</item>
+        <item name="colorAccent">#333000</item>
+    </style>
+
     <style name="LaunchTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/background</item>
     </style>

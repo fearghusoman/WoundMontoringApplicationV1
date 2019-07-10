@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment {
 
     FirebaseAuth firebaseAuth;
 
-    FirebaseAuth.AuthStateListener authStateListener;
+    FirebaseUser firebaseUser;
 
     Context context;
 
@@ -92,9 +92,9 @@ public class HomeFragment extends Fragment {
         editor = sharedPreferences.edit();
 
         //use firebase auth to setup the email variable
-        //firebaseAuth = FirebaseAuth.getInstance();
-        //email = firebaseAuth.getCurrentUser().getEmail();
-        email = sharedPreferences.getString(TEXT, "");
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        email = firebaseUser.getEmail();
 
         //set-up the recycler view settings
         recyclerView = view.findViewById(R.id.recycler_view);

@@ -22,6 +22,9 @@ import com.example.woundmontoringapplicationv1.DressingReminderItem;
 import com.example.woundmontoringapplicationv1.R;
 import com.example.woundmontoringapplicationv1.activities.CalendarFragments.TimePickerFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -63,6 +66,12 @@ public class RemindersActivity extends AppCompatActivity implements TimePickerDi
 
     int numberOfAlarmsSet = 0;
 
+    FirebaseAuth firebaseAuth;
+
+    FirebaseUser firebaseUser;
+
+    String email;
+
     JSONObject jsonObject;
 
     JsonObjectRequest jsonObjectRequest;
@@ -88,6 +97,11 @@ public class RemindersActivity extends AppCompatActivity implements TimePickerDi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminders);
+
+        //use firebase auth to setup the email variable
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        email = firebaseUser.getEmail();
 
         dressingItems = new ArrayList<>();
         recyclerView = findViewById(R.id.recycler_view);
@@ -169,7 +183,7 @@ public class RemindersActivity extends AppCompatActivity implements TimePickerDi
 
         jsonObject = new JSONObject();
         try{
-            jsonObject.put("EmailVar", "johndoe@gmail.com");
+            jsonObject.put("EmailVar", email);
         }
         catch(Exception e){
             e.printStackTrace();

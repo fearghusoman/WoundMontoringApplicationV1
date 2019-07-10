@@ -23,6 +23,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,6 +41,10 @@ public class HistoryActivity extends AppCompatActivity {
     JSONObject jsonObject;
 
     RequestQueue requestQueue;
+
+    FirebaseAuth firebaseAuth;
+
+    FirebaseUser firebaseUser;
 
     SharedPreferences sharedPreferences;
 
@@ -57,8 +63,10 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        sharedPreferences = getApplicationContext().getSharedPreferences("APPLICATION_PREFS", Context.MODE_PRIVATE);
-        email = sharedPreferences.getString(TEXT, "");
+        //use firebase auth to setup the email variable
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        email = firebaseUser.getEmail();
 
         floatingActionButton = findViewById(R.id.backToMenu);
         recyclerView = findViewById(R.id.recycler_view);

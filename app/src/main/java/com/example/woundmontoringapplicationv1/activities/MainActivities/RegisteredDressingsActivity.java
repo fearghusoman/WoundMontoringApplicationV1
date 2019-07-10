@@ -23,6 +23,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,7 +42,9 @@ public class RegisteredDressingsActivity extends AppCompatActivity {
 
     RequestQueue requestQueue;
 
-    SharedPreferences sharedPreferences;
+    FirebaseAuth firebaseAuth;
+
+    FirebaseUser firebaseUser;
 
     String url = "http://foman01.lampt.eeecs.qub.ac.uk/woundmonitoring/registered_dressing.php";
 
@@ -57,8 +61,10 @@ public class RegisteredDressingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registered_dressings);
 
-        sharedPreferences = getApplicationContext().getSharedPreferences("APPLICATION_PREFS", Context.MODE_PRIVATE);
-        email = sharedPreferences.getString(TEXT, "");
+        //use firebase auth to setup the email variable
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        email = firebaseUser.getEmail();
 
 
         floatingActionButton = findViewById(R.id.backToMenu);

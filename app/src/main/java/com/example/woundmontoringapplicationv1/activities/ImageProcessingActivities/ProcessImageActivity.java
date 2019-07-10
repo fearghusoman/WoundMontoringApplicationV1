@@ -41,6 +41,8 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
@@ -117,6 +119,9 @@ public class ProcessImageActivity extends AppCompatActivity {
 
     Dressing dressing;
 
+    FirebaseAuth firebaseAuth;
+    FirebaseUser firebaseUser;
+
     FloatingActionButton floatingActionButton;
     Frame frame, frameRotated;
 
@@ -131,7 +136,6 @@ public class ProcessImageActivity extends AppCompatActivity {
     int circ1x, circ1y, circ2x, circ2y, circ3x, circ3y, circ4x, circ4y;
 
     int[] overallRGBC1, overallRGBC2, overallRGBC3, overallRGBC4;
-    int[] colorsInt = {Color.WHITE, Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW};
 
     Point[] qrCornerPoints, qrCornerPointsRotated;
     Point centreC1, centreC2, centreC3, centreC4;
@@ -228,9 +232,10 @@ public class ProcessImageActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(ProcessImageActivity.this);
         progressDialog = new ProgressDialog(ProcessImageActivity.this);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        //LoggedInEmail = sharedPreferences.getString("email", "");
-        LoggedInEmail = "johndoe@gmail.com";
+        //use firebase auth to setup the email variable
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        LoggedInEmail = firebaseUser.getEmail();
 
         bundle = getIntent().getExtras();
 

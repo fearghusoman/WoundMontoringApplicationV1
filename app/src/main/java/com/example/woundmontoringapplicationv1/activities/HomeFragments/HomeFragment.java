@@ -41,8 +41,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 
-import static com.example.woundmontoringapplicationv1.activities.LoginAndRegisterActivities.LoginActivity.TEXT;
-
 public class HomeFragment extends Fragment {
 
     public final static int MY_PERMISSION_REQUEST_CAMERA = 1;

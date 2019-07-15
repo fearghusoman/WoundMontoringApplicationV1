@@ -17,10 +17,13 @@
         android:label="Wound Montoring Application V1"
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:usesCleartextTraffic="true"
         android:supportsRtl="true"
-        android:theme="@style/CustomWMAStyle">
-        <activity android:name=".activities.LoginAndRegisterActivities.UserDeclinedActivity"></activity>
+        android:theme="@style/CustomWMAStyle"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".activities.RegisterActivities.AccountDetailsActivity"></activity>
+        <activity android:name=".activities.RegisterActivities.AddressDetailsActivity" />
+        <activity android:name=".activities.RegisterActivities.PersonalDetailsActivity" />
+        <activity android:name=".activities.LoginAndRegisterActivities.UserDeclinedActivity" />
         <activity android:name=".activities.LoginAndRegisterActivities.UserWaitingForApprovalActivity" />
         <activity
             android:name=".activities.MainActivities.LaunchActivity"
@@ -44,7 +47,6 @@
         <activity android:name=".activities.ImageProcessingActivities.ProcessImageActivity" />
         <activity android:name=".activities.ImageProcessingActivities.CaptureImageActivity" />
         <activity android:name=".activities.MainActivities.HomeActivity" />
-        <activity android:name=".activities.LoginAndRegisterActivities.RegisterActivity" />
         <activity android:name=".activities.LoginAndRegisterActivities.LoginActivity" />
     </application>
 

@@ -23,6 +23,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.woundmontoringapplicationv1.R;
 import com.example.woundmontoringapplicationv1.activities.MainActivities.HomeActivity;
+import com.example.woundmontoringapplicationv1.activities.RegisterActivities.PersonalDetailsActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -124,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent registerIntent = new Intent(getApplicationContext(), RegisterActivity.class);
+                Intent registerIntent = new Intent(getApplicationContext(), PersonalDetailsActivity.class);
                 startActivity(registerIntent);
             }
         });

@@ -123,24 +123,18 @@ public class AccountDetailsActivity extends AppCompatActivity {
         final StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("FEARGS REGISTER", response.toString());
-                Log.d("FEARGS REGISTER", "GOT A RESPONSE FROM THE SERVER");
                 progressDialog.dismiss();
 
                 if(response.equalsIgnoreCase("Successful Registration")){
-                    Log.d("FEARGS REGISTER", "EVERYTHING SHOULD BE PERFECT NOW");
-
                     //at this point also create a firebase user
                     firebaseAuth.createUserWithEmailAndPassword(emailS, passwordS).addOnCompleteListener(AccountDetailsActivity.this,
                             new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if(task.isSuccessful()){
-
                                         Toast.makeText(getApplicationContext(), "Well done, you've registered a new account!", Toast.LENGTH_SHORT).show();
 
                                         //we don't want the user to actually be automatically signed in
-                                        //they need to be approved by clinician first
                                         firebaseAuth.signOut();
 
                                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);

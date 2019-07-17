@@ -61,6 +61,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(AccountDetailsActivity.this);
         progressDialog = new ProgressDialog(AccountDetailsActivity.this);
 
+        firebaseAuth = FirebaseAuth.getInstance();
         Bundle bundle = getIntent().getExtras();
 
         if(bundle != null){
@@ -143,6 +144,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
                                         firebaseAuth.signOut();
 
                                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                        intent.putExtra("IntentFrom", "Registration");
                                         startActivity(intent);
                                     }
                                     else{

@@ -110,11 +110,16 @@ public class HistoryActivity extends AppCompatActivity {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                                 String qrid = jsonObject.getString("QRID");
+                                String qrinfo = jsonObject.getString("QRInformation");
                                 String timestamp = jsonObject.getString("Timestamp");
+                                String deltaEC1 = jsonObject.getString("DeltaE_C1");
+                                String deltaEC2 = jsonObject.getString("DeltaE_C2");
+                                String deltaEC3 = jsonObject.getString("DeltaE_C3");
+                                String deltaEC4 = jsonObject.getString("DeltaE_C4");
+                                String warning = jsonObject.getString("WarningLevel");
 
-                                Log.d("FEARG FORLOOP", i + ": " + qrid + ", " + timestamp);
-
-                                snapshotItems.add(new SnapshotItem(qrid, timestamp));
+                                snapshotItems.add(new SnapshotItem(qrinfo, timestamp, deltaEC1, deltaEC2,
+                                        deltaEC3, deltaEC4, warning));
                             }
 
                             homeFragmentRecyclerAdapter = new HomeFragmentRecyclerAdapter(getApplicationContext(), snapshotItems);

@@ -899,7 +899,7 @@ public class ProcessImageActivity extends AppCompatActivity {
             overallRGBC1 = getAverageRGBValue(circle1);
             overallRGBC2 = getAverageRGBValue(circle2);
             overallRGBC3 = getAverageRGBValue(circle3);
-            overallRGBC4 =getAverageRGBValue(circle4);
+            overallRGBC4 = getAverageRGBValue(circle4);
 
             overallRGBC1String = convertIntArrayRGBToString(overallRGBC1);
             overallRGBC2String = convertIntArrayRGBToString(overallRGBC2);

@@ -4,6 +4,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,9 +55,30 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
 
         String qrInfo = currentItem.getQRInfo();
         String timestamp = currentItem.getTimestamp();
+        String deltaEC1 = currentItem.getDeltaEC1();
+        String deltaEC2 = currentItem.getDeltaEC2();
+        String deltaEC3 = currentItem.getDeltaEC3();
+        String deltaEC4 = currentItem.getDeltaEC4();
+        String warning = currentItem.getWarning();
 
         homeFragmentViewHolder.qrInfoTextView.setText(qrInfo);
         homeFragmentViewHolder.timestampTextView.setText(timestamp);
+        homeFragmentViewHolder.detlaeTextView.setText("O2: " + deltaEC1 + ", H2O: " + deltaEC2 +
+                                                            ", CO2: " + deltaEC3 + ", RNH2: " + deltaEC4);
+        homeFragmentViewHolder.warningTextView.setText(warning);
+
+        switch(warning){
+            case "OK":
+                homeFragmentViewHolder.warningTextView.setTextColor(Color.GREEN);
+                break;
+            case "AMBER":
+                homeFragmentViewHolder.warningTextView.setTextColor(Color.YELLOW);
+                break;
+            case "RED":
+                homeFragmentViewHolder.warningTextView.setTextColor(Color.RED);
+                break;
+        }
+
     }
 
     /**
@@ -75,6 +97,8 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
 
         public TextView qrInfoTextView;
         public TextView timestampTextView;
+        public TextView detlaeTextView;
+        public TextView warningTextView;
 
         /**
          *
@@ -84,6 +108,8 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
             super(itemView);
             qrInfoTextView = itemView.findViewById(R.id.textViewQR);
             timestampTextView = itemView.findViewById(R.id.textViewTime);
+            detlaeTextView = itemView.findViewById(R.id.textViewDeltaE);
+            warningTextView = itemView.findViewById(R.id.textViewWarningLevel);
         }
     }
 }

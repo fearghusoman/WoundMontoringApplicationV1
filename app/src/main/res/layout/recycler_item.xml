@@ -30,7 +30,7 @@
                     android:id="@+id/textView__"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="QR ID: "
+                    android:text="QR: "
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="@color/white"
                     android:textSize="14sp"
@@ -40,7 +40,7 @@
                     android:id="@+id/textViewQR"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="QR ID"
+                    android:text="QRID"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="@color/white"
                     android:fontFamily="sans-serif-thin"
@@ -75,6 +75,58 @@
                     />
             </TableRow>
 
+            <TableRow
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp">
+                <TextView
+                    android:id="@+id/textViewDelta__"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="DeltaE Values: "
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/textViewTime__"
+                    />
+
+                <TextView
+                    android:id="@+id/textViewDeltaE"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="DeltaEs"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:fontFamily="sans-serif-thin"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/textViewTime__"
+                    />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp">
+                <TextView
+                    android:id="@+id/textViewWarning__"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Warning Level: "
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/textViewDeltaE"
+                    />
+
+                <TextView
+                    android:id="@+id/textViewWarningLevel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Warning"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/textViewDeltaE"
+                    />
+            </TableRow>
 
         </TableLayout>
 

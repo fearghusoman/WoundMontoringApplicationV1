@@ -38,8 +38,6 @@ public class LoginActivity extends AppCompatActivity {
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String TEXT = "email";
 
-    private String text_email;
-
     //EditText objects
     EditText Email, Password;
 
@@ -57,13 +55,15 @@ public class LoginActivity extends AppCompatActivity {
     //Storing URL in a String variable
     String hhtpUrl = "http://foman01.lampt.eeecs.qub.ac.uk/woundmonitoring/login.php";
 
-    Boolean checkEditText, userLoggedIn, userApproved;
+    Boolean checkEditText, userLoggedIn;
 
-    String responseUserChecker;
+    String responseUserChecker, fromActivity = "Other";
 
     //firebase authentication
     FirebaseAuth firebaseAuth;
     FirebaseAuth.AuthStateListener authStateListener;
+
+    Bundle bundle;
 
     //textView object for signup
     TextView textView, textViewForgotPW;
@@ -73,7 +73,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //setup firebase authentication
+        bundle = getIntent().getExtras();
+
+        if(bundle != null){
+            fromActivity = bundle.getString("IntentFrom");
+        }
+
+        Log.d("FEARGS Act", "fromActivity: " + fromActivity);
+
         firebaseAuth = FirebaseAuth.getInstance();
         //if user is already logged in then let's just get to it
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -82,8 +89,10 @@ public class LoginActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
                 if(user != null){
-                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                    startActivity(intent);
+                    if(fromActivity.equalsIgnoreCase("Other")){
+                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        startActivity(intent);
+                    }
                 }
             }
         };
@@ -97,15 +106,6 @@ public class LoginActivity extends AppCompatActivity {
 
         requestQueue = Volley.newRequestQueue(LoginActivity.this);
         progressDialog = new ProgressDialog(LoginActivity.this);
-
-        //call the load data method
-        loadData();
-
-        //if user already logged in then just go to HomeActivity
-        if(!text_email.equalsIgnoreCase("")){
-            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-            startActivity(intent);
-        }
 
         LoginButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -321,14 +321,6 @@ public class LoginActivity extends AppCompatActivity {
 
         //important: **must apply to the Editor instance
         editor.apply();
-    }
-
-    /**
-     *
-     */
-    private void loadData(){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        text_email = sharedPreferences.getString(TEXT, "");
     }
 
     /**

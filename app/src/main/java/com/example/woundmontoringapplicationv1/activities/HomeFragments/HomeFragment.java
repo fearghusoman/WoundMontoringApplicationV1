@@ -40,6 +40,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class HomeFragment extends Fragment {
 
@@ -92,7 +93,9 @@ public class HomeFragment extends Fragment {
         //use firebase auth to setup the email variable
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
-        email = firebaseUser.getEmail();
+        if (firebaseUser != null) {
+            email = firebaseUser.getEmail();
+        }
 
         //set-up the recycler view settings
         recyclerView = view.findViewById(R.id.recycler_view);
@@ -149,11 +152,16 @@ public class HomeFragment extends Fragment {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                                 String qrid = jsonObject.getString("QRID");
+                                String qrinfo = jsonObject.getString("QRInformation");
                                 String timestamp = jsonObject.getString("Timestamp");
+                                String deltaEC1 = jsonObject.getString("DeltaE_C1");
+                                String deltaEC2 = jsonObject.getString("DeltaE_C2");
+                                String deltaEC3 = jsonObject.getString("DeltaE_C3");
+                                String deltaEC4 = jsonObject.getString("DeltaE_C4");
+                                String warning = jsonObject.getString("WarningLevel");
 
-                                Log.d("FEARG FORLOOP", i + ": " + qrid + ", " + timestamp);
-
-                                snapshotItems.add(new SnapshotItem(qrid, timestamp));
+                                snapshotItems.add(new SnapshotItem(qrinfo, timestamp, deltaEC1, deltaEC2,
+                                        deltaEC3, deltaEC4, warning));
 
                                 //also add the id to shared preferences
                                 if(strings.contains(qrid)){
@@ -169,7 +177,21 @@ public class HomeFragment extends Fragment {
 
                             }
 
-                            homeFragmentRecyclerAdapter = new HomeFragmentRecyclerAdapter(getActivity(), snapshotItems);
+                            //order the snapshotItems array list
+                            Collections.sort(snapshotItems);
+
+                            ArrayList<SnapshotItem> snapshotItemsNew = new ArrayList<SnapshotItem>();
+
+                            for(int k = 0; k < 5; k++){
+                                try {
+                                    snapshotItemsNew.add(snapshotItems.get(k));
+                                }
+                                catch (IndexOutOfBoundsException e){
+                                    break;
+                                }
+                            }
+
+                            homeFragmentRecyclerAdapter = new HomeFragmentRecyclerAdapter(getActivity(), snapshotItemsNew);
                             recyclerView.setAdapter(homeFragmentRecyclerAdapter);
 
                         } catch (JSONException e) {

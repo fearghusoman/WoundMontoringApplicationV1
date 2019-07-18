@@ -9,6 +9,8 @@ import com.example.woundmontoringapplicationv1.activities.MainActivities.HomeAct
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.core.graphics.ColorUtils;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -290,24 +292,21 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Method takes the original colour and the current analysis colour
+     * as RGB Strings and converts them to lab space
+     * before performing the delta e calculation
      * @param rgbString
      */
     private double calculateDeltaE(String rgbString, String colorCurrent){
         double deltaE;
 
+        //convert the strings to int arrrays
         int[] rgbs = convertStringRGBtoInts(rgbString);
         int[] rgbsCurrent = convertStringRGBtoInts(colorCurrent);
 
-        /**-------------------------------------------------------------------------------------------------------**/
-        /**----------------------BEGIN THE CONVERSION TO CIELAB AND DELTA E CALCULATION---------------------------**/
-        /**-------------------------------------------------------------------------------------------------------**/
+        //call the euclidean distance method
         deltaE = euclideanDistanceBetweenLABs(rgbs, rgbsCurrent);
-
-        Log.d("FEARGS DELTAE", "DeltaE: " + deltaE);
-
         return deltaE;
-
     }
 
     /**
@@ -339,7 +338,6 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
      * @return
      */
     private double euclideanDistanceBetweenLABs(int[] colorInitial, int[] colorCurrent){
-
         CIELab cieLab = new CIELab();
 
         int r = colorInitial[0];
@@ -355,7 +353,6 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
         double[] colorCurrentLAB = cieLab.rgbToLab(rX,gX, bX);
 
         return ColorUtils.distanceEuclidean(colorInitialLAB, colorCurrentLAB);
-
     }
 
     /**
@@ -366,9 +363,14 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
     private void getFeedback(double deltaE, TextView textView, TextView textViewD){
         if(deltaE >= DELTAE_THRESHOLD_AMBER){
             textView.setText("RED ALERT");
+            textView.setTextColor(Color.RED);
         }
         else if(deltaE >= DELTAE_THRESHOLD_GREEN){
             textView.setText("AMBER ALERT");
+            textView.setTextColor(Color.YELLOW);
+        }
+        else{
+            textView.setTextColor(Color.GREEN);
         }
 
         textViewD.setText("" + deltaE);

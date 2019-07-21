@@ -23,9 +23,7 @@
                     android:padding="3dip"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="@color/white"
-                    android:textSize="24sp"
-                    android:clickable="true"
-                    android:onClick="perform_action"/>
+                    android:textSize="24sp"/>
             </TableRow>
             <TableRow>
                 <TextView

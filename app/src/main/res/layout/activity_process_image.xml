@@ -45,126 +45,12 @@
             android:layout_height="wrap_content"
             android:text="" />
 
-        <ImageView
-            android:id="@+id/imgViewOriginal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="30dp"/>
-
-        <TextView
-            android:id="@+id/txtContent2"
-            android:layout_width="wrap_content"
-            android:layout_height="75dp"
-            android:paddingBottom="30dp"
-            android:text=""
-            android:textColor="@color/white"
-            android:visibility="gone" />
-
-        <View
-            android:id="@+id/view1"
-            android:layout_width="wrap_content"
-            android:layout_height="15dip"
-            android:background="@color/colorAccentCUSTOM"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/txtContent3"
-            android:layout_width="wrap_content"
-            android:layout_height="75dp"
-            android:paddingBottom="30dp"
-            android:text=""
-            android:textColor="@color/white"
-            android:visibility="gone" />
-
-        <View
-            android:id="@+id/view2"
-            android:layout_width="wrap_content"
-            android:layout_height="15dip"
-            android:background="@color/colorAccentCUSTOM"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/txtContent4"
-            android:layout_width="wrap_content"
-            android:layout_height="75dp"
-            android:text=""
-            android:textColor="@color/white"
-            android:visibility="gone" />
-
-        <View
-            android:id="@+id/view3"
-            android:layout_width="wrap_content"
-            android:layout_height="15dip"
-            android:background="@color/colorAccentCUSTOM"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/txtContent5"
-            android:layout_width="wrap_content"
-            android:layout_height="75dp"
-            android:paddingBottom="30dp"
-            android:text=""
-            android:textColor="@color/white"
-            android:visibility="gone" />
-
-        <View
-            android:id="@+id/view4"
-            android:layout_width="wrap_content"
-            android:layout_height="15dip"
-            android:background="@color/colorAccentCUSTOM"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/txtContent6"
-            android:layout_width="wrap_content"
-            android:layout_height="75dp"
-            android:paddingBottom="30dp"
-            android:text=""
-            android:textColor="@color/white"
-            android:visibility="gone" />
-
         <View
             android:id="@+id/view5"
             android:layout_width="wrap_content"
             android:layout_height="15dip"
             android:background="@color/colorAccentCUSTOM"
             android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/imgviewWarpedAndAffineTransformation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="30dp"/>
-
-        <ImageView
-            android:id="@+id/imgviewAffineTransformation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="30dp"/>
-
-        <ImageView
-            android:id="@+id/imgviewDrawCirclesOnCorners1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="30dp"/>
-
-        <ImageView
-            android:id="@+id/imgviewDrawCirclesOnCorners2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="30dp"/>
-
-        <ImageView
-            android:id="@+id/imgviewDrawCirclesOnCorners3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="30dp"/>
-
-        <ImageView
-            android:id="@+id/imgviewDrawCirclesOnCorners4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="30dp"/>
 
         <ImageView
             android:id="@+id/imgview2"
@@ -195,117 +81,12 @@
             android:textColor="@color/white"
             android:textSize="16sp" />
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="15dip"
-            android:background="@color/colorAccentCUSTOM"
-            />
 
-        <TextView
-            android:id="@+id/textViewC1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:visibility="visible"
-            android:text="Circle1 cropped:" />
 
-        <TextView
-            android:id="@+id/textViewC1hm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:visibility="visible"
-            />
 
-        <ImageView
-            android:id="@+id/imageViewC1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/bandage_mock_up" />
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="15dip"
-            android:background="@color/colorAccentCUSTOM"
-            />
 
-        <TextView
-            android:id="@+id/textViewC2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:visibility="visible"
-            android:text="Circle2 cropped:" />
 
-        <TextView
-            android:id="@+id/textViewC2hm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:visibility="visible"
-            />
-
-        <ImageView
-            android:id="@+id/imageViewC2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/bandage_mock_up" />
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="15dip"
-            android:background="@color/colorAccentCUSTOM"
-            />
-
-        <TextView
-            android:id="@+id/textViewC3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:visibility="visible"
-            android:text="Circle3 cropped:" />
-
-        <TextView
-            android:id="@+id/textViewC3hm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:visibility="visible"
-            />
-
-        <ImageView
-            android:id="@+id/imageViewC3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/bandage_mock_up" />
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="15dip"
-            android:background="@color/colorAccentCUSTOM"
-            />
-
-        <TextView
-            android:id="@+id/textViewC4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:visibility="visible"
-            android:text="Circle4 cropped:" />
-
-        <TextView
-            android:id="@+id/textViewC4hm"
-            android:layout_width="match_parent"
-            android:layout_height= "wrap_content"
-            android:textColor="@color/white"
-            android:visibility="visible"
-            />
-
-        <ImageView
-            android:id="@+id/imageViewC4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/bandage_mock_up" />
 
     </LinearLayout>
 

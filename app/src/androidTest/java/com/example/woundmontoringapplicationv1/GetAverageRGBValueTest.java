@@ -2,19 +2,22 @@ package com.example.woundmontoringapplicationv1;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-
-import com.example.woundmontoringapplicationv1.activities.ImageProcessingActivities.ProcessImageActivity;
+import android.graphics.Point;
 
 import junit.framework.TestCase;
+
+import com.example.woundmontoringapplicationv1.activities.ImageProcessingActivities.ProcessImageActivity;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class GtAverageRGBValueTest extends TestCase {
+public class GetAverageRGBValueTest extends TestCase {
 
     private Bitmap redBitmap;
     private int redColor, redBitmpHeight, redBitmapWidth, redBitmapCount;
     private int[] redRGBs = new int[3];
+
+    private Point centreOfArbitraryCircle;
 
     @Before
     public void setUp() throws Exception{
@@ -24,6 +27,8 @@ public class GtAverageRGBValueTest extends TestCase {
         redBitmapWidth = 100;
 
         redBitmapCount = 10000;
+
+        centreOfArbitraryCircle = new Point(50, 50);
 
         redBitmap = Bitmap.createBitmap(redBitmapWidth, redBitmpHeight, Bitmap.Config.ARGB_8888);
 
@@ -39,12 +44,12 @@ public class GtAverageRGBValueTest extends TestCase {
     }
 
     @Test
-    public void testAverageRGBOfRedBitmapIsRed(){
+    public void testAverageRGBOfRedBitmapIsRed() {
         ProcessImageActivity processImageActivity = new ProcessImageActivity();
 
-        //int[] resultRGBs = processImageActivity.getAverageRGBValue(redBitmap);
+        int[] resultRGBs = processImageActivity.getAverageRGBValueFromBitmap(redBitmap, centreOfArbitraryCircle);
 
-        //assertEquals(resultRGBs, redRGBs);
+        assertEquals(redRGBs, resultRGBs);
     }
 
 }

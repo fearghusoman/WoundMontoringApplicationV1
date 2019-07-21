@@ -60,7 +60,6 @@ import java.util.Map;
  *
  */
 public class ProcessImageActivity extends AppCompatActivity {
-
     /**-----------------------------------------------------------------------**/
     /**----------------------STATIC VARIABLES --------------------------------**/
     /**-----------------------------------------------------------------------**/
@@ -74,7 +73,6 @@ public class ProcessImageActivity extends AppCompatActivity {
     final static double L3 = 16.2;
     //length of the side of qr corner square
     final static double L_QR = 1.4;
-
 
     //Measurements for the circles
     //distance from edge of rect to centre of circle1 in cm
@@ -99,61 +97,30 @@ public class ProcessImageActivity extends AppCompatActivity {
     /**-----------------------------------------------------------------------**/
     Barcode thisBarCode;
     BarcodeDetector barcodeDetector;
-
     Bitmap bitmap;
-    Bitmap circle1, circle2, circle3, circle4;
-
     boolean continueWithProcessing = false;
-
     Bundle bundle;
-
     Button processImgBtn, submitAnalysisBtn, opencvBtn;
-
     double slope;
     double q;
-
     Dressing dressing;
-
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
-
     FloatingActionButton floatingActionButton;
     Frame frame, frameRotated;
-
-    ImageView imageViewOriginal, imageView2, imgviewDrawCirclesOnCorners1, imgviewDrawCirclesOnCorners2, imgviewDrawCirclesOnCorners3, imgviewDrawCirclesOnCorners4;
-    ImageView imageViewC1, imageViewC2, imageViewC3, imageViewC4, imgviewWarpedAndAffineTransformation, imgviewWarpedTransformation;
-
-    int orientation;
+    ImageView imageView2;
     //variables to hold the calculated four corners of the rectangle to be analysed
-    int x1, y1, x2, y2, x3, y3, x4, y4;
-    int l1, l2, l3;
-    int a, r, g, b;
-    int circ1x, circ1y, circ2x, circ2y, circ3x, circ3y, circ4x, circ4y;
-
+    int x1, y1, x2, y2, x3, y3, x4, y4, orientation, l1, l2, l3;
     int[] overallRGBC1, overallRGBC2, overallRGBC3, overallRGBC4;
-
     Point[] qrCornerPoints, qrCornerPointsRotated;
     Point centreC1, centreC2, centreC3, centreC4;
     Point A1, A2, A3, A4;
-    //coordinates for circles
-    Point circ1, circ2, circ3, circ4;
-
     ProgressDialog progressDialog;
-
     Rect rect;
     RequestQueue requestQueue;
-
     SparseArray<Barcode> barcodes;
-
-    String timestamp = "";
-    String path = "";
-    String LoggedInEmail, qrInfoHolder;
-    String overallRGBC1String, overallRGBC2String, overallRGBC3String, overallRGBC4String;
-
-    TextView textView, textView5, textView6;
-    TextView tvC1, tvC2, tvC3, tvC4;
-
-    View view3, view4, view5;
+    String LoggedInEmail, qrInfoHolder, timestamp = "", path = "", overallRGBC1String, overallRGBC2String, overallRGBC3String, overallRGBC4String;
+    TextView textView;
 
     /**-----------------------------------------------------------------------**/
     /**---------------------BASE LOADER CALLBACK -----------------------------**/
@@ -196,33 +163,7 @@ public class ProcessImageActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(ProcessImageActivity.this);
 
         textView = findViewById(R.id.txtContent) ;
-        textView5 = findViewById(R.id.txtContent5) ;
-        textView6 = findViewById(R.id.txtContent6) ;
-
-        //text view for the colors in the four circles
-        tvC1 = findViewById(R.id.textViewC1hm);
-        tvC2 = findViewById(R.id.textViewC2hm);
-        tvC3 = findViewById(R.id.textViewC3hm);
-        tvC4 = findViewById(R.id.textViewC4hm);
-
-        view3 =  findViewById(R.id.view3);
-        view4 =  findViewById(R.id.view4);
-        view5 =  findViewById(R.id.view5);
-
-        //image views for the subsets that are the 4 circles
-        imageViewC1 = findViewById(R.id.imageViewC1);
-        imageViewC2 = findViewById(R.id.imageViewC2);
-        imageViewC3 = findViewById(R.id.imageViewC3);
-        imageViewC4 = findViewById(R.id.imageViewC4);
-
         imageView2 = findViewById(R.id.imgview2);
-        imageViewOriginal = findViewById(R.id.imgViewOriginal);
-        imgviewDrawCirclesOnCorners1 = findViewById(R.id.imgviewDrawCirclesOnCorners1);
-        imgviewDrawCirclesOnCorners2 = findViewById(R.id.imgviewDrawCirclesOnCorners2);
-        imgviewDrawCirclesOnCorners3 = findViewById(R.id.imgviewDrawCirclesOnCorners3);
-        imgviewDrawCirclesOnCorners4 = findViewById(R.id.imgviewDrawCirclesOnCorners4);
-        imgviewWarpedAndAffineTransformation = findViewById(R.id.imgviewWarpedAndAffineTransformation);;
-        imgviewWarpedTransformation = findViewById(R.id.imgviewAffineTransformation);;
 
         requestQueue = Volley.newRequestQueue(ProcessImageActivity.this);
         progressDialog = new ProgressDialog(ProcessImageActivity.this);
@@ -240,10 +181,8 @@ public class ProcessImageActivity extends AppCompatActivity {
 
             try {
                 FileInputStream fIS = new FileInputStream(new File(path));
-
                 bitmap = BitmapFactory.decodeStream(fIS);
-                Log.d("FEARGS BITMAP", "Bitmap:" + bitmap.getHeight() + " " + bitmap.getWidth());
-                imageViewOriginal.setImageBitmap(bitmap);
+                imageView2.setImageBitmap(bitmap);
             }
             catch(FileNotFoundException e){
                 e.printStackTrace();
@@ -405,10 +344,10 @@ public class ProcessImageActivity extends AppCompatActivity {
     private int getOrientationOfBitmap(Bitmap bitmap, Point[] points){
         int ORIENTATION = 0;
 
-        boolean corner1 = setupArrayOfPoints(0, points[0], bitmap, imgviewDrawCirclesOnCorners1);
-        boolean corner2 = setupArrayOfPoints(1, points[1], bitmap, imgviewDrawCirclesOnCorners2);
-        boolean corner3 = setupArrayOfPoints(2, points[2], bitmap, imgviewDrawCirclesOnCorners3);
-        boolean corner4 = setupArrayOfPoints(3, points[3], bitmap, imgviewDrawCirclesOnCorners4);
+        boolean corner1 = setupArrayOfPoints(0, points[0], bitmap);
+        boolean corner2 = setupArrayOfPoints(1, points[1], bitmap);
+        boolean corner3 = setupArrayOfPoints(2, points[2], bitmap);
+        boolean corner4 = setupArrayOfPoints(3, points[3], bitmap);
 
         String orientationCorner = getOrientationCorner(corner1, corner2, corner3, corner4);
 
@@ -437,7 +376,7 @@ public class ProcessImageActivity extends AppCompatActivity {
      * @param corner
      * @return
      */
-    private boolean setupArrayOfPoints(int corner, Point point, Bitmap bitmap, ImageView imageView){
+    private boolean setupArrayOfPoints(int corner, Point point, Bitmap bitmap){
 
         float radius = 1;
 
@@ -494,13 +433,10 @@ public class ProcessImageActivity extends AppCompatActivity {
             canvas.drawCircle((float) p.x, (float) p.y, radius, paint);
         }
 
-        imageView.setImageBitmap(bitmap1);
-
         Log.d("FEARGS CORNER", "WE ARE NOW CHECKING CORNER " + corner);
 
         boolean dataCorner = closerToBlack(points, bitmap);
-
-        if(dataCorner == true){
+        if(dataCorner){
             orientationCorner = false;
         }
         else{
@@ -632,27 +568,6 @@ public class ProcessImageActivity extends AppCompatActivity {
     }
 
     /**
-     *
-     * @param rect
-     */
-    private void calculateOurCircles(Rect rect, double proportion){
-        circ1y = rect.top + ((rect.bottom - rect.top) / 2);
-        circ2y = circ1y;
-        circ3y = circ1y;
-        circ4y = circ1y;
-
-        circ1x = (int) (rect.left + (LCirc1 * proportion));
-        circ2x = (int) (circ1x + (LCirc2 * proportion));
-        circ3x = (int) (circ2x + (LCirc3 * proportion));
-        circ4x = (int) (circ3x + (LCirc4 * proportion));
-
-        circ1 = new Point(circ1x, circ1y);
-        circ2 = new Point(circ2x, circ2y);
-        circ3 = new Point(circ3x, circ3y);
-        circ4 = new Point(circ4x, circ4y);
-    }
-
-    /**
      * The method receives an imageView, rectangle, and bitmap as parameters. The imageview is set
      * to the passed bitmap, and draws a black rectangle over the bitmap using the coordinates passed
      * by the rectangle parameter.
@@ -676,12 +591,6 @@ public class ProcessImageActivity extends AppCompatActivity {
         //canvas.rotate(angle, rect.left, rect.top);
         canvas.drawRect(rect, paint);
 
-        //try to draw the circles
-        //canvas.drawCircle(circ1.x, circ1.y, (float) (radius1 * q), paint);
-        //canvas.drawCircle(circ2.x, circ2.y, (float) (radius2 * q), paint);
-        //canvas.drawCircle(circ3.x, circ3.y, (float) (radius3 * q), paint);
-        //canvas.drawCircle(circ4.x, circ4.y, (float) (radius4 * q), paint);
-
         imageView.setImageBitmap(myBitmap);
     }
 
@@ -696,7 +605,6 @@ public class ProcessImageActivity extends AppCompatActivity {
     private void checkQRRegisteredWithCurrentUser(){StringRequest stringRequest = new StringRequest(Request.Method.POST, checkurl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
 
                 if (response.equalsIgnoreCase("QR Code is registered with this user")) {
                     continueWithProcessing = true;
@@ -716,7 +624,6 @@ public class ProcessImageActivity extends AppCompatActivity {
                 /**-------------------------------------------------------------------------**/
                 //once response has been received we'll call the analysis method
                 carryOutColourAnalysis();
-
                 progressDialog.dismiss();
 
                 //add an on click listener to the submit analysis button
@@ -794,27 +701,10 @@ public class ProcessImageActivity extends AppCompatActivity {
     private void carryOutColourAnalysis(){
         if(continueWithProcessing){
             textView.setText(qrInfoHolder);
-
-            textView5.setVisibility(View.VISIBLE);
-            textView6.setVisibility(View.VISIBLE);
-            view3.setVisibility(View.VISIBLE);
-            view4.setVisibility(View.VISIBLE);
-            view5.setVisibility(View.VISIBLE);
-
             qrCornerPoints = getQRCoordinates(barcodeDetector, frame);
-            String corners = "Original QR Code coordinates: ";
-
-            for (int i = 0; i < 4; i++) {
-                corners = corners + i + ": (" + qrCornerPoints[i].x + ", " + qrCornerPoints[i].y + ")  ";
-            }
-            textView5.setText(corners);
-
             //let's set up our rectangle this method takes the qr codes coordinates as input and applies geometric
             //arithmetic to the corners to calculate the location of our desired rectangle for analysis
             calculateOurRectangle(qrCornerPoints);
-
-            textView6.setText("Original Rectangle coordinates: A1: (" + A1.x + ", " + A1.y + "), " + "A2: (" + A2.x + ", " + A2.y + "), " +
-                    "A3: (" + A3.x + ", " + A3.y + "), " + "A4: (" + A4.x + ", " + A4.y + ")");
 
             /**-----------------------------------------------------------------------**/
             /**-----------------------------------------------------------------------**/
@@ -833,8 +723,7 @@ public class ProcessImageActivity extends AppCompatActivity {
             /**---------------------------------------------------------------------------------**/
             org.opencv.core.Point[] srcPointsForWarp = getQRCornerPointsWarp(qrCornerPointsRotated);
             org.opencv.core.Point[] referencePointsForWarp = getReferencePointsWarp(qrCornerPointsRotated);
-            Bitmap warpedBitmap = performWarpPerspective(rotatedBitmap, srcPointsForWarp, referencePointsForWarp, imgviewWarpedTransformation);
-
+            Bitmap warpedBitmap = performWarpPerspective(rotatedBitmap, srcPointsForWarp, referencePointsForWarp);
             Frame frameWarpPerspective = new Frame.Builder().setBitmap(warpedBitmap).build();
             Point[] qrCornerPointsWarpPerspective = getQRCoordinates(barcodeDetector, frameWarpPerspective);
 
@@ -844,8 +733,7 @@ public class ProcessImageActivity extends AppCompatActivity {
             /**-----------------------------------------------------------------------**/
             org.opencv.core.Point[] sourcePoints = getQRCornerPoints(qrCornerPointsWarpPerspective);
             org.opencv.core.Point[] referencePoints = getReferencePoints(qrCornerPointsWarpPerspective);
-            Bitmap affineTransformedBitmap = performAffineTransformation(warpedBitmap, sourcePoints, referencePoints, imgviewWarpedAndAffineTransformation);
-
+            Bitmap affineTransformedBitmap = performAffineTransformation(warpedBitmap, sourcePoints, referencePoints);
             Frame frameAffine = new Frame.Builder().setBitmap(affineTransformedBitmap).build();
             Point[] qrCornerPointsAffine = getQRCoordinates(barcodeDetector, frameAffine);
 
@@ -854,7 +742,6 @@ public class ProcessImageActivity extends AppCompatActivity {
             /**-----------------------ORIENTATION ------------------------------------**/
             /**-----------------------------------------------------------------------**/
             Bitmap rotatedAndOrientatedBitmap = orientateBitmap(affineTransformedBitmap, qrCornerPointsAffine);
-
             Frame frame2 = new Frame.Builder().setBitmap(rotatedAndOrientatedBitmap).build();
             Point[] qrCornerPoints2 = getQRCoordinates(barcodeDetector, frame2);
 
@@ -864,9 +751,6 @@ public class ProcessImageActivity extends AppCompatActivity {
             /**-------------------------------------------------------------------------------------**/
             calculateOurRectangle(qrCornerPoints2);
             rect = new Rect(A1.x, A1.y, A2.x, A3.y);
-            Log.d("FEARGS RECT", "RECT: left x:" + rect.left + ", top y:" + rect.top + ", right x: " + rect.right + ", bottom y: " + rect.bottom);
-            calculateOurCircles(rect, q);
-
             drawRectOnImage(imageView2, rect, rotatedAndOrientatedBitmap);
 
             /**-------------------------------------------------------------------------------------**/
@@ -890,7 +774,6 @@ public class ProcessImageActivity extends AppCompatActivity {
             overallRGBC2String = convertIntArrayRGBToString(overallRGBC2);
             overallRGBC3String = convertIntArrayRGBToString(overallRGBC3);
             overallRGBC4String = convertIntArrayRGBToString(overallRGBC4);
-
         }
         else{
             textView.setText("Make sure you've registered the QR Code..");
@@ -904,12 +787,10 @@ public class ProcessImageActivity extends AppCompatActivity {
      * @param rect
      */
     private void getCirclesOnImage(Rect rect, double prop){
-
         centreC1 = new Point((int) (rect.left + (LCirc1 * prop)), rect.top + ((rect.bottom - rect.top) / 2));
         centreC2 = new Point((int) (centreC1.x + (LCirc2 * prop)), rect.top + ((rect.bottom - rect.top) / 2));
         centreC3 = new Point((int) (centreC2.x + (LCirc3 * prop)), rect.top + ((rect.bottom - rect.top) / 2));
         centreC4 = new Point((int) (centreC3.x + (LCirc4 * prop)), rect.top + ((rect.bottom - rect.top) / 2));
-
     }
 
 
@@ -952,9 +833,8 @@ public class ProcessImageActivity extends AppCompatActivity {
      * @param bitmap
      * @param srcPoints
      * @param referencePoints
-     * @param imageView
      */
-    private Bitmap performAffineTransformation(Bitmap bitmap, org.opencv.core.Point[] srcPoints, org.opencv.core.Point[] referencePoints, ImageView imageView){
+    private Bitmap performAffineTransformation(Bitmap bitmap, org.opencv.core.Point[] srcPoints, org.opencv.core.Point[] referencePoints){
         Mat mat = new Mat();
 
         Bitmap bitmap1 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
@@ -962,7 +842,6 @@ public class ProcessImageActivity extends AppCompatActivity {
 
         //using the two point arrays do the transformation
         Mat warpMat = Imgproc.getAffineTransform(new MatOfPoint2f(srcPoints), new MatOfPoint2f(referencePoints));
-
         Mat warpDst = Mat.zeros(mat.rows(), mat.cols(), mat.type());
 
         Imgproc.warpAffine(mat, warpDst, warpMat, warpDst.size());
@@ -970,7 +849,6 @@ public class ProcessImageActivity extends AppCompatActivity {
         //create new bitmap from our mat and then set it to the passed imageView
         Bitmap bmp = Bitmap.createBitmap(warpDst.cols(), warpDst.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(warpDst, bmp);
-        imageView.setImageBitmap(bmp);
 
         return bmp;
     }
@@ -1012,10 +890,9 @@ public class ProcessImageActivity extends AppCompatActivity {
      * @param bitmap
      * @param srcPoints
      * @param referencePoints
-     * @param imageView
      * @return
      */
-    private Bitmap performWarpPerspective(Bitmap bitmap, org.opencv.core.Point[] srcPoints, org.opencv.core.Point[] referencePoints, ImageView imageView){
+    private Bitmap performWarpPerspective(Bitmap bitmap, org.opencv.core.Point[] srcPoints, org.opencv.core.Point[] referencePoints){
         Mat mat = new Mat();
 
         Bitmap bitmap1 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
@@ -1033,7 +910,6 @@ public class ProcessImageActivity extends AppCompatActivity {
         //create new bitmap from our mat and then set it to the passed imageView
         Bitmap bmp = Bitmap.createBitmap(destMat.cols(), destMat.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(destMat, bmp);
-        imageView.setImageBitmap(bmp);
 
         return bmp;
     }
@@ -1047,32 +923,23 @@ public class ProcessImageActivity extends AppCompatActivity {
         int totalR = 0, totalG = 0, totalB = 0;
         int count = 0;
 
-
         int startPointx = centre.x - 5;
         int startPointy = centre.y - 5;
-
         int endPointx = centre.x + 5;
         int endPointy = centre.y + 5;
 
         for(int i = startPointx; i < endPointx; i++){
             for(int j = startPointy; j < endPointy; j++){
-
                 if(Color.red(bitmap.getPixel(i, j)) > 0 && Color.green(bitmap.getPixel(i, j)) > 0 && Color.blue(bitmap.getPixel(i, j)) > 0){
-
                     totalR += Color.red(bitmap.getPixel(i, j));
                     totalG += Color.green(bitmap.getPixel(i, j));
                     totalB += Color.blue(bitmap.getPixel(i, j));
-
                     count += 1;
-
                 }
             }
         }
-        Log.d("FEARGS RGB TOTS", "R: " + totalR + ", G: " + totalG + ", " + "B: " + totalB + ". count: " + count);
 
         try {
-            Log.d("FEARGS RGB NEWMETHOD", "RGB: (" + (totalR / count) + ", " + (totalG / count) + ", " + (totalB / count) + ")");
-
             rgb[0] = totalR / count;
             rgb[1] = totalG / count;
             rgb[2] = totalB / count;
@@ -1090,11 +957,10 @@ public class ProcessImageActivity extends AppCompatActivity {
      * @param rgb
      * @return
      */
-    private String convertIntArrayRGBToString(int[] rgb){
+    public String convertIntArrayRGBToString(int[] rgb){
         int r = rgb[0];
         int g = rgb[1];
         int b = rgb[2];
-
         Log.d("FEARGS RGB STRING", "(" + r + ", " + g + ", " + b + ")");
 
         return "(" + r + ", " + g + ", " + b + ")";

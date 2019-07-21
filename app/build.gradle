@@ -25,6 +25,10 @@ android {
             universalApk true
         }
     }
+
+    testOptions {
+        unitTests.includeAndroidResources = true
+    }
 }
 
 
@@ -63,6 +67,9 @@ dependencies {
 
     //Implement Volley for restful api services
     implementation 'com.android.volley:volley:1.1.1'
+
+    // Optional -- Robolectric environment
+    testImplementation 'androidx.test:core:1.0.0'
 
     //for email builder
     implementation 'de.cketti.mailto:email-intent-builder:1.0.0'

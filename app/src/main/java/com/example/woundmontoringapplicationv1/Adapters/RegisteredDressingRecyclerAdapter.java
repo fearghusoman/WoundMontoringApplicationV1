@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.woundmontoringapplicationv1.DressingItem;
 import com.example.woundmontoringapplicationv1.R;
@@ -57,6 +59,13 @@ public class RegisteredDressingRecyclerAdapter extends RecyclerView.Adapter<Regi
         registeredDressingViewHolder.qridTextView.setText(qrid);
         registeredDressingViewHolder.qrInfoTextView.setText(qrInfo);
         registeredDressingViewHolder.locationTextView.setText(location);
+        registeredDressingViewHolder.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "You're deleting the dressing", Toast.LENGTH_LONG).show();
+                
+            }
+        });
     }
 
     /**
@@ -74,8 +83,15 @@ public class RegisteredDressingRecyclerAdapter extends RecyclerView.Adapter<Regi
     public class RegisteredDressingViewHolder extends RecyclerView.ViewHolder{
 
         public TextView qrInfoTextView;
+        public TextView qrInfoTextView__;
+
         public TextView qridTextView;
+        public TextView qridTextView__;
+
         public TextView locationTextView;
+        public TextView locationTextView__;
+
+        public Button deleteButton;
 
         /**
          *
@@ -84,8 +100,15 @@ public class RegisteredDressingRecyclerAdapter extends RecyclerView.Adapter<Regi
         public RegisteredDressingViewHolder(@NonNull View itemView) {
             super(itemView);
             qrInfoTextView = itemView.findViewById(R.id.textViewQRInfo);
+            qrInfoTextView__ = itemView.findViewById(R.id.textViewQRInfo__);
+
             qridTextView = itemView.findViewById(R.id.textViewQRID);
+            qridTextView__ = itemView.findViewById(R.id.textView__);
+
             locationTextView = itemView.findViewById(R.id.textViewLocation);
+            locationTextView__ = itemView.findViewById(R.id.textViewLocation__);
+
+            deleteButton = itemView.findViewById(R.id.buttonDeleteDressing);
         }
     }
 }

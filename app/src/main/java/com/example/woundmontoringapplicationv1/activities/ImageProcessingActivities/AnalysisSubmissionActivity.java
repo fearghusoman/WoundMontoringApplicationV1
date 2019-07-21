@@ -141,7 +141,7 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
 
                         @Override
                         public void onResponse(JSONObject response) {
-                            Log.d("FEARGS VOLLEY", "Got a response from 1st request");
+                            Log.d("FEARGS VOLLEY",  "Got a response from 1st request");
                             Log.d("FEARGS VOLLEY CHECK", response.toString());
 
                             try {

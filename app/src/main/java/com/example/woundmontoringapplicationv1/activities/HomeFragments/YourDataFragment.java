@@ -14,12 +14,13 @@ import android.widget.TextView;
 import com.example.woundmontoringapplicationv1.R;
 import com.example.woundmontoringapplicationv1.activities.MainActivities.HistoryActivity;
 import com.example.woundmontoringapplicationv1.activities.LoginAndRegisterActivities.LogoutActivity;
+import com.example.woundmontoringapplicationv1.activities.MainActivities.PersonalDetailsDataActivity;
 import com.example.woundmontoringapplicationv1.activities.MainActivities.RegisteredDressingsActivity;
 import com.example.woundmontoringapplicationv1.activities.MainActivities.RemindersActivity;
 
 public class YourDataFragment extends Fragment {
 
-    TextView reminderTV, historyTV, registeredDressingsTV;
+    TextView reminderTV, historyTV, registeredDressingsTV, personalDetails;
     Button logout;
 
     @Nullable
@@ -32,6 +33,7 @@ public class YourDataFragment extends Fragment {
         reminderTV = view.findViewById(R.id.reminders);
         historyTV = view.findViewById(R.id.historyTV);
         registeredDressingsTV = view.findViewById(R.id.registeredTV);
+        personalDetails = view.findViewById(R.id.personalDetails);
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +63,14 @@ public class YourDataFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), RegisteredDressingsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        personalDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), PersonalDetailsDataActivity.class);
                 startActivity(intent);
             }
         });

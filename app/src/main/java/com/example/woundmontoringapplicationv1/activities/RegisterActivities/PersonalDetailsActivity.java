@@ -6,6 +6,7 @@ import androidx.fragment.app.DialogFragment;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -87,8 +88,31 @@ public class PersonalDetailsActivity extends AppCompatActivity implements DatePi
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
         String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
+        String alternativeDateString = DateFormat.getDateInstance(DateFormat.SHORT).format(c.getTime());
+        String alternativeDateString2;
 
-        dateOfBirth.setText(currentDateString);
+        if(c.get(Calendar.MONTH) < 10){
+            if(c.get(Calendar.DAY_OF_MONTH) < 10){
+                alternativeDateString2 = c.get(Calendar.YEAR) + "-0" + c.get(Calendar.MONTH) + "-0" + c.get(Calendar.DAY_OF_MONTH);
+            }
+            else{
+                alternativeDateString2 = c.get(Calendar.YEAR) + "-0" + c.get(Calendar.MONTH) + "-" + c.get(Calendar.DAY_OF_MONTH);
+            }
+
+        }
+        else{
+            if(c.get(Calendar.DAY_OF_MONTH) < 10){
+                alternativeDateString2 = c.get(Calendar.YEAR) + "-" + c.get(Calendar.MONTH) + "-0" + c.get(Calendar.DAY_OF_MONTH);
+            }
+            else{
+                alternativeDateString2 = c.get(Calendar.YEAR) + "-" + c.get(Calendar.MONTH) + "-" + c.get(Calendar.DAY_OF_MONTH);
+            }
+        }
+
+        Log.d("FEARGS TIME", alternativeDateString);
+        Log.d("FEARGS TIME", alternativeDateString2);
+
+        dateOfBirth.setText(alternativeDateString2);
     }
 
     /**

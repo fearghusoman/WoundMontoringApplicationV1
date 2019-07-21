@@ -23,6 +23,7 @@
                     <TextView
                         android:fontFamily="sans-serif"
                         android:padding="3dip"
+                        android:id="@+id/personalDetails"
                         android:text="Personal Details"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         android:textColor="@color/white"

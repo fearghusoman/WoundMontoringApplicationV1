@@ -36,7 +36,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
 
     boolean fieldsFilledAndPasswordMatch;
 
-    private String emailS, passwordS, passwordCheckS, clinicianS, fnS, lnS, a1S, a2S, townS, countryS, postcodeS;
+    private String emailS, passwordS, passwordCheckS, clinicianS, fnS, lnS, a1S, a2S, townS, countryS, postcodeS, dob;
 
     Button registerBtn;
 
@@ -65,7 +65,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         if(bundle != null){
-            setPersonalAndAddressDetails(bundle.getString("FirstName"), bundle.getString("LastName"), bundle.getString("FirstName"),
+            setPersonalAndAddressDetails(bundle.getString("FirstName"), bundle.getString("LastName"), bundle.getString("DateOfBirth"),
                     bundle.getString("Address1"), bundle.getString("Address2"), bundle.getString("Town"),
                     bundle.getString("Country"), bundle.getString("Postcode"));
 
@@ -162,6 +162,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
                     Log.d("FEARGS REGISTER", response);
                     Log.d("FEARGS REGISTER", "pw: " + passwordS);
                     Log.d("FEARGS REGISTER", "email: " + emailS);
+                    Log.d("FEARGS REGISTER", "dob: " + dob);
                     Log.d("FEARGS REGISTER", "fn: " + fnS);
                     Log.d("FEARGS REGISTER", "ln: " + lnS);
                     Log.d("FEARGS REGISTER", "a1: " + a1S);
@@ -193,7 +194,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
                 params.put("Password", passwordS);
                 params.put("FName", fnS);
                 params.put("LName", lnS);
-                //params.put("Email", dobS);
+                params.put("DateOfBirth", dob);
                 params.put("Add1", a1S);
                 params.put("Add2", a2S);
                 params.put("Town", townS);
@@ -245,6 +246,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
         townS = town;
         countryS = country;
         postcodeS = postcode;
+        dob = dateOfBirth;
         Log.d("FEARG", dateOfBirth);
 
     }

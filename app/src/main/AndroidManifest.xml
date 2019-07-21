@@ -20,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/CustomWMAStyle"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.RegisterActivities.AccountDetailsActivity"></activity>
+        <activity android:name=".activities.MainActivities.PersonalDetailsDataActivity"></activity>
+        <activity android:name=".activities.RegisterActivities.AccountDetailsActivity" />
         <activity android:name=".activities.RegisterActivities.AddressDetailsActivity" />
         <activity android:name=".activities.RegisterActivities.PersonalDetailsActivity" />
         <activity android:name=".activities.LoginAndRegisterActivities.UserDeclinedActivity" />

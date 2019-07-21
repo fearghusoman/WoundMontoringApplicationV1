@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDarkCUSTOM"
+    tools:context=".activities.MainActivities.PersonalDetailsDataActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_marginBottom="6dp"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/TitleRegistered"
+            android:text="Your Personal Details"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@color/white"
+            android:textSize="32sp"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:id="@+id/topview"
+            android:layout_below="@+id/TitleRegistered"
+            android:background="@color/colorAccentCUSTOM" />
+
+        <TableLayout
+            android:id="@+id/table1"
+            android:stretchColumns="*"
+            android:layout_below="@+id/topview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp">
+                <TextView
+                    android:id="@+id/FirstName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="First Name: "
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    />
+
+                <TextView
+                    android:id="@+id/fname"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="fname"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:fontFamily="sans-serif-thin"
+                    android:textSize="14sp"
+                    />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp">
+                <TextView
+                    android:id="@+id/LastName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Last Name: "
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/fname"
+                    />
+
+                <TextView
+                    android:id="@+id/lastname"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="lastname"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:fontFamily="sans-serif-thin"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/fname"
+                    />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp">
+                <TextView
+                    android:id="@+id/Email"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Email: "
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/lastname"
+                    />
+
+                <TextView
+                    android:id="@+id/email"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="email"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:fontFamily="sans-serif-thin"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/lastname"
+                    />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp">
+                <TextView
+                    android:id="@+id/DOB"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Date Of Birth: "
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/email"
+                    />
+
+                <TextView
+                    android:id="@+id/dob"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="dob"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:fontFamily="sans-serif-thin"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/email"
+                    />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:id="@+id/topview1"
+                android:background="@color/colorAccentCUSTOM" />
+
+            <TableRow
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp">
+                <TextView
+                    android:id="@+id/A1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Address Line 1: "
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    />
+
+                <TextView
+                    android:id="@+id/a1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="a1"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:fontFamily="sans-serif-thin"
+                    android:textSize="14sp"
+                    />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp">
+                <TextView
+                    android:id="@+id/A2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Address Line 2: "
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/a1"
+                    />
+
+                <TextView
+                    android:id="@+id/a2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="a2"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:fontFamily="sans-serif-thin"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/a1"
+                    />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp">
+                <TextView
+                    android:id="@+id/Town"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Town: "
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/a2"
+                    />
+
+                <TextView
+                    android:id="@+id/town"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="town"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:fontFamily="sans-serif-thin"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/a2"
+                    />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp">
+                <TextView
+                    android:id="@+id/Country"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Country: "
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/town"
+                    />
+
+                <TextView
+                    android:id="@+id/country"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="country"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:fontFamily="sans-serif-thin"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/town"
+                    />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp">
+                <TextView
+                    android:id="@+id/PostCode"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Post Code: "
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/country"
+                    />
+
+                <TextView
+                    android:id="@+id/pc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="pc"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:fontFamily="sans-serif-thin"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/country"
+                    />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:id="@+id/topview2"
+                android:background="@color/colorAccentCUSTOM" />
+
+            <TableRow
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp">
+                <TextView
+                    android:id="@+id/Clinician"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Clinician's Email: "
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/pc"
+                    />
+
+
+                <TextView
+                    android:id="@+id/clinician"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="clinician"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:fontFamily="sans-serif-thin"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/pc"
+                    />
+            </TableRow>
+        </TableLayout>
+
+    </RelativeLayout>
+
+</ScrollView>

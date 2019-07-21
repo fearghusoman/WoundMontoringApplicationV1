@@ -876,31 +876,16 @@ public class ProcessImageActivity extends AppCompatActivity {
             //call the method to calculate the centres of the 4 circles to draw - calculated with relation to the rect
             getCirclesOnImage(rect, q);
 
-            //method to draw the first circle as its own bitmap
-            getBitmapClippedCirclePath(rotatedAndOrientatedBitmap, centreC1,radius1 * q, imageViewC1);
-            getBitmapClippedCirclePath(rotatedAndOrientatedBitmap, centreC2,radius2 * q, imageViewC2);
-            getBitmapClippedCirclePath(rotatedAndOrientatedBitmap, centreC3,radius3 * q, imageViewC3);
-            getBitmapClippedCirclePath(rotatedAndOrientatedBitmap, centreC4,radius4 * q, imageViewC4);
-
-            BitmapDrawable bitmapDrawableC1 = (BitmapDrawable) imageViewC1.getDrawable();
-            BitmapDrawable bitmapDrawableC2 = (BitmapDrawable) imageViewC2.getDrawable();
-            BitmapDrawable bitmapDrawableC3 = (BitmapDrawable) imageViewC3.getDrawable();
-            BitmapDrawable bitmapDrawableC4 = (BitmapDrawable) imageViewC4.getDrawable();
-
-            circle1 = bitmapDrawableC1.getBitmap();
-            circle2 = bitmapDrawableC2.getBitmap();
-            circle3 = bitmapDrawableC3.getBitmap();
-            circle4 = bitmapDrawableC4.getBitmap();
+            //call the averageRGBValues method for the circles on the bitmap
+            overallRGBC1 = getAverageRGBValueFromBitmap(rotatedAndOrientatedBitmap, centreC1);
+            overallRGBC2 = getAverageRGBValueFromBitmap(rotatedAndOrientatedBitmap, centreC2);
+            overallRGBC3 = getAverageRGBValueFromBitmap(rotatedAndOrientatedBitmap, centreC3);
+            overallRGBC4 = getAverageRGBValueFromBitmap(rotatedAndOrientatedBitmap, centreC4);
 
             /**---------------------------------------------------------------------------------**/
             /**---------------------------------------------------------------------------------**/
             /**-------------------AVERAGE RGB VALUES OF EACH CIRCLE ----------------------------**/
             /**---------------------------------------------------------------------------------**/
-            overallRGBC1 = getAverageRGBValue(circle1);
-            overallRGBC2 = getAverageRGBValue(circle2);
-            overallRGBC3 = getAverageRGBValue(circle3);
-            overallRGBC4 = getAverageRGBValue(circle4);
-
             overallRGBC1String = convertIntArrayRGBToString(overallRGBC1);
             overallRGBC2String = convertIntArrayRGBToString(overallRGBC2);
             overallRGBC3String = convertIntArrayRGBToString(overallRGBC3);
@@ -927,31 +912,6 @@ public class ProcessImageActivity extends AppCompatActivity {
 
     }
 
-    /**
-     *
-     * @param bitmap
-     * @param radius
-     * @param imageView
-     */
-    private void getBitmapClippedCirclePath(Bitmap bitmap, Point centreOfCircle, double radius, ImageView imageView){
-
-        Bitmap circleBitmap;
-        circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-
-        Path path = new Path();
-        path.addCircle(
-                (float) (centreOfCircle.x),
-                (float) (centreOfCircle.y),
-                (float) (radius),
-                Path.Direction.CCW
-        );
-
-        Canvas canvas = new Canvas(circleBitmap);
-        canvas.clipPath(path);
-        canvas.drawBitmap(bitmap, 0, 0, null);
-        imageView.setImageBitmap(circleBitmap);
-
-    }
 
     /**
      * This method takes in the qr corner points from the original image. It uses the top left corner
@@ -1082,18 +1042,20 @@ public class ProcessImageActivity extends AppCompatActivity {
      *
      * @param bitmap
      */
-    private int[] getAverageRGBValue(Bitmap bitmap){
+    public int[] getAverageRGBValueFromBitmap(Bitmap bitmap, Point centre){
         int[] rgb = new int[3];
         int totalR = 0, totalG = 0, totalB = 0;
         int count = 0;
 
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
 
-        Log.d("FEARGS RGB SIZE", "Width: " + width + ", height: " + height);
+        int startPointx = centre.x - 5;
+        int startPointy = centre.y - 5;
 
-        for(int i = 0; i < width; i++){
-            for(int j = 0; j < height; j++){
+        int endPointx = centre.x + 5;
+        int endPointy = centre.y + 5;
+
+        for(int i = startPointx; i < endPointx; i++){
+            for(int j = startPointy; j < endPointy; j++){
 
                 if(Color.red(bitmap.getPixel(i, j)) > 0 && Color.green(bitmap.getPixel(i, j)) > 0 && Color.blue(bitmap.getPixel(i, j)) > 0){
 
@@ -1109,7 +1071,7 @@ public class ProcessImageActivity extends AppCompatActivity {
         Log.d("FEARGS RGB TOTS", "R: " + totalR + ", G: " + totalG + ", " + "B: " + totalB + ". count: " + count);
 
         try {
-            Log.d("FEARGS RGB", "RGB: (" + (totalR / count) + ", " + (totalG / count) + ", " + (totalB / count) + ")");
+            Log.d("FEARGS RGB NEWMETHOD", "RGB: (" + (totalR / count) + ", " + (totalG / count) + ", " + (totalB / count) + ")");
 
             rgb[0] = totalR / count;
             rgb[1] = totalG / count;
@@ -1129,9 +1091,9 @@ public class ProcessImageActivity extends AppCompatActivity {
      * @return
      */
     private String convertIntArrayRGBToString(int[] rgb){
-        int r = Color.red(rgb[0]);
-        int g = Color.green(rgb[1]);
-        int b = Color.blue(rgb[2]);
+        int r = rgb[0];
+        int g = rgb[1];
+        int b = rgb[2];
 
         Log.d("FEARGS RGB STRING", "(" + r + ", " + g + ", " + b + ")");
 

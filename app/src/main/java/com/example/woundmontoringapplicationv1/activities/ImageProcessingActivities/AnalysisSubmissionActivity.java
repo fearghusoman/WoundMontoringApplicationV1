@@ -323,7 +323,7 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
      * @param rgbString
      * @return
      */
-    private int[] convertStringRGBtoInts(String rgbString){
+    public int[] convertStringRGBtoInts(String rgbString){
         String withoutBraces = rgbString.replace("(", "");
         withoutBraces = withoutBraces.replace(")", "");
 

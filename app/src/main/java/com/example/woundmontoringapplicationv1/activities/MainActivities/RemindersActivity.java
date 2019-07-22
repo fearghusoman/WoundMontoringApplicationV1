@@ -12,20 +12,15 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.woundmontoringapplicationv1.Adapters.RegisteredDressingRecyclerAdapter;
 import com.example.woundmontoringapplicationv1.Adapters.RemindersRecyclerAdapter;
 import com.example.woundmontoringapplicationv1.AlertReceiver;
-import com.example.woundmontoringapplicationv1.DressingItem;
 import com.example.woundmontoringapplicationv1.DressingReminderItem;
 import com.example.woundmontoringapplicationv1.R;
-import com.example.woundmontoringapplicationv1.activities.CalendarFragments.TimePickerFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,7 +32,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,13 +42,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
- *
+ * This activity uses a Volley request to check with the MySQL database the current warning level
+ * of a wound, and whether or not the alarm needs to be updated.
+ * It does so by calling the RemindersRecyclerAdapter for each returned dressing.
  */
 public class RemindersActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener{
-
-    private int NO_ALERT_REMINDER_FREQUENCY  = 24;
-    private int AMBER_ALERT_REMINDER_FREQUENCY  = 8;
-    private int RED_ALERT_REMINDER_FREQUENCY  = 4;
 
     private RecyclerView recyclerView;
     private RemindersRecyclerAdapter remindersRecyclerAdapter;
@@ -62,7 +54,7 @@ public class RemindersActivity extends AppCompatActivity implements TimePickerDi
 
     Button button1, button2, button3;
 
-    FloatingActionButton floatingActionButton, floatingActionButtonBack;
+    FloatingActionButton floatingActionButtonBack;
 
     int numberOfAlarmsSet = 0;
 
@@ -109,7 +101,6 @@ public class RemindersActivity extends AppCompatActivity implements TimePickerDi
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.HORIZONTAL));
 
-
         sharedPreferences = getApplicationContext().getSharedPreferences("APPLICATION_PREFS", Context.MODE_PRIVATE);
         String testSharedPrefs = sharedPreferences.getString("QRID0", "Default initiated");
 
@@ -128,7 +119,6 @@ public class RemindersActivity extends AppCompatActivity implements TimePickerDi
         button2 = findViewById(R.id.cancelReminder1);
         button3 = findViewById(R.id.cancelReminder2);
 
-        floatingActionButton = findViewById(R.id.addNewReminder);
         floatingActionButtonBack = findViewById(R.id.backToMenu);
 
         floatingActionButtonBack.setOnClickListener(new View.OnClickListener() {
@@ -137,42 +127,6 @@ public class RemindersActivity extends AppCompatActivity implements TimePickerDi
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 intent.putExtra("message", "yourdatafragment");
                 startActivity(intent);
-            }
-        });
-
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(numberOfAlarmsSet >= 0 && numberOfAlarmsSet < 3){
-                    DialogFragment timePicker = new TimePickerFragment();
-                    timePicker.show(getSupportFragmentManager(), "time picker");
-                }
-                else{
-                    Toast.makeText(RemindersActivity.this, "The maximum alarms allowed is 3!", Toast.LENGTH_LONG);
-                }
-
-            }
-        });
-
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cancelAlarm(textView, button1, view2);
-            }
-        });
-
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cancelAlarm(textView2, button2, view3);
-            }
-        });
-
-        button3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cancelAlarm(textView3, button3, view4);
             }
         });
 
@@ -338,24 +292,5 @@ public class RemindersActivity extends AppCompatActivity implements TimePickerDi
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
     }
 
-    /**
-     * this method is called when the cancelalarm button is clicked by the user
-     * it cancels the alarmmanager intent and updates the text view
-     */
-    private void cancelAlarm(TextView tv, Button btn, View v) {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
 
-        alarmManager.cancel(pendingIntent);
-        tv.setVisibility(View.GONE);
-        btn.setVisibility(View.GONE);
-        v.setVisibility(View.GONE);
-        numberOfAlarmsSet -= 1;
-
-        if(numberOfAlarmsSet == 0){
-            textViewEmpty.setText("There are no reminders set.");
-            textViewEmpty.setVisibility(View.VISIBLE);
-        }
-    }
 }

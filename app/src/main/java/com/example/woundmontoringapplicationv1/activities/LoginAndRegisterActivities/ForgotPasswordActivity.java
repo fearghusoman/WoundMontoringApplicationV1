@@ -17,7 +17,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 /**
- *
+ * This activity uses the Firebase Authentication system to send a reset password
+ * email to the user's registered email address.
  */
 public class ForgotPasswordActivity extends AppCompatActivity {
 

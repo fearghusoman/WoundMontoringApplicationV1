@@ -9,12 +9,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 
-import com.example.woundmontoringapplicationv1.Dressing;
 import com.example.woundmontoringapplicationv1.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,7 +54,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * The activity which takes the image from the CaptureImageActivity
+ * and processes it. QR Code is extracted, image is transformed and rotated
+ * and colour analysis is performed on the four circular regions of the dressing
  */
 public class ProcessImageActivity extends AppCompatActivity {
     /**-----------------------------------------------------------------------**/
@@ -103,7 +102,6 @@ public class ProcessImageActivity extends AppCompatActivity {
     Button processImgBtn, submitAnalysisBtn, opencvBtn;
     double slope;
     double q;
-    Dressing dressing;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
     FloatingActionButton floatingActionButton;
@@ -151,9 +149,6 @@ public class ProcessImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_process_image);
 
         OpenCVLoader.initDebug();
-
-        //create an instance of our dressing
-        dressing = new Dressing(L1,L2, L3, L_QR, LCirc1, LCirc2, LCirc3, LCirc4, radius1, radius2, radius3, radius4);
 
         processImgBtn = findViewById(R.id.button);
         submitAnalysisBtn = findViewById(R.id.buttonSubmit);
@@ -281,7 +276,8 @@ public class ProcessImageActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Method takes the top two corners of the QR code and
+     * calculates the slope between them
      * @param cornerPoints
      * @return
      */
@@ -301,11 +297,13 @@ public class ProcessImageActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Method rotates the bitmap using the slope that has been
+     * calculated; this creates a horizontal bitmap
+     * with relation to the QR code
      * @param bitmap
      * @param slope
      */
-    private Bitmap rotateBitmap(Bitmap bitmap, double slope, Barcode barcode){
+    private Bitmap rotateBitmap(Bitmap bitmap, double slope){
 
         Matrix rotationMatrix = new Matrix();
         rotationMatrix.postRotate((float) (Math.abs(slope)));
@@ -316,7 +314,9 @@ public class ProcessImageActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Method begins calling the orientation methods
+     * It uses the bitmap and the QR code coordinates to
+     * orientate the bitmap
      * @param bitmap
      * @param points
      * @return
@@ -336,7 +336,10 @@ public class ProcessImageActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Method gets the results of the setUpArrayOfPoints method
+     * for each corner of the QR code. If the result is true for a corner
+     * then this means it is the Alignment Marker; which should be in the bottom
+     * right corner for the correct orientation
      * @param bitmap
      * @param points
      * @return
@@ -371,7 +374,7 @@ public class ProcessImageActivity extends AppCompatActivity {
 
     /**
      * Pass in one of the qr corners, come one pixel in from the corner, then using the actual real
-     * world length of the side of the squares, check that a line drawn on both direcitons passes
+     * world length of the side of the squares, check that a line drawn on both directions passes
      * only black pixels
      * @param corner
      * @return
@@ -447,7 +450,10 @@ public class ProcessImageActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Takes the array of points from a QR corner. Calls the method that
+     * checks whether each pixels corner os closer to black or white. If it
+     * is closer to white for any pixel then false is returned, as it must then not be
+     * a Position Marker.
      * @param points
      * @return
      */
@@ -465,7 +471,8 @@ public class ProcessImageActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Checks whether a pixel in the bitmap is closer to
+     * black or white.
      * @param bitmap
      * @param point
      * @return
@@ -492,7 +499,8 @@ public class ProcessImageActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Creates the orientation corner string; if a corner's value is true
+     * then this means it is the orientation corner.
      * @param c1
      * @param c2
      * @param c3
@@ -712,7 +720,7 @@ public class ProcessImageActivity extends AppCompatActivity {
             /**-----------------------------------------------------------------------**/
             //calculate the slope of the qrcode in the original bitmap
             slope = getSlopeOfRectangle(qrCornerPoints);
-            Bitmap rotatedBitmap = rotateBitmap(bitmap, slope, thisBarCode);
+            Bitmap rotatedBitmap = rotateBitmap(bitmap, slope);
 
             frameRotated = new Frame.Builder().setBitmap(rotatedBitmap).build();
             qrCornerPointsRotated = getQRCoordinates(barcodeDetector, frameRotated);
@@ -783,7 +791,8 @@ public class ProcessImageActivity extends AppCompatActivity {
 
 
     /**
-     *
+     * Method uses the proportional value calculated and the rectangle calculated
+     * and creates the centre points of the 4 circles for analysis from it.
      * @param rect
      */
     private void getCirclesOnImage(Rect rect, double prop){
@@ -854,7 +863,9 @@ public class ProcessImageActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * This method takes in the qr corner points from the original image. It uses the top left corner
+     * and the real world measurements for the QR code to calculate where the other corners 'should' be.
+     * These corners are then used as the reference points for the warp perspective transformation.
      * @param qrCornerPoints
      * @return
      */
@@ -886,7 +897,8 @@ public class ProcessImageActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Pass the affined bitmap and the source points, reference points, and the imageview where
+     * you want to display the result.
      * @param bitmap
      * @param srcPoints
      * @param referencePoints
@@ -915,7 +927,8 @@ public class ProcessImageActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Creates a square around the passed point in the bitmap, iterates through
+     * all pixels in the bitmap and returns the average RGB value for them.
      * @param bitmap
      */
     public int[] getAverageRGBValueFromBitmap(Bitmap bitmap, Point centre){
@@ -953,7 +966,7 @@ public class ProcessImageActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Converts an integer array of RGB components to an intelligible string
      * @param rgb
      * @return
      */

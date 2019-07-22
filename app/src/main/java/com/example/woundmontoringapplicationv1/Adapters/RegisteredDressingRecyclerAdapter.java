@@ -15,6 +15,10 @@ import com.example.woundmontoringapplicationv1.R;
 
 import java.util.ArrayList;
 
+/**
+ * This adapter presents the registered dressing data to the user; with each
+ * dressing in its own section of the recycler view.
+ */
 public class RegisteredDressingRecyclerAdapter extends RecyclerView.Adapter<RegisteredDressingRecyclerAdapter.RegisteredDressingViewHolder> {
 
     private Context context;

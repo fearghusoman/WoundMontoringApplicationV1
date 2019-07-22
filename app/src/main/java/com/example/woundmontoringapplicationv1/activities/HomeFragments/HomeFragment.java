@@ -42,6 +42,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * The Home Fragment displays a link to the RegisterDressingActivity as well
+ * a list of the user's most recent analyses, which are formed using the
+ * HomeFragmentRecyclerAdapter
+ */
 public class HomeFragment extends Fragment {
 
     public final static int MY_PERMISSION_REQUEST_CAMERA = 1;

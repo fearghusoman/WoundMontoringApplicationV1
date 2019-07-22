@@ -2,6 +2,10 @@ package com.example.woundmontoringapplicationv1;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * The DressingItem class defines the item to be used in the Registered Dressing Activites
+ * recycler view.
+ */
 public class DressingItem {
 
     @SerializedName("QRID")

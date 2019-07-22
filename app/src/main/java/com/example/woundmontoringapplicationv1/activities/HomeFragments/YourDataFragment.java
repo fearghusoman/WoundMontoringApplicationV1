@@ -18,6 +18,11 @@ import com.example.woundmontoringapplicationv1.activities.MainActivities.Persona
 import com.example.woundmontoringapplicationv1.activities.MainActivities.RegisteredDressingsActivity;
 import com.example.woundmontoringapplicationv1.activities.MainActivities.RemindersActivity;
 
+/**
+ * This activity acts as a menu. It contains links to the various activities
+ * where the user can view their details.
+ * The logout button appears at the bottom of this activity.
+ */
 public class YourDataFragment extends Fragment {
 
     TextView reminderTV, historyTV, registeredDressingsTV, personalDetails;

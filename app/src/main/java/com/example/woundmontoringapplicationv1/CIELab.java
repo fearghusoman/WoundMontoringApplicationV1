@@ -4,6 +4,8 @@ import androidx.core.graphics.ColorUtils;
 import android.util.Log;
 
 /**
+ * Class created by user of stackoverflow - performs a number of useful CIELAB conversions
+ * and delta E calculations
  * Credit to: https://stackoverflow.com/questions/49114582/rgb-to-xyz-and-thenxyz-to-lab-in-androidjava
  * answer by: Muhammad Yasir
  */

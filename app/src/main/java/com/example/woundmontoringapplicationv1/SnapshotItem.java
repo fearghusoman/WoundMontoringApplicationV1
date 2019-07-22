@@ -3,7 +3,8 @@ package com.example.woundmontoringapplicationv1;
 import com.google.gson.annotations.SerializedName;
 
 /**
- *
+ * Class that defines the object to be displayed in the HomeFragment's recycler view
+ * that shows the user the details of their most recent analyses
  */
 public class SnapshotItem implements Comparable<SnapshotItem>{
 

@@ -38,10 +38,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * This activity receives the image analysis data from ProcessImageActivity
+ * It sends a request to the server, where it gets the RGB analysis from the
+ * the dressing's initial analysis. Using this it calculates the delta e value
+ * for the current analysis.
+ * The Delta E values are used to give the user feedback on the state of their wound.
  */
 public class AnalysisSubmissionActivity extends AppCompatActivity {
 
+    //static variable for the delta e warning levels
     public final static int DELTAE_THRESHOLD_GREEN = 10;
     public final static int DELTAE_THRESHOLD_AMBER = 30;
 
@@ -49,10 +54,12 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
 
     Bundle bundle;
 
+    //delta e values for each circle are stored as doubles
     double deltaEC1, deltaEC2, deltaEC3, deltaEC4;
 
     String rgbC1, rgbC2, rgbC3, rgbC4;
 
+    //the rgb values for the initial analysis are received as strings from the server
     String rgbResponseFromServerC1, rgbResponseFromServerC2, rgbResponseFromServerC3, rgbResponseFromServerC4;
 
     StringRequest stringRequest;
@@ -63,8 +70,10 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
 
     String userEmail, qrInfo, timestamp;
 
+    //url for the volley request that inserts the new analysis to the server
     String url = "http://foman01.lampt.eeecs.qub.ac.uk/woundmonitoring/insert_analysis.php";
 
+    //url for the first volley request
     String urlInitial = "http://foman01.lampt.eeecs.qub.ac.uk/woundmonitoring/initial_analysis_v1.php";
 
     ProgressDialog progressDialog;

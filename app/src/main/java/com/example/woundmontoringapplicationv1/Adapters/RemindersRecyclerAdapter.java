@@ -30,13 +30,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * A RecyclerAdapter that sets up the notifications, and their frequencies, for each dressing registered
+ * with the user. It then adapts the data into a format that is suitable for the user of the application,
+ * to be viewed in the Reminders Activity.
  */
-public class RemindersRecyclerAdapter extends RecyclerView.Adapter<RemindersRecyclerAdapter.RemindersViewHolder> {
+public class    RemindersRecyclerAdapter extends RecyclerView.Adapter<RemindersRecyclerAdapter.RemindersViewHolder> {
 
     private Context context;
     private ArrayList<DressingReminderItem> dressingItems;
 
+    //static variables for the reminder frequencies depending on threat levels
     private int NO_ALERT_REMINDER_FREQUENCY  = 24;
     private int AMBER_ALERT_REMINDER_FREQUENCY  = 8;
     private int RED_ALERT_REMINDER_FREQUENCY  = 4;

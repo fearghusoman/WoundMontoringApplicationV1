@@ -15,6 +15,10 @@ import com.example.woundmontoringapplicationv1.SnapshotItem;
 
 import java.util.ArrayList;
 
+/**
+ * This adapter present the wound analysis data to the user
+ * in the form of recycler view.
+ */
 public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragmentRecyclerAdapter.HomeFragmentViewHolder> {
 
     private Context context;

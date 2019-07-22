@@ -13,6 +13,12 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 
+/**
+ * This is the default activity  that launches once a user has signed in.
+ * It contains three fragments; HomeFragment, MonitorFragment, YourDataFragment
+ * The HomeFragment is the default option. A user navigates through the fragments using the
+ * navbar at the bottom of the activity.
+ */
 public class HomeActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;

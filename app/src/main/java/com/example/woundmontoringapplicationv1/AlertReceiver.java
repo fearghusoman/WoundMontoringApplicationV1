@@ -6,7 +6,8 @@ import android.content.Intent;
 import androidx.core.app.NotificationCompat;
 
 /**
- *
+ * The AlertReceiver class defines the tailored notifications that
+ * are to be sent to the user when it is time for them to start monitoring their wound.
  */
 public class AlertReceiver extends BroadcastReceiver {
 

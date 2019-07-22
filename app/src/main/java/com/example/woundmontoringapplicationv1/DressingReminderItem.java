@@ -2,6 +2,10 @@ package com.example.woundmontoringapplicationv1;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * The class that defines the object to be adapted to the RemindersRecyclerAdapter
+ * and displayed in the Reminders recycler view.
+ */
 public class DressingReminderItem {
 
     @SerializedName("QRID")

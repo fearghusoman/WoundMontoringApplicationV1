@@ -33,6 +33,11 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This activity allows a user to login to their account. It checks that their email is valid in the MySQL
+ * database, and then uses the Firebase Authentication sign-in method.
+ * Also contains links to the Register and ForgotPassword activities
+ */
 public class LoginActivity extends AppCompatActivity {
 
     public static final String SHARED_PREFS = "sharedPrefs";

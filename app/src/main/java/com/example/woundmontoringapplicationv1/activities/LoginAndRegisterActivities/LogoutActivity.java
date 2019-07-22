@@ -19,7 +19,8 @@ import android.widget.Button;
 import static com.example.woundmontoringapplicationv1.activities.LoginAndRegisterActivities.LoginActivity.SHARED_PREFS;
 
 /**
- *
+ * This activity prompts the user to confirm that they wish to log out of the
+ * application. If they chose to do so the Firebase signout method is used
  */
 public class LogoutActivity extends AppCompatActivity {
 

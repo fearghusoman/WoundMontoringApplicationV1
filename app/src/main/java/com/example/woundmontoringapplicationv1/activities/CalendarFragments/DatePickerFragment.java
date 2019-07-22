@@ -9,7 +9,8 @@ import androidx.fragment.app.DialogFragment;
 import java.util.Calendar;
 
 /**
- *
+ * DatePickerFragment is the fragment that appears when on the screen when the choose date
+ * button is selected by the user
  */
 public class DatePickerFragment extends DialogFragment {
 

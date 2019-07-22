@@ -39,6 +39,12 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * This activity uses the Camera2 API to create a capturing session.
+ * A floating action button allows a user to capture an image
+ * The captured image is stored to the local device and its path is passed to the next
+ * activity through an Intent.
+ */
 public class CaptureImageActivity extends AppCompatActivity {
 
     //setup the class' instance variables
@@ -236,7 +242,7 @@ public class CaptureImageActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * sets up the camera and its characteristics
      */
     private void setUpCamera(){
         try{

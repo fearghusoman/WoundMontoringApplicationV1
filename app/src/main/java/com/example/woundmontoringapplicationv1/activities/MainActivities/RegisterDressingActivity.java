@@ -44,7 +44,9 @@ import java.util.Map;
 import static com.example.woundmontoringapplicationv1.activities.LoginAndRegisterActivities.LoginActivity.SHARED_PREFS;
 
 /**
- *
+ * This activity involves a user registering their dressing.
+ * It takes the image from the CaptureImage activity and allows the user to select
+ * the body part to assign it to.
  */
 public class RegisterDressingActivity extends AppCompatActivity {
 

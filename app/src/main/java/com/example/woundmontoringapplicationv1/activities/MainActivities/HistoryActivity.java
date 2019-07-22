@@ -34,6 +34,10 @@ import java.util.ArrayList;
 
 import static com.example.woundmontoringapplicationv1.activities.LoginAndRegisterActivities.LoginActivity.TEXT;
 
+/**
+ * This activity displays a list of the user's analyses that they have performed.
+ * It uses the HomeFragmentRecyclerAdapter to adapt the data to the view
+ */
 public class HistoryActivity extends AppCompatActivity {
 
     JsonObjectRequest jsonObjectRequest;
@@ -45,8 +49,6 @@ public class HistoryActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
 
     FirebaseUser firebaseUser;
-
-    SharedPreferences sharedPreferences;
 
     String url = "http://foman01.lampt.eeecs.qub.ac.uk/woundmonitoring/most_recent_analysis.php";
 

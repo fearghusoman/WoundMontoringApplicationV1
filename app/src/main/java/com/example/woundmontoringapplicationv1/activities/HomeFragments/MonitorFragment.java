@@ -13,6 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * The activity displays info the user about how to analyse their wound
+ * and a floating action button that brings them to the CaptureImageActivity
+ */
 public class MonitorFragment extends Fragment {
 
     FloatingActionButton btn1;

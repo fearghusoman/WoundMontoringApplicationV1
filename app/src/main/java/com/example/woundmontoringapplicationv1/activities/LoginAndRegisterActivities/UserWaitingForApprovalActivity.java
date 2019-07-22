@@ -8,6 +8,11 @@ import android.widget.Button;
 
 import com.example.woundmontoringapplicationv1.R;
 
+/**
+ * This activity  is called when a user attempts to log into an account
+ * that has been registered, but not yet approved by the clinician through the
+ * web application.
+ */
 public class UserWaitingForApprovalActivity extends AppCompatActivity {
 
     Button button;

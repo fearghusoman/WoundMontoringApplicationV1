@@ -26,6 +26,10 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The Activity that is accessed from the YourDataFragment.
+ * Contains a list of the user's details.
+ */
 public class PersonalDetailsDataActivity extends AppCompatActivity {
 
     JsonObjectRequest jsonObjectRequest;

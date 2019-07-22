@@ -34,6 +34,11 @@ import java.util.ArrayList;
 
 import static com.example.woundmontoringapplicationv1.activities.LoginAndRegisterActivities.LoginActivity.TEXT;
 
+/**
+ * This activity is accessed from the YourDataFragment and allows the user to view
+ * a list of their registered dressings; a future implementation point would be to
+ * allow a user to delete dressings from the list.
+ */
 public class RegisteredDressingsActivity extends AppCompatActivity {
 
     JsonObjectRequest jsonObjectRequest;

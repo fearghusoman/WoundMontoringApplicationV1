@@ -46,17 +46,13 @@ import java.util.Calendar;
  * of a wound, and whether or not the alarm needs to be updated.
  * It does so by calling the RemindersRecyclerAdapter for each returned dressing.
  */
-public class RemindersActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener{
+public class RemindersActivity extends AppCompatActivity{
 
     private RecyclerView recyclerView;
     private RemindersRecyclerAdapter remindersRecyclerAdapter;
     private ArrayList<DressingReminderItem> dressingItems;
 
-    Button button1, button2, button3;
-
     FloatingActionButton floatingActionButtonBack;
-
-    int numberOfAlarmsSet = 0;
 
     FirebaseAuth firebaseAuth;
 
@@ -72,13 +68,7 @@ public class RemindersActivity extends AppCompatActivity implements TimePickerDi
 
     SharedPreferences sharedPreferences;
 
-    String timeText;
-
     String url = "http://foman01.lampt.eeecs.qub.ac.uk/woundmonitoring/registered_dressing.php";
-
-    TextView textView, textView2, textView3, textViewEmpty;
-
-    View view2, view3, view4;
 
     /**
      * onCreate method is called when the activity is first created within
@@ -106,19 +96,6 @@ public class RemindersActivity extends AppCompatActivity implements TimePickerDi
 
         Log.d("FEARGS SHARED", testSharedPrefs);
 
-        textView = findViewById(R.id.textTime);
-        textView2 = findViewById(R.id.textTime1);
-        textView3 = findViewById(R.id.textTime2);
-        textViewEmpty = findViewById(R.id.textViewNoAlarms);
-
-        view2 = findViewById(R.id.view2);
-        view3 = findViewById(R.id.view3);
-        view4 = findViewById(R.id.view4);
-
-        button1 = findViewById(R.id.cancelReminder);
-        button2 = findViewById(R.id.cancelReminder1);
-        button3 = findViewById(R.id.cancelReminder2);
-
         floatingActionButtonBack = findViewById(R.id.backToMenu);
 
         floatingActionButtonBack.setOnClickListener(new View.OnClickListener() {
@@ -129,11 +106,6 @@ public class RemindersActivity extends AppCompatActivity implements TimePickerDi
                 startActivity(intent);
             }
         });
-
-        if(savedInstanceState != null){
-            timeText = savedInstanceState.getString("setTime1");
-            textView.setText(timeText);
-        }
 
         jsonObject = new JSONObject();
         try{
@@ -194,103 +166,6 @@ public class RemindersActivity extends AppCompatActivity implements TimePickerDi
 
     }
 
-    /**
-     *
-     * @param outState
-     */
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putString("setTime1", timeText);
-    }
-
-    /**
-     * Activity  implements the TimePickerDialog.OnTimesetListener and so must override the
-     * onTimeSet method.
-     * We get the chosen time from the dialog and using this time pass it to the startAlarm
-     * and updateTimeText methods
-     * @param view
-     * @param hourOfDay
-     * @param minute
-     */
-    @Override
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        c.set(Calendar.MINUTE, minute);
-        c.set(Calendar.SECOND, 0);
-
-        updateTimeText(c);
-        startAlarm(c);
-    }
-
-    /**
-     * update the view's text with the time chosen from the time picker
-     * dialog
-     * @param c
-     */
-    private void updateTimeText(Calendar c) {
-        timeText = "";
-        timeText += DateFormat.getTimeInstance(DateFormat.SHORT).format(c.getTime());
-
-        switch(numberOfAlarmsSet){
-            case 0:
-                textView.setText(timeText);
-                break;
-            case 1:
-                textView2.setText(timeText);
-                break;
-            case 2:
-                textView3.setText(timeText);
-                break;
-        }
-
-        showAlarm();
-    }
-
-    /**
-     * once the alarm has been set we can show it on screen and cancel the other text view
-     */
-    private void showAlarm(){
-        switch(numberOfAlarmsSet){
-            case 0:
-                textView.setVisibility(View.VISIBLE);
-                button1.setVisibility(View.VISIBLE);
-                view2.setVisibility(View.VISIBLE);
-                textViewEmpty.setVisibility(View.GONE);
-                break;
-            case 1:
-                textView2.setVisibility(View.VISIBLE);
-                button2.setVisibility(View.VISIBLE);
-                view3.setVisibility(View.VISIBLE);
-                break;
-            case 2:
-                textView3.setVisibility(View.VISIBLE);
-                button3.setVisibility(View.VISIBLE);
-                view4.setVisibility(View.VISIBLE);
-                break;
-        }
-
-        numberOfAlarmsSet += 1;
-    }
-
-    /**
-     * we take the chosen time from the dialog and pass it through an intent
-     * to an instance of the alarmmanager class using the alertreceiver class
-     * @param c
-     */
-    private void startAlarm(Calendar c) {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
-
-        if (c.before(Calendar.getInstance())) {
-            c.add(Calendar.DATE, 1);
-        }
-
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
-    }
 
 
 }

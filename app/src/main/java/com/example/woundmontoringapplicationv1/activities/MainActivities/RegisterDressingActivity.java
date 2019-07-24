@@ -56,7 +56,7 @@ public class RegisterDressingActivity extends AppCompatActivity {
     Bundle bundle;
     Bitmap bitmap;
     ImageView imageView;
-    TextView textView1;
+    TextView textView1, textView2;
     BarcodeDetector barcodeDetector;
     Barcode dressingBarcode;
     Frame frame;
@@ -86,6 +86,7 @@ public class RegisterDressingActivity extends AppCompatActivity {
 
         imageView = findViewById(R.id.dressing_image);
         textView1 = findViewById(R.id.textView);
+        textView2 = findViewById(R.id.textViewSpinner);
         spinner = findViewById(R.id.myspinner);
         btn = findViewById(R.id.button_register_dressing);
         floatingActionButton = findViewById(R.id.backToTakeImage);
@@ -148,6 +149,10 @@ public class RegisterDressingActivity extends AppCompatActivity {
                                 textView1.setText(dressingBarcode.rawValue);
                                 imageView.setImageBitmap(bitmap);
 
+                                spinner.setVisibility(View.VISIBLE);
+                                btn.setVisibility(View.VISIBLE);
+                                textView2.setVisibility(View.VISIBLE);
+
                                 adapter = ArrayAdapter.createFromResource(this, R.array.wound_locations, R.layout.support_simple_spinner_dropdown_item);
                                 adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
 
@@ -170,6 +175,9 @@ public class RegisterDressingActivity extends AppCompatActivity {
                             }
                             else{
                                 textView1.setText("Sorry, but there was no QR code present in the image.");
+                                spinner.setVisibility(View.INVISIBLE);
+                                btn.setVisibility(View.INVISIBLE);
+                                textView2.setVisibility(View.INVISIBLE);
                             }
                         }
 

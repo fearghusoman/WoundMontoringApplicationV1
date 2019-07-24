@@ -20,9 +20,10 @@ public class AlertReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
        App notificationHelper = new App(context);
 
-       String contentDescription = "It's time to start monitoring Dressing " + intent.getStringExtra("QRID") + ", which is located on your " + intent.getStringExtra("location");
+       String contentDescription = "It's time to start monitoring Dressing " + intent.getStringExtra("QRID") + ", which is located on your " + intent.getStringExtra("Location");
 
        NotificationCompat.Builder builder = notificationHelper.getChannelNotification(contentDescription);
+       builder.setStyle(new NotificationCompat.BigTextStyle().bigText(contentDescription));
        notificationHelper.getManager().notify(1, builder.build());
     }
 }

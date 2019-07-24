@@ -148,10 +148,12 @@ public class    RemindersRecyclerAdapter extends RecyclerView.Adapter<RemindersR
      */
     public void setupAlarm(String timestamp, String qrid, String location, String currentWarningLevel, @NonNull RemindersRecyclerAdapter.RemindersViewHolder remindersViewHolder){
         String[] partsOfTimestamp = timestamp.split(" ");
+        Log.d("FEARGS TIMESTAMP", "" + timestamp);
 
         String time = partsOfTimestamp[1];
 
         int hour = Integer.parseInt(time.substring(0, 2));
+        int minute = Integer.parseInt(time.substring(3, 5));
         Log.d("FEARGS PARSE HOUR", "" + hour);
 
         SharedPreferences sharedPreferences;
@@ -160,6 +162,7 @@ public class    RemindersRecyclerAdapter extends RecyclerView.Adapter<RemindersR
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
 
         String alarmMessage;
 
@@ -170,13 +173,13 @@ public class    RemindersRecyclerAdapter extends RecyclerView.Adapter<RemindersR
         intent.putExtra("QRID", qrid);
         intent.putExtra("Location", location);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, Integer.parseInt(qrid), intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, Integer.parseInt(qrid), intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         if(currentWarningLevel.equalsIgnoreCase("OK")){
 
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * NO_ALERT_REMINDER_FREQUENCY, pendingIntent);
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * NO_ALERT_REMINDER_FREQUENCY, pendingIntent);
 
-            alarmMessage = "Since your dressing is not on alert, you will receive a notification every day at " + hour + ":00.";
+            alarmMessage = "Since your dressing is not on alert, you will receive a notification every day at " + hour + ":" + minute + ".";
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
 

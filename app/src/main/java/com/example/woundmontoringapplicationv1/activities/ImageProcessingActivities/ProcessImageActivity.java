@@ -99,7 +99,7 @@ public class ProcessImageActivity extends AppCompatActivity {
     Bitmap bitmap;
     boolean continueWithProcessing = false;
     Bundle bundle;
-    Button processImgBtn, submitAnalysisBtn, opencvBtn;
+    Button processImgBtn, submitAnalysisBtn;
     double slope;
     double q;
     FirebaseAuth firebaseAuth;
@@ -153,7 +153,6 @@ public class ProcessImageActivity extends AppCompatActivity {
         processImgBtn = findViewById(R.id.button);
         submitAnalysisBtn = findViewById(R.id.buttonSubmit);
         floatingActionButton = findViewById(R.id.backToTakeImage);
-        opencvBtn = findViewById(R.id.buttonOPENCVANALYSIS);
 
         progressDialog = new ProgressDialog(ProcessImageActivity.this);
 
@@ -270,9 +269,12 @@ public class ProcessImageActivity extends AppCompatActivity {
         barcodeSparseArray = barcodeDetector.detect(frame);
 
         Barcode b = barcodeSparseArray.valueAt(0);
-        Point[] qrCornerPoints = b.cornerPoints;
+        Point[] qrCornerPoints1 = b.cornerPoints;
 
-        return qrCornerPoints;
+
+
+
+        return qrCornerPoints1;
     }
 
     /**

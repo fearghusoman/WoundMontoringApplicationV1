@@ -33,9 +33,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:backgroundTint="@color/colorPrimaryCUSTOM"
+                android:backgroundTint="@color/colorAccentCUSTOM"
                 android:text="Process Image"
-                android:textColor="@color/white"
+                android:textColor="#000000"
                 android:textSize="16sp" />
 
         <TextView
@@ -64,22 +64,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:backgroundTint="@color/colorPrimaryCUSTOM"
+            android:backgroundTint="@color/colorAccentCUSTOM"
             android:text="Submit Analysis"
-            android:textColor="@color/white"
+            android:textColor="#000000"
             android:textSize="16sp" />
 
-        <Button
-            android:id="@+id/buttonOPENCVANALYSIS"
-            android:visibility="gone"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:backgroundTint="@color/colorPrimaryCUSTOM"
-            android:text="OpenCV Analysis"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
+
 
 
 

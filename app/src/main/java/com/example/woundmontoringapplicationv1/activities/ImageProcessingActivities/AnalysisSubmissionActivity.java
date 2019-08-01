@@ -288,7 +288,8 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Get the RGB values from the bundle received from the processImageActivity
+     * passed as a string
      */
     private void setupVariables(){
 
@@ -319,7 +320,8 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Takes the RGB values in the String format in which the server stores them
+     * and then converts the string to an integer array
      * @param rgbString
      * @return
      */
@@ -365,7 +367,8 @@ public class AnalysisSubmissionActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Sets up the text views, to show the user feedback on the delta e values
+     * received from the analysis
      * @param deltaE
      * @param textView
      */

@@ -89,19 +89,24 @@ public class ProcessImageActivity extends AppCompatActivity {
     final static double radius3 = 1.5 / 2;
     final static double radius4 = 1.5 / 2;
 
+    //url that checks that the dressing has been registered with the user
     static final String checkurl = "http://foman01.lampt.eeecs.qub.ac.uk/woundmonitoring/process_image.php";
 
     /**-----------------------------------------------------------------------**/
     /**---------------------INSTANCE VARiABLES -------------------------------**/
     /**-----------------------------------------------------------------------**/
+    //visions api barcode vars
     Barcode thisBarCode;
     BarcodeDetector barcodeDetector;
     Bitmap bitmap;
+    //boolean, if set to true by the checkregisteredwithuser method, then analysis is performed
     boolean continueWithProcessing = false;
+    //bundle for data passed from the CaptureImageActivity
     Bundle bundle;
     Button processImgBtn, submitAnalysisBtn;
     double slope;
     double q;
+    //firebase vars
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
     FloatingActionButton floatingActionButton;
@@ -123,7 +128,7 @@ public class ProcessImageActivity extends AppCompatActivity {
     /**-----------------------------------------------------------------------**/
     /**---------------------BASE LOADER CALLBACK -----------------------------**/
     /**-----------------------------------------------------------------------**/
-
+    //ensures the correct setup of the opencv library
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
         public void onManagerConnected(int status) {
@@ -148,6 +153,7 @@ public class ProcessImageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_process_image);
 
+        //initialise the opencv loader
         OpenCVLoader.initDebug();
 
         processImgBtn = findViewById(R.id.button);
@@ -169,11 +175,13 @@ public class ProcessImageActivity extends AppCompatActivity {
 
         bundle = getIntent().getExtras();
 
+        //if data has been passed from the camera
         if (bundle != null) {
             path = bundle.get("imageName").toString();
             timestamp = bundle.get("timestamp").toString();
 
             try {
+                //create a bitmap from the file's byte stream
                 FileInputStream fIS = new FileInputStream(new File(path));
                 bitmap = BitmapFactory.decodeStream(fIS);
                 imageView2.setImageBitmap(bitmap);
@@ -209,16 +217,19 @@ public class ProcessImageActivity extends AppCompatActivity {
                 progressDialog.setMessage("Please wait...");
                 progressDialog.show();
 
+                //setup the barcode detector
                 barcodeDetector = new BarcodeDetector.Builder(getApplicationContext()).setBarcodeFormats(Barcode.QR_CODE).build();
 
                 if (!barcodeDetector.isOperational()) {
                     textView.setText("Couldn't setup the detector1");
                     return;
                 } else {
+                    //if it is setup then create a frame of the image bitmap
                     frame = new Frame.Builder().setBitmap(bitmap).build();
 
                     barcodes = barcodeDetector.detect(frame);
 
+                    //if a barcode has been detected
                     if (barcodes.size() > 0) {
                         thisBarCode = barcodes.valueAt(0);
                         qrInfoHolder = thisBarCode.rawValue;
@@ -270,9 +281,6 @@ public class ProcessImageActivity extends AppCompatActivity {
 
         Barcode b = barcodeSparseArray.valueAt(0);
         Point[] qrCornerPoints1 = b.cornerPoints;
-
-
-
 
         return qrCornerPoints1;
     }
